@@ -7,17 +7,23 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:Arial, sans-serif;background:#f4f6fb;color:#333}
+    
     header{background:linear-gradient(135deg,#0d47a1,#1976d2);color:#fff;padding:60px 20px;text-align:center}
-    header h1{font-size:42px;margin:12px 0 6px 0}
+    header h1{font-size:42px;margin:15px 0 6px 0;font-weight:bold;color:#ffffff}
     header p{font-size:20px;color:#e3f2fd}
+    
     nav{background:#0d47a1;padding:15px;text-align:center;position:sticky;top:0;z-index:1000}
     nav a{color:#fff;text-decoration:none;margin:0 14px;font-weight:bold}
+    
     section{max-width:1100px;margin:auto;padding:45px 20px}
     .card{background:#fff;border-radius:12px;padding:28px;box-shadow:0 3px 12px rgba(0,0,0,.1);margin-bottom:25px}
+    
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
     .box{background:#1976d2;color:#fff;padding:28px;border-radius:10px;text-align:center;font-size:24px;font-weight:bold}
+    
     .btn{display:inline-block;background:#28a745;color:#fff;padding:14px 28px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:18px;transition: 0.2s;}
     .btn:hover{background:#218838}
+    
     .price{font-size:42px;color:#d32f2f;font-weight:bold;margin:15px 0}
     ul{list-style:none;margin:15px 0;padding-left:0}
     ul li{margin:8px 0;font-size:16px}
@@ -32,9 +38,9 @@
     footer{background:#0d47a1;color:#fff;text-align:center;padding:22px}
     .wa{position:fixed;right:20px;bottom:20px;background:#25D366;color:#fff;text-decoration:none;padding:14px 20px;border-radius:30px;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,.2);z-index:9999}
     
-    /* Mobile optimization responsive adjustments */
+    /* Mobile responsive optimizations */
     @media(max-width:600px){
-      header h1{font-size:30px}
+      header h1{font-size:32px}
       header p{font-size:16px}
       nav{overflow-x:auto;white-space:nowrap}
     }
@@ -43,8 +49,9 @@
 <body>
 
 <header>
-  <!-- Beautifully styled circle profile image logo -->
-  <img src="images/asad-malik.png" alt="Mohd Asad Malik Academy Logo" style="width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8); box-shadow: 0 4px 8px rgba(0,0,0,0.15);">
+  <!-- Fixed image folder path and increased size to 90px so face stands out clearly -->
+  <img src="images/asad-malik.png" alt="Mohd Asad Malik Academy Logo" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.9); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+  <h1>Mohd Asad Malik Academy</h1>
   <p>JKSSB & JKPSC | Reasoning & Mathematics</p>
 </header>
 
@@ -85,7 +92,7 @@
       <li>✔ Weekly Tests</li>
       <li>✔ Practice Questions</li>
     </ul>
-    <a class="btn" href="https://rzp.io/rzp/uZlCljyd" target="_blank">Enroll Now – ₹699</a>
+    <a class="btn" href="https://rzp.io" target="_blank">Enroll Now – ₹699</a>
   </div>
 </section>
 
@@ -93,11 +100,10 @@
   <div class="card">
     <h2>🔴 Live Classes</h2>
     <p style="margin-top:10px;">Daily live classes are conducted on our official YouTube channel.</p>
-    <a class="btn" href="https://www.youtube.com/@JKSSBSTUDIES-h9q" target="_blank" style="background:#cc0000;">🎥 Join Live Class</a>
+    <a class="btn" href="https://youtube.com" target="_blank" style="background:#cc0000;">🎥 Join Live Class</a>
   </div>
 </section>
 
-<!-- Brand New High-Converting Reviews Section -->
 <section id="testimonials">
   <h2>What Our Students Say</h2>
   <div class="testimonial-grid">
