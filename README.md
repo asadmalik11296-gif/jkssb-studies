@@ -1,2 +1,2 @@
 # asad-online-academy
-Experienced online teacher providing personalized learning for Classes 6 to 8 in all major subjects.
+Professional online coaching for JKSSB & JKPSC aspirants with concept-based teaching, practice questions, mock tests and doubt sessions.
