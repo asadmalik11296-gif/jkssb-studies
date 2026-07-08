@@ -1,18 +1,39 @@
+// Smooth scrolling for menu links
 
-// Malik AI Studio JavaScript
+document.querySelectorAll("nav a").forEach(link => {
+
+    link.addEventListener("click", function(e){
+
+        const target = document.querySelector(
+            this.getAttribute("href")
+        );
+
+        if(target){
+
+            e.preventDefault();
+
+            target.scrollIntoView({
+                behavior:"smooth"
+            });
+
+        }
+
+    });
+
+});
 
 
-// Start Creating Button
 
-const startButton = document.querySelector(".hero button");
+// Join Now Button
 
+const joinButton = document.querySelector(".hero button");
 
-if(startButton){
+if(joinButton){
 
-    startButton.addEventListener("click",()=>{
+    joinButton.addEventListener("click",()=>{
 
         document
-        .getElementById("tools")
+        .getElementById("courses")
         .scrollIntoView({
             behavior:"smooth"
         });
@@ -23,98 +44,38 @@ if(startButton){
 
 
 
+// Login Button
+
+const loginButton = document.querySelector("#login button");
 
 
-// AI Tool Buttons
+if(loginButton){
 
-
-const toolButtons = document.querySelectorAll(".card button");
-
-
-toolButtons.forEach((button)=>{
-
-
-    button.addEventListener("click",()=>{
-
+    loginButton.addEventListener("click",()=>{
 
         alert(
-        "AI Tool is coming soon in Malik AI Studio 🚀"
+        "Student login system will be connected soon."
         );
-
 
     });
 
-
-});
-
+}
 
 
 
+// Payment Button
+
+const paymentButton = document.querySelector("#payment button");
 
 
-// Simple scroll animation
+if(paymentButton){
 
+    paymentButton.addEventListener("click",()=>{
 
-const sections = document.querySelectorAll("section");
+        alert(
+        "Payment gateway will be added soon."
+        );
 
-
-window.addEventListener("scroll",()=>{
-
-
-sections.forEach(section=>{
-
-
-    const position =
-    section.getBoundingClientRect().top;
-
-
-    if(position < window.innerHeight - 100){
-
-        section.style.opacity="1";
-
-        section.style.transform="translateY(0)";
-
-    }
-
-
-});
-
-
-});
-
-
-
-
-
-
-// Initial animation style
-
-
-sections.forEach(section=>{
-
-
-    section.style.opacity="0";
-
-    section.style.transform="translateY(40px)";
-
-    section.style.transition="0.8s";
-
-
-});
-
-
-
-
-// Copyright year update
-
-
-const footer =
-document.querySelector("footer p");
-
-
-if(footer){
-
-    footer.innerHTML =
-    `© ${new Date().getFullYear()} Malik AI Studio. All Rights Reserved.`;
+    });
 
 }
