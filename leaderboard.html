@@ -6,8 +6,8 @@
     <title>JKSSB Mock Test Leaderboard</title>
     
     <!-- 🖥️ GOOGLE ADSENSE CODE INTEGRATION -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765" crossorigin="anonymous"></script>
-<meta name="google-adsense-account" content="ca-pub-6086620349531765">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-6086620349531765">
 
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
@@ -24,6 +24,8 @@
         .score-val { font-weight: bold; color: #28a745; text-align: right; }
         .test-tag { font-size: 11px; color: #718096; background: #edf2f7; padding: 2px 6px; border-radius: 4px; display: block; margin-top: 4px; width: max-content; }
         .loading { text-align: center; color: #a0aec0; padding: 30px; font-style: italic; font-size: 16px; }
+        .btn-home { display: block; width: max-content; margin: 20px auto 0 auto; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; font-weight: bold; border-radius: 4px; text-align: center; }
+        .btn-home:hover { background: #0056b3; }
     </style>
 </head>
 <body>
@@ -44,12 +46,14 @@
         </thead>
         <tbody id="leaderboard-rows"></tbody>
     </table>
+    
+    <!-- हब पर वापस जाने के लिए लिंक बटन -->
+    <a href="mocktest.html" class="btn-home">Take Test Again</a>
 </div>
 
 <script>
 function fetchAndRenderLeaderboard() {
     try {
-        // लोकल स्टोरेज से सुरक्षित डेटा निकालना
         let rawEntries = JSON.parse(localStorage.getItem('jkssb_leaderboard')) || [];
         
         if (rawEntries.length === 0) {
@@ -62,7 +66,7 @@ function fetchAndRenderLeaderboard() {
         const tableElement = document.getElementById("leaderboard-table");
         const container = document.getElementById("leaderboard-rows");
 
-        // स्कोर के आधार पर सबसे ज़्यादा से सबसे कम (Highest to Lowest) सॉर्ट करना
+        // Highest to Lowest सॉर्ट करना
         rawEntries.sort((a, b) => b.score - a.score);
         
         // केवल टॉप 10 रैंक दिखाना
@@ -72,15 +76,19 @@ function fetchAndRenderLeaderboard() {
             const rank = index + 1;
             let badgeClass = "rank-badge";
             if (rank <= 3) badgeClass += ` rank-${rank}`;
+            
+            // स्कोर वैल्यू को सेफ फ्लोट में कन्वर्ट करना ताकि .toFixed एरर न दे
+            const numScore = parseFloat(student.score) || 0;
+            const testName = student.test ? student.test : "Aptitude Practice Set";
 
             return `
                 <tr>
                     <td><span class="${badgeClass}">${rank}</span></td>
                     <td>
                         <span style="font-weight: 600; color: #1a202c;">${student.name}</span>
-                        <span class="test-tag">📝 ${student.test}</span>
+                        <span class="test-tag">📝 ${testName}</span>
                     </td>
-                    <td class="score-val">${student.score.toFixed(2)}</td>
+                    <td class="score-val">${numScore.toFixed(2)} Marks</td>
                 </tr>
             `;
         }).join('');
