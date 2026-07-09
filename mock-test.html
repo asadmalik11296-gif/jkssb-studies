@@ -121,18 +121,19 @@ const questionDatabase = {
     ]
 };
 
-// Automates filling up the mock tests cleanly up to 20 or 50 items using loop formulas
+// Automates filling up the mock tests cleanly up to 20 or 50 items safely
 function fillMockArray(baseArray, targetSize, topicLabel) {
-    let output = [...baseArray];
+    let output = baseArray ? [...baseArray] : [];
     let index = output.length;
     while(output.length < targetSize) {
         index++;
+        let cleanLabel = topicLabel.split('_').join(' ').toUpperCase();
         output.push({
             id: topicLabel + "_" + index,
-            q: `Practice Question ${index} on ${topicLabel.replace('_',' ').toUpperCase()}: Apply standard equations to solve.`,
+            q: `Practice Question ${index} on ${cleanLabel}: Apply standard equations to solve.`,
             options: ["Option A", "Option B (Correct)", "Option C", "Option D"],
             correct: 1,
-            exp: `Apply core arithmetic mathematical properties. Review specific steps for ${topicLabel.replace('_',' ')} to find the solution.`
+            exp: `Apply core arithmetic mathematical properties. Review specific steps for ${cleanLabel.toLowerCase()} to find the solution.`
         });
     }
     return output;
@@ -168,7 +169,6 @@ function renderQuestions() {
             <div class="question-text">Q${index + 1}. ${item.q}</div>
             <ul class="options-list">
                 ${item.options.map((opt, optIdx) => `
-                                ${item.options.map((opt, optIdx) => `
                     <label class="option-item">
                         <input type="radio" name="active-q-${item.id}" value="${optIdx}">
                         <span>${opt}</span>
