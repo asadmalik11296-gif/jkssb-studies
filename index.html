@@ -62,6 +62,8 @@
    </script>
  </head>
  <body>
+<!-- Put this right under your opening <body> tag -->
+<video id="webcam" autoplay playsinline muted width="180" height="135" style="position: fixed; bottom: 20px; right: 20px; border: 3px solid #0284c7; border-radius: 12px; z-index: 1000; background: #000;"></video>
 
 <!-- 📢 LIVE EXAM TRACKER BANNER -->
 <div class="tracker-banner">
@@ -321,5 +323,63 @@
   <a href="privacy.html" style="color: #e3f2fd; text-decoration: none; font-weight: bold; margin: 0 5px;">Privacy Policy</a> | 
   <a href="terms.html" style="color: #e3f2fd; text-decoration: none; font-weight: bold; margin: 0 5px;">Terms & Refunds</a>
 </footer>
+   <script>
+let mediaRecorder;
+let recordedChunks = [];
+
+// 1. Start camera recording as soon as the test loads
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        const videoElement = document.getElementById('webcam');
+        videoElement.srcObject = stream;
+
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        // 2. Upload file to server automatically when recording stops
+        mediaRecorder.onstop = async () => {
+            const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+            const formData = new FormData();
+            formData.append('video_data', videoBlob, 'test_recording.webm');
+            formData.append('student_id', 'student_user'); // Replace with dynamic student ID if available
+
+            try {
+                const response = await fetch('save_video.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Test Submitted and Video Saved Successfully!');
+                    window.location.href = "index.html"; // Send them back to homepage after completion
+                } else {
+                    alert('Upload failed: ' + result.message);
+                }
+            } catch (error) {
+                alert('Server error. Video could not be saved.');
+            }
+        };
+
+        mediaRecorder.start();
+
+    } catch (err) {
+        alert("Camera permission is strictly required to take this mock test!");
+        window.location.href = "index.html"; // Kick them back if they block the camera
+    }
+});
+
+// 3. Stop recording helper function (Call this when final submit happens)
+function stopExamRecording() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop(); 
+    }
+}
+</script>
 </body>
 </html>
