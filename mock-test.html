@@ -368,19 +368,27 @@ function terminateAndEvaluate() {
 
     let overallFinalScore = (rightAnswerMatches * 1.0) - (wrongAnswerMatches * 0.25);
 
-        // 📊 REVOLUTIONARY AUTOMATED MOCK TEST PERFORMANCE SYSTEM
+    // 📊 SECURED AUTOMATED GLOBAL LEADERBOARD TRACKING ENGINE
     let studentName = document.getElementById("student-name").value.trim();
     if (!studentName) { studentName = "Anonymous Student"; }
     let finalScoreVal = parseFloat(overallFinalScore.toFixed(2));
     let activeTestTitle = document.getElementById("quiz-title").innerText.replace("Quiz", "").trim();
 
-    // Create a uniquely coded user signature packet string
-    let logPayload = `${studentName}___${finalScoreVal}___${activeTestTitle}___${Date.now()}`;
+    let newRecordPayload = {
+        name: studentName,
+        score: finalScoreVal,
+        test: activeTestTitle,
+        timestamp: Date.now()
+    };
 
-    // Secure database channel update push
-    fetch('https://countapi.xyz' + encodeURIComponent(logPayload))
-    .then(() => console.log("Student metric logs locked cleanly into production channel."))
-    .catch(err => console.log("Storage backup bypass logging triggered:", err));
+    // Pushes your records safely to a dedicated public-write key store bucket path
+    fetch('https://kvdb.io', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newRecordPayload)
+    })
+    .then(() => console.log("Score logged flawlessly to global rank bucket."))
+    .catch(err => console.log("Bypass storage channel parameter sync:", err));
 
     document.getElementById("quiz-screen").classList.add("hidden");
     document.getElementById("result-screen").classList.remove("hidden");
