@@ -223,24 +223,81 @@ footer{
 
 
 
-/* Mobile */
+/* 📱 Mobile Specific Rules (Updated for Mock Test & Leaderboard) */
 
 @media(max-width:768px){
 
-header{
-    flex-direction:column;
-}
+    header{
+        flex-direction:column;
+        padding:15px;
+    }
 
-nav{
-    margin-top:15px;
-}
+    nav{
+        margin-top:15px;
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+    }
 
-nav a{
-    margin:10px;
-}
+    nav a{
+        margin:0;
+        font-size:14px;
+    }
 
-.hero h1{
-    font-size:35px;
-}
+    .hero h1{
+        font-size:35px;
+    }
+    
+    .hero p{
+        font-size:16px;
+    }
+    
+    section {
+        padding: 40px 5%;
+    }
 
+    /* 🎯 मोबाइल के लिए टेस्ट हब कंटेनर का फिक्स */
+    .test-container {
+        padding: 15px !important;
+        margin: 10px !important;
+    }
+
+    /* ग्रिड लेआउट को सिंगल कॉलम करना ताकि फ़ोन पर कार्ड्स टूटे नहीं */
+    .grid-layout {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+    
+    /* लाइव क्विज़ का लेआउट ऊपर-नीचे सेट करना */
+    .quiz-body {
+        flex-direction: column !important;
+    }
+    
+    /* सवाल का एरिया पूरा चौड़ा करना */
+    .question-area {
+        width: 100% !important;
+    }
+
+    /* साइडबार पैलेट को नीचे सेट करना */
+    .sidebar {
+        width: 100% !important;
+        margin-top: 20px !important;
+        max-height: none !important;
+    }
+    
+    /* 📊 लीडरबोर्ड टेबल को मोबाइल रिस्पॉन्सिव बनाना */
+    .leaderboard-container {
+        padding: 15px !important;
+        margin: 10px auto !important;
+    }
+    
+    .rank-table th, .rank-table td {
+        padding: 8px !important;
+        font-size: 13px !important;
+    }
+    
+    .test-tag {
+        font-size: 10px !important;
+    }
 }
