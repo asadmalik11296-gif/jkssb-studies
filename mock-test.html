@@ -352,13 +352,14 @@ window.addEventListener('DOMContentLoaded', async () => {
         // 2. Upload video binary directly to Cloudinary when recording stops
         mediaRecorder.onstop = async () => {
             const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-            const formData = new FormData();
-            
-            formData.append('file', videoBlob);
-            formData.append('upload_preset', 'quiz_preset'); 
+const formData = new FormData();
 
-            try {
-                const response = await fetch('https://cloudinary.com', { 
+formData.append('file', videoBlob);
+formData.append('upload_preset', 'quiz_preset'); 
+formData.append('resource_type', 'video');
+
+try {
+    const response = await fetch('https://cloudinary.com', {  
                     method: 'POST',
                     body: formData
                 });
