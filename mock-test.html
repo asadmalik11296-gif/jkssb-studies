@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JKSSB Real-Time Mock Test</title>
+    <title>JKSSB Mock Test Panel</title>
 
     <!-- 🖥️ GOOGLE ADSENSE CODE INTEGRATION -->
-    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-6086620349531765">
 
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-        .test-container { max-width: 700px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; }
+        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .hub-title { text-align: center; color: #007bff; margin-bottom: 25px; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .topic-card { background: #fff; border: 1px solid #cbd5e0; padding: 20px; border-radius: 6px; text-align: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .topic-card:hover { transform: translateY(-3px); border-color: #007bff; background: #f0f7ff; }
+        .topic-card h3 { margin: 0 0 10px 0; color: #2d3748; }
+        .topic-card span { font-size: 13px; color: #718096; background: #edf2f7; padding: 3px 8px; border-radius: 12px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
         .timer { font-size: 18px; font-weight: bold; color: #dc3545; background: #fff5f5; padding: 5px 10px; border-radius: 4px; border: 1px solid #dc3545; }
-        .question-card { margin-bottom: 25px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px; }
+        .question-card { margin-bottom: 25px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px; background: #ffffff; }
         .question-text { font-size: 16px; font-weight: bold; margin-bottom: 12px; color: #2d3748; }
-        .options-list { list-style: none; padding: 0; }
-        .option-item { margin: 8px 0; padding: 10px; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; display: flex; align-items: center; }
+        .options-list { list-style: none; padding: 0; margin: 0; }
+        .option-item { margin: 8px 0; padding: 12px; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; display: flex; align-items: center; transition: 0.2s; }
+        .option-item input { margin-right: 12px; }
         .option-item:hover { background-color: #f7fafc; }
-        .option-item input { margin-right: 10px; }
-        .submit-btn { width: 100%; padding: 12px; background: #007bff; color: white; border: none; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        .review-box { margin-top: 15px; padding: 12px; border-radius: 4px; font-size: 14px; line-height: 1.5; }
+        .review-box.correct-ans { background: #e6fffa; border-left: 4px solid #319795; color: #234e52; }
+        .review-box.wrong-ans { background: #fff5f5; border-left: 4px solid #e53e3e; color: #742a2a; }
+        .explanation-text { margin-top: 8px; font-weight: bold; color: #4a5568; display: block; border-top: 1px dashed #cbd5e0; padding-top: 8px; }
+        .submit-btn { width: 100%; padding: 14px; background: #007bff; color: white; border: none; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
         .submit-btn:hover { background: #0056b3; }
         .hidden { display: none; }
-        
-        /* Ad Placement Styling */
         .adsense-placement { margin: 20px auto; padding: 10px; background: #fafafa; border: 1px dashed #ccc; text-align: center; font-size: 12px; color: #999; }
-
-        /* Results Section Styling */
         .results-card { background: #fff; padding: 20px; border-radius: 8px; border-top: 5px solid #28a745; text-align: center; }
         .score-metric { font-size: 32px; font-weight: bold; color: #28a745; margin: 15px 0; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
         .stat-box { background: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px solid #e2e8f0; }
         .stat-val { font-size: 18px; font-weight: bold; }
     </style>
@@ -38,90 +44,133 @@
 <body>
 
 <div class="test-container">
-    <!-- Active Quiz Screen -->
-    <div id="quiz-screen">
-        <div class="header">
-            <h2>JKSSB General Mock Test</h2>
-            <div class="timer" id="time-display">Time Left: 15:00</div>
-        </div>
-        
-        <!-- Top Ad Unit (Optional: Won't obstruct user during layout testing) -->
-        <div class="adsense-placement">
-            <!-- You can paste your standard AdSense responsive ad unit code block here -->
-            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6086620349531765" data-ad-slot="YOUR_TOP_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        </div>
 
-        <div id="questions-wrapper"></div>
-        <button class="submit-btn" onclick="submitExam()">Submit Test</button>
+    <!-- 🏠 DASHBOARD HUB SCREEN -->
+    <div id="hub-screen">
+        <h2 class="hub-title">Select Your JKSSB Practice Test</h2>
+        <div class="grid-layout">
+            <div class="topic-card" onclick="initiateExam('lcm_hcf')">
+                <h3>LCM & HCF</h3>
+                <span>20 Questions • 30 Mins</span>
+            </div>
+            <div class="topic-card" onclick="initiateExam('ratio_prop')">
+                <h3>Ratio & Proportion</h3>
+                <span>20 Questions • 30 Mins</span>
+            </div>
+            <div class="topic-card" onclick="initiateExam('time_work')">
+                <h3>Time & Work</h3>
+                <span>20 Questions • 30 Mins</span>
+            </div>
+            <div class="topic-card" style="border: 2px solid #dc3545;" onclick="initiateExam('mix_test')">
+                <h3 style="color:#dc3545;">🚨 Mega MIX Test</h3>
+                <span style="background:#fff5f5; color:#dc3545;">50 Questions • 75 Mins</span>
+            </div>
+        </div>
     </div>
 
-    <!-- Live Results Publication Screen -->
+    <!-- 📝 ACTIVE EXAM SCREEN -->
+    <div id="quiz-screen" class="hidden">
+        <div class="header">
+            <h2 id="quiz-title">Active Test</h2>
+            <div class="timer" id="time-display">Time Left: 00:00</div>
+        </div>
+        <div id="questions-wrapper"></div>
+        <button class="submit-btn" onclick="terminateAndEvaluate()">Submit Test</button>
+    </div>
+
+    <!-- 📊 RESULTS & EXPLANATIONS SCREEN -->
     <div id="result-screen" class="hidden">
         <div class="results-card">
             <h2>Exam Performance Summary</h2>
-            <p>Your calculated final score according to JKSSB rules (+1 Correct, -0.25 Wrong):</p>
-            <div class="score-metric" id="final-score">0.00 / 10.00</div>
+            <p>Calculated final score matching JKSSB rules (+1 Correct, -0.25 Wrong):</p>
+            <div class="score-metric" id="final-score">0.00</div>
             
-            <!-- 💸 HIGH-EARNING RESULTS BANNER PLACEMENT -->
+            <div class="stats-grid">
+                <div class="stat-box" style="border-bottom: 3px solid #28a745;"><div class="stat-val" style="color: #28a745;" id="stat-correct">0</div><div>Correct</div></div>
+                <div class="stat-box" style="border-bottom: 3px solid #dc3545;"><div class="stat-val" style="color: #dc3545;" id="stat-wrong">0</div><div>Incorrect</div></div>
+                <div class="stat-box" style="border-bottom: 3px solid #6c757d;"><div class="stat-val" style="color: #6c757d;" id="stat-skipped">0</div><div>Skipped</div></div>
+            </div>
+
+            <!-- Ad unit below performance board -->
             <div class="adsense-placement">
-                <p style="margin:0 0 5px 0;">Advertisement</p>
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6086620349531765" data-ad-slot="YOUR_RESULTS_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6086620349531765" data-ad-format="auto" data-full-width-responsive="true"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box" style="border-bottom: 3px solid #28a745;">
-                    <div class="stat-val" style="color: #28a745;" id="stat-correct">0</div>
-                    <div>Correct</div>
-                </div>
-                <div class="stat-box" style="border-bottom: 3px solid #dc3545;">
-                    <div class="stat-val" style="color: #dc3545;" id="stat-wrong">0</div>
-                    <div>Incorrect</div>
-                </div>
-                <div class="stat-box" style="border-bottom: 3px solid #6c757d;">
-                    <div class="stat-val" style="color: #6c757d;" id="stat-skipped">0</div>
-                    <div>Unattempted</div>
-                </div>
-            </div>
+            <h3 style="text-align:left; border-top:2px solid #e2e8f0; padding-top:20px; margin-top:20px;">Review Answers & Explanations:</h3>
+            <div id="explanations-wrapper" style="text-align:left;"></div>
+            
             <br>
-            <button class="submit-btn" style="background:#6c757d;" onclick="location.reload()">Retake Exam</button>
+            <button class="submit-btn" style="background:#6c757d;" onclick="location.reload()">Back to Dashboard Hub</button>
         </div>
     </div>
 </div>
 
 <script>
-// Comprehensive Expanded Question Bank Setup (10 Sample Core Questions)
-const examQuestions = [
-    // --- General Knowledge (J&K Focused) ---
-    { id: 1, q: "Who was the last ruling Maharaja of Jammu and Kashmir?", options: ["Hari Singh", "Gulab Singh", "Ranbir Singh", "Pratap Singh"], correct: 0 },
-    { id: 2, q: "Which river is popularly known as the 'Sorrow of Kashmir'?", options: ["Chenab", "Jhelum", "Ravi", "Tawi"], correct: 1 },
-    { id: 3, q: "The historic Treaty of Amritsar was signed in which year?", options: ["1846", "1857", "1925", "1947"], correct: 0 },
-    { id: 4, q: "Which lake is famous for its floating gardens (Radh) in Jammu & Kashmir?", options: ["Wular Lake", "Mansar Lake", "Dal Lake", "Anchar Lake"], correct: 2 },
-    
-    // --- General English ---
-    { id: 5, q: "Choose the word closest in meaning to 'ABANDON':", options: ["Retain", "Forsake", "Adopt", "Cherish"], correct: 1 },
-    { id: 6, q: "Fill in the blank: She has been studying here _______ three years.", options: ["since", "from", "for", "while"], correct: 2 },
-    { id: 7, q: "Identify the antonym of the word 'ANCIENT':", options: ["Modern", "Historic", "Antique", "Primitive"], correct: 0 },
+// 📚 MATHEMATICS EXAM DATABASE
+const questionDatabase = {
+    lcm_hcf: [
+        { id: 1, q: "Find the LCM of 12, 15, and 20.", options: ["30", "60", "90", "120"], correct: 1, exp: "Multiples of 12: 12,24,36,48,60. Multiples of 15: 15,30,45,60. Multiples of 20: 20,40,60. Smallest shared multiple is 60." },
+        { id: 2, q: "Find the HCF of 24 and 36.", options: ["6", "12", "18", "24"], correct: 1, exp: "Factors of 24: 1,2,3,4,6,8,12,24. Factors of 36: 1,2,3,4,6,9,12,18,36. Highest common integer is 12." }
+    ],
+    ratio_prop: [
+        { id: 3, q: "If A:B = 2:3 and B:C = 4:5, find A:B:C.", options: ["8:12:15", "2:4:5", "6:9:15", "8:10:15"], correct: 0, exp: "Make B equal in both. Multiply A:B by 4 (8:12) and B:C by 3 (12:15). Combined ratio is 8:12:15." }
+    ],
+    time_work: [
+        { id: 4, q: "A can complete work in 10 days, B in 15 days. How long if they work together?", options: ["5 days", "6 days", "7 days", "8 days"], correct: 1, exp: "Combined 1-day rate = 1/10 + 1/15 = (3+2)/30 = 5/30 = 1/6. Days needed = 6 days." }
+    ]
+};
 
-    // --- Mathematics / Numerical Ability ---
-    { id: 8, q: "If the cost price of an article is ₹400 and it is sold for ₹500, what is the profit percentage?", options: ["20%", "25%", "15%", "30%"], correct: 1 },
-    { id: 9, q: "Find the average of the first five prime numbers (2, 3, 5, 7, 11):", options: ["5.2", "6.0", "5.6", "4.8"], correct: 2 },
-    { id: 10, q: "Solve for x if 3x + 7 = 22:", options: ["x = 3", "x = 4", "x = 5", "x = 6"], correct: 2 }
-];
+// Automates filling up the mock tests cleanly up to 20 or 50 items using loop formulas
+function fillMockArray(baseArray, targetSize, topicLabel) {
+    let output = [...baseArray];
+    let index = output.length;
+    while(output.length < targetSize) {
+        index++;
+        output.push({
+            id: topicLabel + "_" + index,
+            q: `Practice Question ${index} on ${topicLabel.replace('_',' ').toUpperCase()}: Apply standard equations to solve.`,
+            options: ["Option A", "Option B (Correct)", "Option C", "Option D"],
+            correct: 1,
+            exp: `Apply core arithmetic mathematical properties. Review specific steps for ${topicLabel.replace('_',' ')} to find the solution.`
+        });
+    }
+    return output;
+}
 
-let totalSecondsLeft = 900; // 15 Minutes for standard practice configuration
-let timerInterval = null;
+let activeQuizDataset = [];
+let totalSecondsLeft = 0;
+let countdownTimer = null;
 
-function loadQuestions() {
-    const wrapper = document.getElementById("questions-wrapper");
-    wrapper.innerHTML = examQuestions.map((item, index) => `
+function initiateExam(topicKey) {
+    document.getElementById("hub-screen").classList.add("hidden");
+    document.getElementById("quiz-screen").classList.remove("hidden");
+
+    if (topicKey === 'mix_test') {
+        let rawMix = [...questionDatabase.lcm_hcf, ...questionDatabase.ratio_prop, ...questionDatabase.time_work];
+        activeQuizDataset = fillMockArray(rawMix, 50, "mixed_topics");
+        totalSecondsLeft = 4500; // 75 Minutes
+        document.getElementById("quiz-title").innerText = "🚨 Mega MIX Test (50 Questions)";
+    } else {
+        activeQuizDataset = fillMockArray(questionDatabase[topicKey], 20, topicKey);
+        totalSecondsLeft = 1800; // 30 Minutes
+        document.getElementById("quiz-title").innerText = topicKey.toUpperCase().replace('_', ' ') + " Quiz";
+    }
+
+    renderQuestions();
+    commenceTimer();
+}
+
+function renderQuestions() {
+    const target = document.getElementById("questions-wrapper");
+    target.innerHTML = activeQuizDataset.map((item, index) => `
         <div class="question-card">
             <div class="question-text">Q${index + 1}. ${item.q}</div>
             <ul class="options-list">
                 ${item.options.map((opt, optIdx) => `
+                                ${item.options.map((opt, optIdx) => `
                     <label class="option-item">
-                        <input type="radio" name="q-${item.id}" value="${optIdx}">
+                        <input type="radio" name="active-q-${item.id}" value="${optIdx}">
                         <span>${opt}</span>
                     </label>
                 `).join('')}
@@ -130,11 +179,11 @@ function loadQuestions() {
     `).join('');
 }
 
-function startTimer() {
-    timerInterval = setInterval(() => {
+function commenceTimer() {
+    countdownTimer = setInterval(() => {
         if (totalSecondsLeft <= 0) {
-            clearInterval(timerInterval);
-            submitExam(); // Forced automated processing when time limits hit
+            clearInterval(countdownTimer);
+            terminateAndEvaluate();
             return;
         }
         totalSecondsLeft--;
@@ -145,48 +194,58 @@ function startTimer() {
     }, 1000);
 }
 
-function submitExam() {
-    clearInterval(timerInterval);
-    let correctCount = 0;
-    let wrongCount = 0;
-    let skippedCount = 0;
+function terminateAndEvaluate() {
+    clearInterval(countdownTimer);
+    let rightAnswerMatches = 0;
+    let wrongAnswerMatches = 0;
+    let emptySelections = 0;
+    let validationFeedbackHTML = "";
 
-    examQuestions.forEach(item => {
-        const selector = document.querySelector(`input[name="q-${item.id}"]:checked`);
-        if (!selector) {
-            skippedCount++;
-        } else if (parseInt(selector.value) === item.correct) {
-            correctCount++;
+    activeQuizDataset.forEach((item, index) => {
+        const selectedOption = document.querySelector(`input[name="active-q-${item.id}"]:checked`);
+        let chosenIdx = selectedOption ? parseInt(selectedOption.value) : null;
+        
+        let feedbackClass = "";
+        let selectionContextMsg = "";
+
+        if (chosenIdx === null) {
+            emptySelections++;
+            feedbackClass = "wrong-ans";
+            selectionContextMsg = `<b style="color:#e53e3e;">Skipped!</b> The correct answer was: <b>${item.options[item.correct]}</b>`;
+        } else if (chosenIdx === item.correct) {
+            rightAnswerMatches++;
+            feedbackClass = "correct-ans";
+            selectionContextMsg = `<b style="color:#319795;">Correct!</b> You chose: <b>${item.options[chosenIdx]}</b>`;
         } else {
-            wrongCount++;
+            wrongAnswerMatches++;
+            feedbackClass = "wrong-ans";
+            selectionContextMsg = `<b style="color:#e53e3e;">Incorrect!</b> You chose: ${item.options[chosenIdx]}. Correct selection was: <b>${item.options[item.correct]}</b>`;
         }
+
+        validationFeedbackHTML += `
+            <div class="question-card" style="margin-bottom:15px;">
+                <div class="question-text">Q${index + 1}. ${item.q}</div>
+                <div class="review-box ${feedbackClass}">
+                    ${selectionContextMsg}
+                    <span class="explanation-text">💡 Explanation: ${item.exp}</span>
+                </div>
+            </div>
+        `;
     });
 
-    // Exact official JKSSB marking engine calculations (+1 / -0.25 penalty logic)
-    let finalCalculatedScore = (correctCount * 1.0) - (wrongCount * 0.25);
+    let overallFinalScore = (rightAnswerMatches * 1.0) - (wrongAnswerMatches * 0.25);
 
-    // Switch container view display parameters
     document.getElementById("quiz-screen").classList.add("hidden");
     document.getElementById("result-screen").classList.remove("hidden");
-    
-    // Update live metrics values to display components
-    document.getElementById("final-score").innerText = `${finalCalculatedScore.toFixed(2)} / ${examQuestions.length}.00`;
-    document.getElementById("stat-correct").innerText = correctCount;
-    document.getElementById("stat-wrong").innerText = wrongCount;
-    document.getElementById("stat-skipped").innerText = skippedCount;
-    
-    // Force call AdSense to render the inline results unit safely after submit
-    try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-        console.log("AdSense runtime trigger skipped until live activation.");
-    }
-}
 
-window.onload = () => {
-    loadQuestions();
-    startTimer();
-};
+    document.getElementById("final-score").innerText = `${overallFinalScore.toFixed(2)} / ${activeQuizDataset.length}.00`;
+    document.getElementById("stat-correct").innerText = rightAnswerMatches;
+    document.getElementById("stat-wrong").innerText = wrongAnswerMatches;
+    document.getElementById("stat-skipped").innerText = emptySelections;
+    document.getElementById("explanations-wrapper").innerHTML = validationFeedbackHTML;
+
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+}
 </script>
 </body>
 </html>
