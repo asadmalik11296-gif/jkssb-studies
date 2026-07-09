@@ -6,7 +6,7 @@
     <title>JKSSB Mock Test Panel</title>
 
     <!-- 🖥️ GOOGLE ADSENSE CODE INTEGRATION -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765" crossorigin="anonymous"></script>
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-6086620349531765">
 
     <style>
@@ -48,6 +48,13 @@
     <!-- 🏠 DASHBOARD HUB SCREEN -->
     <div id="hub-screen">
         <h2 class="hub-title">Select Your JKSSB Practice Test</h2>
+        
+        <!-- Leaderboard Registration Field -->
+        <div id="user-registration" style="text-align: center; margin-bottom: 25px; padding: 15px; background: #eef2f7; border-radius: 6px; border: 1px solid #cbd5e0;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #2d3748;">Enter your details to register for the Leaderboard:</p>
+            <input type="text" id="student-name" placeholder="Enter Your Full Name" style="padding: 10px; width: 85%; max-width: 320px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 15px;" required>
+        </div>
+
         <div class="grid-layout">
             <div class="topic-card" onclick="initiateExam('lcm_hcf')">
                 <h3>LCM & HCF</h3>
@@ -234,6 +241,28 @@ function terminateAndEvaluate() {
     });
 
     let overallFinalScore = (rightAnswerMatches * 1.0) - (wrongAnswerMatches * 0.25);
+
+    // 📊 AUTOMATED PUBLIC LEADERBOARD TRACKING SYSTEM (FIXED PATH)
+    let studentName = document.getElementById("student-name").value.trim();
+    if (!studentName) { studentName = "Anonymous Student"; }
+    let finalScoreVal = parseFloat(overallFinalScore.toFixed(2));
+    let activeTestTitle = document.getElementById("quiz-title").innerText;
+
+    fetch('https://jsonbin.io', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': '$2a$10$PWA.EXAM.TRACKER.DATA.KEY.DUMMY' 
+        },
+        body: JSON.stringify({
+            name: studentName,
+            score: finalScoreVal,
+            test: activeTestTitle,
+            date: new Date().toLocaleDateString()
+        })
+    }).then(() => {
+        console.log("Leaderboard score sent successfully!");
+    }).catch(err => console.log("Tracking sync bypass:", err));
 
     document.getElementById("quiz-screen").classList.add("hidden");
     document.getElementById("result-screen").classList.remove("hidden");
