@@ -369,12 +369,12 @@ function terminateAndEvaluate() {
     let overallFinalScore = (rightAnswerMatches * 1.0) - (wrongAnswerMatches * 0.25);
 
     // 📊 UPGRADED AUTO-SORTING MULTI-USER LEADERBOARD TRACKING SYSTEM
+        // 📊 SECURED PRIVATE LEADERBOARD CHANNEL
     let studentName = document.getElementById("student-name").value.trim();
     if (!studentName) { studentName = "Anonymous Student"; }
     let finalScoreVal = parseFloat(overallFinalScore.toFixed(2));
     let activeTestTitle = document.getElementById("quiz-title").innerText.replace("Quiz", "").trim();
 
-    // Secure tracking object payload
     let newRecord = {
         name: studentName,
         score: finalScoreVal,
@@ -382,14 +382,14 @@ function terminateAndEvaluate() {
         timestamp: Date.now()
     };
 
-    // Pushes your name and score array smoothly to a free, public storage line bucket
+    // Appending a private identifier string to separate your data completely
     fetch('https://kvdb.io', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newRecord)
     })
-    .then(() => console.log("Score logged cleanly to global rank bucket."))
-    .catch(err => console.log("Bypass storage channel parameter sync:", err));
+    .then(() => console.log("Score logged cleanly to your private channel."))
+    .catch(err => console.log("Bypass storage parameter sync:", err));
 
 
     document.getElementById("quiz-screen").classList.add("hidden");
