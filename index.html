@@ -48,8 +48,20 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765"
      crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-6086620349531765">
-</head>
-<body>
+ <!-- Paste the PWA code right here -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#007bff">
+  <script>
+     if ('serviceWorker' in navigator) {
+       window.addEventListener('load', () => {
+         navigator.serviceWorker.register('/sw.js')
+           .then(reg => console.log('Service Worker registered!', reg.scope))
+           .catch(err => console.log('Service Worker failed:', err));
+       });
+     }
+   </script>
+ </head>
+ <body>
 
 <!-- 📢 LIVE EXAM TRACKER BANNER -->
 <div class="tracker-banner">
