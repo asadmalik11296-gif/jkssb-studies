@@ -193,7 +193,7 @@ function startTimer() {
     }, 1000);
 }
 
-// Test submission with negative marking
+// Test submission with fully compatible leaderboard data sync
 function submitQuiz(isAuto = false) {
     if(!isAuto && !confirm("क्या आप सच में टेस्ट सबमिट करना चाहते हैं?")) return;
     clearInterval(timerInterval);
@@ -218,6 +218,27 @@ function submitQuiz(isAuto = false) {
         <p style="color: #28a745; font-weight: bold; margin: 5px 0;">Correct Answers: ${correct}</p>
         <p style="color: #dc2626; font-weight: bold; margin: 5px 0;">Wrong Answers: ${wrong}</p>
     `;
+
+    // 🏆 LEADERSBOARD ENTRY
+    setTimeout(() => {
+        let userName = prompt("लीडरबोर्ड में अपना नाम दर्ज करने के लिए अपना नाम लिखें:");
+        if (!userName) userName = "Anonymous User";
+
+        let leaderboard = JSON.parse(localStorage.getItem('jkssb_leaderboard')) || [];
+        
+        // यहाँ टेबल स्ट्रक्चर के हिसाब से 'name', 'score' और 'test' तीनों जा रहे हैं
+        leaderboard.push({ 
+            name: userName, 
+            score: parseFloat(finalScore.toFixed(2)),
+            test: "Aptitude Practice Set" 
+        });
+        
+        leaderboard.sort((a, b) => b.score - a.score);
+        localStorage.setItem('jkssb_leaderboard', JSON.stringify(leaderboard));
+        
+        // यदि आप चाहते हैं कि सबमिट होने के बाद यूजर सीधे लीडरबोर्ड पेज पर चला जाए:
+        // window.location.href = "leaderboard.html"; 
+    }, 1000);
 }
 </script>
 </body>
