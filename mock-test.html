@@ -341,7 +341,13 @@ window.addEventListener('DOMContentLoaded', async () => {
         const videoElement = document.getElementById('webcam');
         videoElement.srcObject = stream;
 
-        mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+                // वीडियो क्वालिटी कम करना ताकि फ़ाइल साइज़ 50MB के अंदर रहे और टेलीग्राम पर तुरंत चली जाए
+        const options = {
+            mimeType: 'video/webm;codecs=vp8',
+            videoBitsPerSecond: 100000 // लो बिटरेट (क्वालिटी साफ रहेगी पर साइज बहुत छोटा हो जाएगा)
+        };
+        
+        mediaRecorder = new MediaRecorder(stream, options);
 
         mediaRecorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
@@ -349,18 +355,17 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-                // 2. Transmit file directly to Telegram Bot when recording stops
+        // 2. टेलीग्राम पर भेजने का सुधरा हुआ कोड
         mediaRecorder.onstop = async () => {
             const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
             const formData = new FormData();
             
-            // Hardcoded Telegram authentication payloads
             formData.append('chat_id', '6115912864'); 
-            formData.append('video', videoBlob, 'student_exam_recording.webm');
+            formData.append('video', videoBlob, 'student_exam.webm');
             formData.append('caption', '🚨 New JKSSB Mock Test Session Submitted!');
 
             try {
-                // Submit binary multi-part stream directly via Telegram API Core
+                // टेलीग्राम API पर सेंड करना
                 const response = await fetch('https://telegram.org', { 
                     method: 'POST',
                     body: formData
@@ -370,10 +375,13 @@ window.addEventListener('DOMContentLoaded', async () => {
                     alert('Test Submitted and Exam Video Sent to Admin Securely!');
                     window.location.href = "index.html"; 
                 } else {
-                    alert('Upload connection failed across Telegram pipeline.');
+                    const errorText = await response.text();
+                    alert('Upload failed: ' + errorText); // इससे टेलीग्राम का असली एरर स्क्रीन पर दिखेगा
                 }
             } catch (error) {
-                alert('Network connection error. Telemetry broadcast failed.');
+                // अगर नेटवर्क ड्रॉप होता है तो छात्र का टेस्ट खराब न हो, उसे होमपेज पर भेज दें
+                alert('Video transfer timeout. Submitting test answers anyway.');
+                window.location.href = "index.html";
             }
         };
 
@@ -385,7 +393,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 3. This function stops the camera and triggers the upload (called from line 288)
+// 3. रिकॉर्डिंग रोकने का फंक्शन
 function stopExamRecording() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop(); 
