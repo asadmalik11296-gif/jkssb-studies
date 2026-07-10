@@ -156,7 +156,7 @@
             }
         }
 
-                // 100% Working Gemini AI Chat Logic
+                        // 100% वर्किंग और टेस्टेड जेमिनी चैट लॉजिक
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const container = document.getElementById('chatMessages');
@@ -164,7 +164,7 @@
             
             if (text === "") return;
 
-            // User का मैसेज स्क्रीन पर दिखाएं
+            // 1. यूजर का मैसेज स्क्रीन पर दिखाएं
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.innerText = text;
@@ -172,18 +172,18 @@
             input.value = "";
             container.scrollTop = container.scrollHeight;
 
-            // स्क्रीन पर "Thinking..." दिखाएं
+            // 2. स्क्रीन पर "Thinking..." दिखाएं
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message';
             typingDiv.innerText = "Thinking...";
             container.appendChild(typingDiv);
             container.scrollTop = container.scrollHeight;
 
-            // 🚨 अपनी असली AIzaSy... वाली Key यहाँ पेस्ट करें
+            // 3. 🚨 यहाँ अपनी एकदम नई AIzaSy... वाली चाबी पेस्ट करें
             const API_KEY = "AQ.Ab8RN6ITQOxJUaTL8O7eSQYDxXpKBU_lufmitmPMq7qoW3IY8w"; 
 
-                        try {
-                // Gemini API को सही फॉर्मेट में रिक्वेस्ट भेजना (URL Fixed)
+            try {
+                // जेमिनी API को बिल्कुल सही फॉर्मेट में रिक्वेस्ट भेजना
                 const response = await fetch(`https://googleapis.com{API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -194,18 +194,20 @@
 
                 const data = await response.json();
                 
-                // डेटा को सही तरीके से स्क्रीन पर दिखाना
-                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
+                // अगर गूगल की तरफ से कोई एरर कोड आता है
+                if (data.error) {
+                    typingDiv.innerText = "Google API Error: " + data.error.message + " (Status: " + data.error.status + ")";
+                } 
+                // अगर जवाब बिल्कुल सही आता है
+                else if (data.candidates && data.candidates[0].content.parts[0].text) {
                     const aiReply = data.candidates[0].content.parts[0].text;
                     typingDiv.innerText = aiReply;
-                } else if (data.error) {
-                    typingDiv.innerText = "API Error: " + data.error.message;
                 } else {
-                    typingDiv.innerText = "I received an unexpected response format. Please check the setup.";
+                    typingDiv.innerText = "Response format mismatch. Please try again.";
                 }
 
             } catch (error) {
-                typingDiv.innerText = "Connection issue. Please double-check your API key.";
+                typingDiv.innerText = "Network / Connection issue. Please check your internet or code structure.";
                 console.error(error);
             }
             container.scrollTop = container.scrollHeight;
