@@ -114,19 +114,23 @@
             <p>Ask anything about JKSSB Syllabus, Exams, or General Knowledge.</p>
         </div>
 
-        <div class="chat-container">
-            <div class="chat-header">
+                <!-- 💬 100% FIXED CHAT CONTAINER WITH WORKING KEYBOARD -->
+        <div class="chat-container" style="display: flex; flex-direction: column; background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; height: 500px; overflow: hidden; margin-top: 10px;">
+            <div class="chat-header" style="background-color: #1f2937; padding: 15px 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1f2937;">
                 <i class="bi bi-robot" style="color: #3b82f6; font-size: 20px;"></i>
                 <span>JKSSB Studies Assistant (Beta)</span>
             </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot-message">
+            
+            <div class="chat-messages" id="chatMessages" style="flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                <div class="message bot-message" style="background-color: #1f2937; color: #f3f4f6; align-self: flex-start; padding: 12px 16px; border-radius: 8px; font-size: 15px; border-bottom-left-radius: 2px; max-width: 75%;">
                     Hello! I am your personal JKSSB Study Assistant. How can I help you with your preparation today?
                 </div>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="userInput" class="chat-input" placeholder="Type your doubt here...">
-                <button onclick="sendMessage()" class="send-btn">Send</button>
+            
+                        <!-- Keyboard Focus Area Fixed -->
+            <div class="chat-input-area" style="display: flex; padding: 15px; background-color: #111827; border-top: 1px solid #1f2937; gap: 10px;">
+                <input type="text" id="userInput" class="chat-input" placeholder="Type your doubt here..." style="flex-grow: 1; background-color: #1f2937; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; color: white; font-size: 15px; outline: none; -webkit-user-select: text; user-select: text;" onkeypress="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()" class="send-btn" style="background-color: #3b82f6; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">Send</button>
             </div>
         </div>
     </div>
