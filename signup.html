@@ -49,12 +49,13 @@
 
     <!-- 🔥 100% FIXED FIREBASE MODULES FOR SIGNUP.HTML -->
     <script type="module">
-        // हमने यहाँ बिल्कुल सही और वर्किंग CDN लिंक्स का इस्तेमाल किया है
-        import { initializeApp } from "https://gstatic.com";
-        import { getAuth, createUserWithEmailAndPassword } from "https://gstatic.com";
-        import { getFirestore, doc, setDoc } from "https://gstatic.com";
+    <!-- ⚡ CORS AND CACHE FIX: FIREBASE STANDALONE SCRIPTS -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 
-        // ✅ आपकी बिल्कुल असली फ़ायरबेस चाबियाँ:
+    <script>
+        // ✅ आपकी बिल्कुल असली फ़ायरबेस चाबियाँ
         const firebaseConfig = {
             apiKey: "AIzaSyBIYbXqDcnVz0ptRYiByS2EmvCHNMLK9QA",
             authDomain: "://firebaseapp.com",
@@ -65,10 +66,10 @@
             measurementId: "G-3TCXTCDST5"
         };
 
-        // फायरबेस को चालू करना
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        // फायरबेस को इनिशियलाइज़ करना
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
         // बटन पर क्लिक सुनते ही काम शुरू करना
         document.getElementById('signup-btn').addEventListener('click', async () => {
@@ -86,29 +87,23 @@
             }
 
             try {
-                console.log("Starting automatic registration for:", email);
-                
                 // 1. नया फ़ायरबेस अकाउंट बनाना
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
                 
-                console.log("Firebase Auth Success! UID:", user.uid);
-                
                 // 2. डेटाबेस में नया रिकॉर्ड बनाना (डिफ़ॉल्ट प्लान: free)
-                await setDoc(doc(db, "users", user.uid), {
+                await db.collection("users").doc(user.uid).set({
                     email: email,
                     plan: "free",
                     createdAt: new Date().toISOString()
                 });
                 
-                console.log("Firestore Database Sync Done!");
                 alert("Account created successfully!");
                 
                 // 3. सीधे डैशबोर्ड पर भेज देना
                 window.location.href = "dashboard.html";
                 
             } catch (error) {
-                console.error("Signup Failed Error:", error);
                 alert("Error: " + error.message);
             }
         });
