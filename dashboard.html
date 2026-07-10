@@ -159,5 +159,23 @@
             const text = input.value.trim();
             
             if (text === "") return;
+        // Add User Message
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user-message';
+        userDiv.innerText = text;
+        container.appendChild(userDiv);
+        input.value = "";
+        container.scrollTop = container.scrollHeight;
 
-            // Add User Message
+        // Add Automated Personal Bot Response
+        setTimeout(() => {
+            const botDiv = document.createElement('div');
+            botDiv.className = 'message bot-message';
+            botDiv.innerText = "Thank you for asking. This custom AI chat model is running directly on your codebase and is currently undergoing setup to link directly with your JKSSB study material database!";
+            container.appendChild(botDiv);
+            container.scrollTop = container.scrollHeight;
+        }, 800);
+    }
+</script>
+</body>
+</html>
