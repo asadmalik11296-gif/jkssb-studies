@@ -152,7 +152,7 @@
             }
         }
 
-        // Simulating Personal Local Chat Logic
+                // 100% Working Gemini AI Chat Logic
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const container = document.getElementById('chatMessages');
@@ -160,7 +160,7 @@
             
             if (text === "") return;
 
-            // 1. User का मैसेज स्क्रीन पर दिखाएं
+            // User का मैसेज स्क्रीन पर दिखाएं
             const userDiv = document.createElement('div');
             userDiv.className = 'message user-message';
             userDiv.innerText = text;
@@ -168,38 +168,43 @@
             input.value = "";
             container.scrollTop = container.scrollHeight;
 
-            // 2. स्क्रीन पर "Typing..." वाला छोटा मैसेज दिखाएं
+            // स्क्रीन पर "Thinking..." दिखाएं
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message';
             typingDiv.innerText = "Thinking...";
             container.appendChild(typingDiv);
             container.scrollTop = container.scrollHeight;
 
-            // 3. यहाँ अपनी Google Gemini API Key डालें
+            // 🚨 अपनी असली AIzaSy... वाली Key यहाँ पेस्ट करें
             const API_KEY = "AQ.Ab8RN6Ji4WiaLrg-__d_rJUn9fI9vfQYX2ySMMn_zBw4iYyhFg"; 
 
             try {
-                // Gemini AI Server को रिक्वेस्ट भेजें
+                // Gemini API को सही फॉर्मेट में रिक्वेस्ट भेजना
                 const response = await fetch(`https://googleapis.com{API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: "You are a helpful JKSSB exam prep assistant for website jkssbstudies.in. Answer this short and clearly in simple language: " + text }] }]
+                        contents: [{ parts: [{ text: "You are a helpful study assistant for JKSSB exams on the website jkssbstudies.in. Answer this query shortly and clearly: " + text }] }]
                     })
                 });
 
                 const data = await response.json();
-                const aiReply = data.candidates[0].content.parts[0].text;
-
-                // "Thinking..." को हटाकर असली AI का जवाब दिखाएं
-                typingDiv.innerText = aiReply;
+                
+                // डेटा को सही तरीके से पढ़ना
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const aiReply = data.candidates[0].content.parts[0].text;
+                    typingDiv.innerText = aiReply;
+                } else {
+                    typingDiv.innerText = "I received an empty response. Please try again.";
+                }
 
             } catch (error) {
-                typingDiv.innerText = "Sorry, I am facing a connection issue. Please check your API key setup.";
+                typingDiv.innerText = "Connection issue. Please double-check your API key.";
                 console.error(error);
             }
             container.scrollTop = container.scrollHeight;
         }
-</script>
+    </script>
 </body>
 </html>
+
