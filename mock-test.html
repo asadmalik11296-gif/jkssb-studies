@@ -309,7 +309,7 @@ stopExamRecording(); // <-- Paste this exactly here on line 288
         <p style="color: #dc2626; font-weight: bold; margin: 5px 0;">Wrong Answers: ${wrong}</p>
     `;
 
-
+<script>
 let studentName = "Guest Student";
 let mediaRecorder;
 let recordedChunks = [];
@@ -322,10 +322,13 @@ window.addEventListener('DOMContentLoaded', async () => {
             videoElement.srcObject = stream;
         }
 
-        let inputName = prompt("Please enter your Full Name / Roll Number to start the test:", "");
-        if (inputName && inputName.trim() !== "") {
-            studentName = inputName;
-        }
+                // 1 सेकंड के गैप के बाद नाम पूछना ताकि ब्राउज़र इसे ब्लॉक न करे
+        setTimeout(() => {
+            let inputName = prompt("Please enter your Full Name / Roll Number to start the test:", "");
+            if (inputName && inputName.trim() !== "") {
+                studentName = inputName;
+            }
+        }, 1000);
 
         mediaRecorder = new MediaRecorder(stream);
 
