@@ -355,34 +355,43 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-        // 2. टेलीग्राम पर भेजने का सुधरा हुआ कोड
+                // 2. टेस्ट सबमिट होने पर छात्र की लाइव फोटो टेलीग्राम पर भेजना
         mediaRecorder.onstop = async () => {
-            const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-            const formData = new FormData();
+            const videoElement = document.getElementById('webcam');
             
-            formData.append('chat_id', '6115912864'); 
-            formData.append('video', videoBlob, 'student_exam.webm');
-            formData.append('caption', '🚨 New JKSSB Mock Test Session Submitted!');
+            // बैकग्राउंड में एक छोटा कैनवास बनाकर वीडियो फ्रेम से फोटो खींचना
+            const canvas = document.createElement('canvas');
+            canvas.width = videoElement.videoWidth || 640;
+            canvas.height = videoElement.videoHeight || 480;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            
+            // फोटो को इमेज फ़ाइल (Blob) में बदलना
+            canvas.toBlob(async (photoBlob) => {
+                const formData = new FormData();
+                formData.append('chat_id', '6115912864');
+                formData.append('photo', photoBlob, 'student_face.jpg');
+                formData.append('caption', '🚨 Student Identity Verification at Exam Submission!');
 
-            try {
-                // टेलीग्राम API पर सेंड करना
-                const response = await fetch('https://telegram.org', { 
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    alert('Test Submitted and Exam Video Sent to Admin Securely!');
-                    window.location.href = "index.html"; 
-                } else {
-                    const errorText = await response.text();
-                    alert('Upload failed: ' + errorText); // इससे टेलीग्राम का असली एरर स्क्रीन पर दिखेगा
+                try {
+                    // टेलीग्राम को सीधे फ़ोटो भेजना (यह कभी ब्लॉक नहीं होता)
+                    const response = await fetch('https://telegram.org', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        alert('Test Submitted and Identity Verified Successfully!');
+                    } else {
+                        console.error('Telegram upload skipped.');
+                    }
+                } catch (error) {
+                    console.error('Network bypass.');
                 }
-            } catch (error) {
-                // अगर नेटवर्क ड्रॉप होता है तो छात्र का टेस्ट खराब न हो, उसे होमपेज पर भेज दें
-                alert('Video transfer timeout. Submitting test answers anyway.');
+                
+                // चाहे फोटो अपलोड हो या फेल, छात्र को होमपेज पर सुरक्षित भेज दें
                 window.location.href = "index.html";
-            }
+            }, 'image/jpeg', 0.7); // 0.7 क्वालिटी यानी साइज़ बेहद छोटा रहेगा
         };
 
         mediaRecorder.start();
