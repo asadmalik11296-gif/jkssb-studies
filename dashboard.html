@@ -314,15 +314,34 @@
 
     <!-- DASHBOARD SCRIPTS -->
     <script>
+        // ==========================================
+        // 🔑 CONFIGURATION & LIMITS (सुरक्षित लिमिट्स)
+        // ==========================================
         const MESH_API_KEY = "Your_Mesh_API_Key_Here"; 
+        
         let IS_PREMIUM_USER = false; 
+        
+        // 🔒 USAGE TRACKING COUNTERS
         let freeMessageCount = 0;
-        const FREE_LIMIT = 10; 
+        const FREE_CHAT_LIMIT = 10; 
+
+        // 👑 PREMIUM USAGE LIMITS (FUP - आपको नुकसान से बचाने के लिए)
+        let premiumImageCount = 0;
+        const MAX_PREMIUM_IMAGES = 200;
+
+        let premiumVideoCount = 0;
+        const MAX_PREMIUM_VIDEOS = 20;
+
+        let premiumQuizCount = 0;
+        const MAX_PREMIUM_QUIZZES = 500;
 
         window.onload = function() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
             document.getElementById('theme-icon').className = savedTheme === 'light' ? "fa-solid fa-moon" : "fa-solid fa-sun";
+            
+            // यहाँ बाद में डेटाबेस से यूजर का डेटा लोड होगा
+            loadUserData();
         };
 
         function toggleTheme() {
@@ -352,12 +371,16 @@
             const targetNav = document.getElementById('nav-' + viewName);
             if(targetNav) targetNav.classList.add('active');
             
+            updatePageTitle(viewName);
+        }
+
+        function updatePageTitle(viewName) {
             const titles = { 
                 'chat': 'Mesh AI Chat Hub', 
-                'image': 'AI Image Studio (Reference Input)', 
-                'video': 'AI Video Lab (Image to Video)', 
+                'image': `AI Image Studio (${premiumImageCount}/${MAX_PREMIUM_IMAGES} Used)`, 
+                'video': `AI Video Lab (${premiumVideoCount}/${MAX_PREMIUM_VIDEOS} Used)`, 
                 'code': 'AI Code Terminal',
-                'quiz': 'Syllabus MCQ Quiz Generator'
+                'quiz': `MCQ Quiz Generator (${premiumQuizCount}/${MAX_PREMIUM_QUIZZES} Used)`
             };
             document.getElementById('page-title').innerText = titles[viewName];
         }
@@ -365,26 +388,30 @@
         function openSubscriptionModal() { document.getElementById('sub-modal').style.display = 'flex'; }
         function closeSubscriptionModal() { document.getElementById('sub-modal').style.display = 'none'; }
 
+        // 💳 जब यूजर भुगतान करेगा (यह आपके बैंक में पैसा आने के बाद ट्रिगर होगा)
         function simulatePaymentSuccess() {
             IS_PREMIUM_USER = true;
             document.getElementById('user-status').classList.add('is-premium');
             document.getElementById('status-text-badge').innerText = "Pro Member ✨";
             closeSubscriptionModal();
-            alert("Success! Your Premium access has been activated.");
+            alert("Payment Successful! Your Pro features with Fair Usage Limits are now active.");
+            
+            // डेटाबेस में स्टेटस सेव करें
+            saveUserData();
         }
 
-        function runPremiumTool(toolName) {
-            if(!IS_PREMIUM_USER) { openSubscriptionModal(); return; }
-            alert(toolName + " task processing started via Mesh API Key.");
-        }
-
+        // ==========================================
+        // 🚀 SMART AND PROTECTED TOOLS LOGIC
+        // ==========================================
+        
+        // 1. CHAT MODE (FREE LIMIT PROTECTED)
         async function runMeshChat() {
             const inputEl = document.getElementById('chat-input');
             const outputEl = document.getElementById('chat-output');
             if(!inputEl.value.trim()) return;
 
-            if(!IS_PREMIUM_USER && freeMessageCount >= FREE_LIMIT) {
-                outputEl.innerHTML += `<div class="chat-line user-line"><div class="msg user-msg" style="background:#ef4444;">Daily Free limit reached. Upgrade to continue.</div></div>`;
+            if(!IS_PREMIUM_USER && freeMessageCount >= FREE_CHAT_LIMIT) {
+                outputEl.innerHTML += `<div class="chat-line user-line"><div class="msg user-msg" style="background:#ef4444;">Daily Free limit reached (10/10). Please upgrade to Premium for uninterrupted access.</div></div>`;
                 openSubscriptionModal();
                 return;
             }
@@ -393,6 +420,72 @@
             if(!IS_PREMIUM_USER) freeMessageCount++;
             inputEl.value = '';
             outputEl.scrollTop = outputEl.scrollHeight;
+            
+            // (यहाँ मेश एपीआई फेच कॉल का बैकएंड कोड चालू होगा)
+        }
+
+        // 2. IMAGE MODE (200 LIMIT PROTECTED)
+        function runPremiumImage() {
+            if(!IS_PREMIUM_USER) { openSubscriptionModal(); return; }
+            
+            if(premiumImageCount >= MAX_PREMIUM_IMAGES) {
+                alert("You have reached your high-speed generation limit of 200 images for this month. Contact support to renew.");
+                return;
+            }
+
+            premiumImageCount++;
+            updatePageTitle('image');
+            alert("Image request sent to Mesh API! (" + premiumImageCount + "/" + MAX_PREMIUM_IMAGES + ")");
+            saveUserData();
+        }
+
+        // 3. VIDEO MODE (20 LIMIT PROTECTED)
+        function runPremiumVideo() {
+            if(!IS_PREMIUM_USER) { openSubscriptionModal(); return; }
+            
+            if(premiumVideoCount >= MAX_PREMIUM_VIDEOS) {
+                alert("Monthly high-speed limit of 20 videos reached. Upgrade package for more.");
+                return;
+            }
+
+            premiumVideoCount++;
+            updatePageTitle('video');
+            alert("Video rendering started via Mesh API! (" + premiumVideoCount + "/" + MAX_PREMIUM_VIDEOS + ")");
+            saveUserData();
+        }
+
+        // 4. QUIZ MODE (500 LIMIT PROTECTED)
+        function runPremiumQuiz() {
+            if(!IS_PREMIUM_USER) { openSubscriptionModal(); return; }
+            
+            if(premiumQuizCount >= MAX_PREMIUM_QUIZZES) {
+                alert("Quiz limit reached."); return;
+            }
+
+            premiumQuizCount++;
+            updatePageTitle('quiz');
+            alert("Generating MCQ Test... (" + premiumQuizCount + "/" + MAX_PREMIUM_QUIZZES + ")");
+            saveUserData();
+        }
+
+        // नकली डेटाबेस सेव और लोड फंक्शंस
+        function saveUserData() {
+            localStorage.setItem('isPremium', IS_PREMIUM_USER);
+            localStorage.setItem('imgCount', premiumImageCount);
+            localStorage.setItem('vidCount', premiumVideoCount);
+            localStorage.setItem('quizCount', premiumQuizCount);
+        }
+
+        function loadUserData() {
+            IS_PREMIUM_USER = localStorage.getItem('isPremium') === 'true';
+            premiumImageCount = parseInt(localStorage.getItem('imgCount')) || 0;
+            premiumVideoCount = parseInt(localStorage.getItem('vidCount')) || 0;
+            premiumQuizCount = parseInt(localStorage.getItem('quizCount')) || 0;
+            
+            if(IS_PREMIUM_USER) {
+                document.getElementById('user-status').classList.add('is-premium');
+                document.getElementById('status-text-badge').innerText = "Pro Member ✨";
+            }
         }
     </script>
 </body>
