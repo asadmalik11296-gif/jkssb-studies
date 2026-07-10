@@ -18,7 +18,7 @@
         button { background: #38bdf8; color: #0f172a; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 15px; }
         button:hover { background: #0ea5e9; }
         .toggle-link { text-align: center; margin-top: 20px; font-size: 13px; color: #94a3b8; }
-        .toggle-link span { color: #38bdf8; cursor: pointer; font-weight: 600; text-decoration: underline; }
+        .toggle-link a { color: #38bdf8; cursor: pointer; font-weight: 600; text-decoration: underline; }
     </style>
     <!-- 💻 GOOGLE ADSENSE CODE INTEGRATION -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765"
@@ -28,8 +28,8 @@
 <body>
 
     <div class="auth-container">
-        <h2 id="auth-title">Login to JKSSB Studies</h2>
-        <p id="auth-subtitle">Access your AI exam preparation workspace</p>
+        <h2>Login to JKSSB Studies</h2>
+        <p>Access your AI exam preparation workspace</p>
         
         <div class="input-group">
             <label>Email Address</label>
@@ -40,19 +40,17 @@
             <input type="password" id="password" placeholder="••••••••">
         </div>
 
-        <!-- आईडी असाइन की ताकि जावास्क्रिप्ट सीधे क्लिक पकड़ सके -->
-        <button id="auth-btn">Sign In</button>
+        <button id="login-btn">Sign In</button>
         
-        <div class="toggle-link" id="toggle-area">
-            Don't have an account? <span id="switch-toggle-btn">Create Account</span>
+        <!-- 🔗 यहाँ मैंने इसे सीधे signup.html पेज से लिंक कर दिया है! -->
+        <div class="toggle-link">
+            Don't have an account? <a href="signup.html">Create Account</a>
         </div>
     </div>
 
-    <!-- 🔥 FIREBASE MODULES WITH ROBUST EVENT LISTENERS -->
     <script type="module">
         import { initializeApp } from "https://gstatic.com";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://gstatic.com";
-        import { getFirestore, doc, setDoc } from "https://gstatic.com";
+        import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBIYbXqDcnVz0ptRYiByS2EmvCHNMLK9QA",
@@ -66,62 +64,18 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
 
-        let isSignUpMode = false;
-
-        // 🔄 क्लिक्स को बिना किसी एरर के संभालने के लिए मुख्य फंक्शन
-        function toggleFormMode() {
-            isSignUpMode = !isSignUpMode;
-            
-            document.getElementById('auth-title').innerText = isSignUpMode ? "Create Account" : "Login to JKSSB Studies";
-            document.getElementById('auth-subtitle').innerText = isSignUpMode ? "Sign up to start learning with AI" : "Access your AI exam preparation workspace";
-            document.getElementById('auth-btn').innerText = isSignUpMode ? "Sign Up" : "Sign In";
-            
-            const toggleArea = document.getElementById('toggle-area');
-            if (isSignUpMode) {
-                toggleArea.innerHTML = `Already have an account? <span id="switch-toggle-btn">Sign In</span>`;
-            } else {
-                toggleArea.innerHTML = `Don't have an account? <span id="switch-toggle-btn">Create Account</span>`;
-            }
-            
-            // नया बटन रेंडर होने के बाद उस पर दोबारा लिसनर लगाना ज़रूरी है
-            document.getElementById('switch-toggle-btn').addEventListener('click', toggleFormMode);
-        }
-
-        // मुख्य सबमिशन लॉजिक (लॉगिन / साइन-अप)
-        async function handleAuthSubmission() {
+        document.getElementById('login-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-
             if(!email || !password) { alert("Please fill all fields."); return; }
-
             try {
-                if (isSignUpMode) {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    const user = userCredential.user;
-                    
-                    await setDoc(doc(db, "users", user.uid), {
-                        email: email,
-                        plan: "free",
-                        createdAt: new Date().toISOString()
-                    });
-                    
-                    alert("Account created successfully!");
-                } else {
-                    await signInWithEmailAndPassword(auth, email, password);
-                }
-                
+                await signInWithEmailAndPassword(auth, email, password);
                 window.location.href = "dashboard.html";
-                
             } catch (error) {
                 alert("Error: " + error.message);
             }
-        }
-
-        // ⚡ मॉडर्न गिटहब/फायरबेस इवेंट बाइंडिंग (100% वर्किंग गारंटी)
-        document.getElementById('switch-toggle-btn').addEventListener('click', toggleFormMode);
-        document.getElementById('auth-btn').addEventListener('click', handleAuthSubmission);
+        });
     </script>
 </body>
 </html>
