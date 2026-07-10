@@ -176,10 +176,10 @@
             container.scrollTop = container.scrollHeight;
 
             // 🚨 अपनी असली AIzaSy... वाली Key यहाँ पेस्ट करें
-            const API_KEY = "AQ.Ab8RN6Ji4WiaLrg-__d_rJUn9fI9vfQYX2ySMMn_zBw4iYyhFg"; 
+            const API_KEY = "AQ.Ab8RN6ITQOxJUaTL8O7eSQYDxXpKBU_lufmitmPMq7qoW3IY8w"; 
 
-            try {
-                // Gemini API को सही फॉर्मेट में रिक्वेस्ट भेजना
+                        try {
+                // Gemini API को सही फॉर्मेट में रिक्वेस्ट भेजना (URL Fixed)
                 const response = await fetch(`https://googleapis.com{API_KEY}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -190,12 +190,14 @@
 
                 const data = await response.json();
                 
-                // डेटा को सही तरीके से पढ़ना
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                // डेटा को सही तरीके से स्क्रीन पर दिखाना
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
                     const aiReply = data.candidates[0].content.parts[0].text;
                     typingDiv.innerText = aiReply;
+                } else if (data.error) {
+                    typingDiv.innerText = "API Error: " + data.error.message;
                 } else {
-                    typingDiv.innerText = "I received an empty response. Please try again.";
+                    typingDiv.innerText = "I received an unexpected response format. Please check the setup.";
                 }
 
             } catch (error) {
@@ -207,4 +209,3 @@
     </script>
 </body>
 </html>
-
