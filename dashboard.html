@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asad AI Studio - JKSSB Studies</title>
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <title>JKSSB Studies AI</title>
+    <!-- Icons Link Fixed -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { display: flex; height: 100vh; background-color: #0b0f19; color: #f3f4f6; overflow: hidden; }
         
         /* Sidebar Design */
-        .sidebar { width: 260px; background-color: #111827; border-right: 1px solid #1f2937; display: flex; flex-direction: column; padding: 20px; }
+        .sidebar { width: 280px; background-color: #111827; border-right: 1px solid #1f2937; display: flex; flex-direction: column; padding: 20px; }
         .logo-section { display: flex; align-items: center; gap: 10px; padding-bottom: 30px; border-bottom: 1px solid #1f2937; margin-bottom: 20px; }
         .logo-icon { background: linear-gradient(135deg, #3b82f6, #8b5cf6); width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
-        .logo-text { font-size: 20px; font-weight: 700; background: linear-gradient(to right, #fff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-text { font-size: 18px; font-weight: 700; background: linear-gradient(to right, #fff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .menu-group { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
-        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; color: #9ca3af; text-decoration: none; border-radius: 8px; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .menu-item { display: flex; align-items: center; gap: 12px; padding: 12px; color: #9ca3af; text-decoration: none; border-radius: 8px; font-size: 15px; font-weight: 500; transition: all 0.2s; cursor: pointer; }
         .menu-item:hover, .menu-item.active { background-color: #1f2937; color: #3b82f6; }
         .menu-item i { font-size: 18px; width: 20px; text-align: center; }
         
@@ -29,68 +30,133 @@
         .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
         .card { background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 15px; cursor: pointer; transition: transform 0.2s, border-color 0.2s; text-decoration: none; color: inherit; }
         .card:hover { transform: translateY(-4px); border-color: #3b82f6; }
-        .card-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .card-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .bg-blue { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
         .bg-purple { background-color: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
         .bg-green { background-color: rgba(16, 185, 129, 0.1); color: #10b858; }
         .card-title { font-size: 18px; font-weight: 600; }
         .card-desc { color: #9ca3af; font-size: 14px; line-height: 1.4; }
+
+        /* Integrated Custom Chat Box Setup */
+        .chat-container { display: none; background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; height: 500px; flex-direction: column; overflow: hidden; margin-top: 10px; }
+        .chat-header { background-color: #1f2937; padding: 15px 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1f2937; }
+        .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .message { max-width: 75%; padding: 12px 16px; border-radius: 8px; font-size: 15px; line-height: 1.4; }
+        .bot-message { background-color: #1f2937; color: #f3f4f6; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user-message { background-color: #3b82f6; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .chat-input-area { display: flex; padding: 15px; background-color: #111827; border-top: 1px solid #1f2937; gap: 10px; }
+        .chat-input { flex-grow: 1; background-color: #1f2937; border: 1px solid #1f2937; border-radius: 8px; padding: 12px; color: white; font-size: 15px; outline: none; }
+        .chat-input:focus { border-color: #3b82f6; }
+        .send-btn { background-color: #3b82f6; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .send-btn:hover { background-color: #2563eb; }
     </style>
-    <!-- 💻 GOOGLE ADSENSE CODE INTEGRATION -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765"
-     crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-pub-6086620349531765">
+    
+    <!-- 📄 GOOGLE ADSENSE CODE INTEGRATION -->
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+    <meta name="google-ad-sense-account" content="ca-pub-6086620349531765">
 </head>
 <body>
 
     <!-- Sidebar Section -->
     <div class="sidebar">
         <div class="logo-section">
-            <div class="logo-icon">A</div>
-            <div class="logo-text">Asad AI</div>
+            <div class="logo-icon">J</div>
+            <div class="logo-text">JKSSB Studies AI</div>
         </div>
         <div class="menu-group">
-            <a href="#" class="menu-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
-            <a href="https://manus.space" target="_blank" class="menu-item"><i class="fa-solid fa-comments"></i> AI Chat</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-file-pdf"></i> PDF Chat</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-pen-nib"></i> AI Writer</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-user"></i> Profile</a>
+            <div onclick="showSection('dashboard')" id="nav-dashboard" class="menu-item active"><i class="bi bi-grid-1x2-fill"></i> Dashboard</div>
+            <div onclick="showSection('chat')" id="nav-chat" class="menu-item"><i class="bi bi-chat-dots-fill"></i> AI Chat</div>
+            <div onclick="alert('PDF Chat Feature Coming Soon!')" class="menu-item"><i class="bi bi-file-earmark-pdf-fill"></i> PDF Chat</div>
+            <div onclick="alert('AI Writer Feature Coming Soon!')" class="menu-item"><i class="bi bi-pencil-square"></i> AI Writer</div>
+            <div onclick="alert('Profile Settings Coming Soon!')" class="menu-item"><i class="bi bi-person-fill"></i> Profile</div>
         </div>
     </div>
 
     <!-- Main Content Area -->
-    <div class="main-content">
+    <div class="main-content" id="dashboard-section">
         <div class="welcome-header">
             <h1>Welcome back, <span class="username">Aspirant</span></h1>
-            <p>Your AI creative studio is ready. What would you like to learn today?</p>
+            <p>Your JKSSB Studies AI creative studio is ready. What would you like to learn today?</p>
         </div>
 
         <h2 style="font-size: 20px; font-weight: 600; color: #9ca3af; margin-top: 10px;">Quick Actions</h2>
         
         <!-- Cards Grid -->
         <div class="quick-actions">
-            <!-- Card 1: AI Chat -->
-            <a href="https://manus.space" target="_blank" class="card">
-                <div class="card-icon bg-blue"><i class="fa-solid fa-comments"></i></div>
+            <!-- Card 1: AI Chat Fixed (Opens Internal Chat Tab) -->
+            <div onclick="showSection('chat')" class="card">
+                <div class="card-icon bg-blue"><i class="bi bi-chat-dots-fill"></i></div>
                 <div class="card-title">AI Chat</div>
-                <div class="card-desc">Start a conversation with Asad AI for JKSSB exam doubts.</div>
-            </a>
+                <div class="card-desc">Start a conversation with JKSSB AI for your exam doubts.</div>
+            </div>
 
             <!-- Card 2: PDF Chat -->
             <div class="card" onclick="alert('PDF Chat Feature Coming Soon!')">
-                <div class="card-icon bg-purple"><i class="fa-solid fa-file-pdf"></i></div>
+                <div class="card-icon bg-purple"><i class="bi bi-file-earmark-pdf-fill"></i></div>
                 <div class="card-title">PDF Chat</div>
                 <div class="card-desc">Upload study materials or notifications and extract information.</div>
             </div>
 
             <!-- Card 3: AI Writer -->
             <div class="card" onclick="alert('AI Writer Feature Coming Soon!')">
-                <div class="card-icon bg-green"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="card-icon bg-green"><i class="bi bi-pencil-square"></i></div>
                 <div class="card-title">AI Writer</div>
                 <div class="card-desc">Generate study notes, sample questions, and essay outlines instantly.</div>
             </div>
         </div>
     </div>
 
-</body>
-</html>
+    <!-- Main Content Area for Chat Tab (100% Personal Code) -->
+    <div class="main-content" id="chat-section" style="display: none;">
+        <div class="welcome-header">
+            <h1>JKSSB Studies <span class="username">AI Chat</span></h1>
+            <p>Ask anything about JKSSB Syllabus, Exams, or General Knowledge.</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <i class="bi bi-robot" style="color: #3b82f6; font-size: 20px;"></i>
+                <span>JKSSB Studies Assistant (Beta)</span>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    Hello! I am your personal JKSSB Study Assistant. How can I help you with your preparation today?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" class="chat-input" placeholder="Type your doubt here...">
+                <button onclick="sendMessage()" class="send-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tab Switching Logic -->
+    <script>
+        function showSection(section) {
+            const dashboardSec = document.getElementById('dashboard-section');
+            const chatSec = document.getElementById('chat-section');
+            const navDashboard = document.getElementById('nav-dashboard');
+            const navChat = document.getElementById('nav-chat');
+
+            if (section === 'dashboard') {
+                dashboardSec.style.display = 'flex';
+                chatSec.style.display = 'none';
+                navDashboard.classList.add('active');
+                navChat.classList.remove('active');
+            } else if (section === 'chat') {
+                dashboardSec.style.display = 'none';
+                chatSec.style.display = 'flex';
+                navChat.classList.add('active');
+                navDashboard.classList.remove('active');
+            }
+        }
+
+        // Simulating Personal Local Chat Logic
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const container = document.getElementById('chatMessages');
+            const text = input.value.trim();
+            
+            if (text === "") return;
+
+            // Add User Message
