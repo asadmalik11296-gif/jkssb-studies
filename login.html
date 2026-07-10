@@ -49,9 +49,11 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getAuth, signInWithEmailAndPassword } from "https://gstatic.com";
+    <!-- ⚡ CORS AND CACHE FIX: FIREBASE STANDALONE SCRIPTS -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 
+    <script>
         const firebaseConfig = {
             apiKey: "AIzaSyBIYbXqDcnVz0ptRYiByS2EmvCHNMLK9QA",
             authDomain: "://firebaseapp.com",
@@ -62,15 +64,15 @@
             measurementId: "G-3TCXTCDST5"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
 
         document.getElementById('login-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             if(!email || !password) { alert("Please fill all fields."); return; }
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                await auth.signInWithEmailAndPassword(email, password);
                 window.location.href = "dashboard.html";
             } catch (error) {
                 alert("Error: " + error.message);
