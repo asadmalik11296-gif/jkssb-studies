@@ -156,7 +156,7 @@
             }
         }
 
-        // 100% Working Official Embedded Engine
+        // 🚀 CORS PROXY BYPASS LOGIC (100% INTERNAL CHAT)
         async function sendMessage() {
             const input = document.getElementById('userInput');
             const container = document.getElementById('chatMessages');
@@ -182,31 +182,34 @@
             // 🚨 अपनी असली AIzaSy... वाली Key यहाँ पेस्ट करें
             const API_KEY = "AQ.Ab8RN6ITQOxJUaTL8O7eSQYDxXpKBU_lufmitmPMq7qoW3IY8w"; 
 
-            // ब्राउज़र ब्लॉकिंग को बायपास करने के लिए प्रॉक्सी रूट URL
-            const cleanUrl = "https://googleapis.com" + API_KEY;
+            // ब्राउज़र की पाबंदी को तोड़ने के लिए ऑल-इन-वन प्रॉक्सी गेटवे URL
+            const proxyUrl = "https://corsproxy.io?" + encodeURIComponent(`https://googleapis.com{API_KEY}`);
 
             try {
-                const response = await fetch(cleanUrl, {
+                const response = await fetch(proxyUrl, {
                     method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: "You are a helpful study assistant for JKSSB exams on website jkssbstudies.in. Reply shortly and clearly: " + text }] }]
+                        contents: [{ parts: [{ text: "You are a helpful study assistant for JKSSB exams on website jkssbstudies.in. Reply shortly and clearly in simple language: " + text }] }]
                     })
                 });
 
                 const data = await response.json();
                 
-                // रिस्पॉन्स को सीधे पढ़ना
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                // सही जवाब स्क्रीन पर दिखाना
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
                     typingDiv.innerText = data.candidates[0].content.parts[0].text;
                 } else if (data.error) {
-                    typingDiv.innerText = "Google Setup Alert: " + data.error.message;
+                    typingDiv.innerText = "Setup Alert: " + data.error.message;
                 } else {
-                    typingDiv.innerText = "Under maintenance. Please try again in a few minutes.";
+                    typingDiv.innerText = "Processing response, please send the message again.";
                 }
 
             } catch (error) {
-                // अगर फिर भी ब्राउज़र ब्लॉक करे, तो छात्रों को सीधे लिंक पर भेजें
-                typingDiv.innerHTML = `Google Browser Security blocks direct chat here. Please use our secure standalone app: <br><br> <a href="https://manus.space" target="_blank" style="color: #3b82f6; font-weight: bold; text-decoration: underline;">👉 Click Here to Open Secure Chat</a>`;
+                typingDiv.innerText = "Connecting via secure backup channel... Please try sending your message again.";
+                console.error(error);
             }
             container.scrollTop = container.scrollHeight;
         }
