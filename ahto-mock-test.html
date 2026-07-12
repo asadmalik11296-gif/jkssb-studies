@@ -26,10 +26,34 @@
         .result-card { background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); min-width: 140px; }
         .result-card h4 { margin: 0 0 5px 0; color: #555; }
         .result-card p { margin: 0; font-size: 22px; font-weight: bold; }
-        
-        /* Review Mode Colors */
-        .option-label.correct-ans { background: #d4edda !important; border-color: #c3e6cb !important; color: #155724 !important; font-weight: bold; }
-        .option-label.wrong-ans { background: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24 !important; }
+                /* Purane CSS code ke theek neeche aur </style> se pehle ise copy-paste kar do */
+        .timer-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #c62828;
+            color: white;
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        @media (max-width: 768px) {
+            .timer-box {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+     }
+ 
+     /* Review Mode Colors */
+     .option-label.correct-ans { background: #d4edda !important; border-color: #c3e6cb !important; color: #155724 !important; font-weight: bold; }
+     .option-label.wrong-ans { background: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24 !important; }
+
 
         .submit-btn { background: #1b5e20; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; display: block; margin: 30px auto 0; transition: 0.2s; }
         .submit-btn:hover { background: #144316; }
