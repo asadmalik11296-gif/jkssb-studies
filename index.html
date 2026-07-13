@@ -19,6 +19,15 @@
         gtag('js', new Date());
         gtag('config', 'G-GQKGDNH2PF');
     </script>
+        <!-- Smart Auto-Update Sync Logic -->
+    <script>
+        // Har 2 ghante mein website automatically check karegi ki koi naya update aaya hai ya nahi
+        if (!sessionStorage.getItem('page_fresh_check')) {
+            sessionStorage.setItem('page_fresh_check', 'true');
+            // location.reload(true) browser ko majboor karta hai server se naya data laane ke liye
+            window.location.reload(true);
+        }
+    </script>
 </head>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
