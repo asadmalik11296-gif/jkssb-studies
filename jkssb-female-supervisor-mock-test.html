@@ -466,20 +466,20 @@
             document.getElementById('net-score-output').innerText = globalNetScore.toFixed(2);
             document.getElementById('scorecard-overlay').style.display = 'flex';
             
-            // Palette update automatic execution
-            syncMatrixVisualIndicators();
-            loadQuestionIndexContext(0); 
-        }
+// Palette update automatic execution
+syncMatrixVisualIndicators();
+loadQuestionIndexContext(0);
 
-        // Dynamic state declaration inside runtime hooks
-        window.isExamSubmitted = false;
+// Dynamic state declaration inside runtime hooks
+window.isExamSubmitted = false;
 
-        window.onload = () => {
-            build120QuestionExamData();
-            establishCBTLayout();
-            loadQuestionIndexContext(0);
-            executeCountdownTicker();
-        };
+window.onload = () => {
+    build120QuestionExamData();
+    establishCBTLayout();
+    syncMatrixVisualIndicators(); // यहाँ जोड़ें
+    loadQuestionIndexContext(0);  // यह पहले से है
+    executeCountdownTicker();
+};
     </script>
 </body>
 </html>
