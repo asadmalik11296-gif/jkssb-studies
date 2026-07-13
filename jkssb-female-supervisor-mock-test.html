@@ -71,6 +71,14 @@
         .stats-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background-color: var(--bg-light); border-radius: 6px; overflow: hidden; }
         .stats-table td { padding: 14px 20px; border: 1px solid var(--border-gray); text-align: left; font-size: 0.95rem; }
         .stats-table tr td:last-child { text-align: right; font-weight: 700; }
+              /* Post-Submission Answer Key Highlight Classes */
+        .option-label.correct-choice { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; pointer-events: none; }
+        .option-label.wrong-choice { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; pointer-events: none; }
+        .option-label.disabled-choice { pointer-events: none; opacity: 0.8; }
+        .matrix-btn.correct-palette { background-color: #16a34a !important; color: white !important; border-color: #15803d !important; }
+        .matrix-btn.wrong-palette { background-color: #dc2626 !important; color: white !important; border-color: #b91c1c !important; }
+        .matrix-btn.blank-palette { background-color: #64748b !important; color: white !important; border-color: #475569 !important; }
+
     </style>
   <!-- 💻 GOOGLE ADSENSE CODE INTEGRATION -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765"
@@ -134,7 +142,10 @@
                 <tr><td>Wrong Answers</td><td id="stat-wrong" style="color: var(--gate-red);">0</td></tr>
                 <tr><td>Unattempted Questions</td><td id="stat-blank">0</td></tr>
             </table>
-            <button class="action-btn btn-next" style="padding: 12px 35px;" onclick="window.location.reload()">Re-take Practice Test</button>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="action-btn btn-next" style="padding: 12px 25px; background-color: #16a34a;" onclick="document.getElementById('scorecard-overlay').style.display='none';">👁️ Review Answers</button>
+                <button class="action-btn btn-prev" style="padding: 12px 25px;" onclick="window.location.reload()">🔄 Re-take Test</button>
+            </div>
         </div>
     </div>
 
@@ -290,6 +301,7 @@
         let selectedIndexPointer = 0;
         let runningClockSeconds = 120 * 60;
         let loopTickerInterval;
+        let isExamSubmitted = false; // Isse browser track karega ki test submit hua hai ya nahi
 
         function build120QuestionExamData() {
             let uniqueGlobalIndex = 1;
@@ -346,11 +358,27 @@
 
             const viewport = document.getElementById('question-viewport');
             let itemsHtml = '';
+            
             activeQuestion.choices.forEach((choice, index) => {
                 const stateSelected = trackedUserAnswers[activeQuestion.globalId] === index;
+                let postSubmitClass = '';
+                
+                // Submit karne ke baad color highlights rule engine
+                if (isExamSubmitted) {
+                    if (index === activeQuestion.correctKeyIndex) {
+                        postSubmitClass = 'correct-choice'; // Sahi answer hamesha green hoga
+                    } else if (stateSelected && index !== activeQuestion.correctKeyIndex) {
+                        postSubmitClass = 'wrong-choice'; // Agar galat choose kiya toh red hoga
+                    } else {
+                        postSubmitClass = 'disabled-choice';
+                    }
+                } else if (stateSelected) {
+                    postSubmitClass = 'selected';
+                }
+
                 itemsHtml += `
-                    <label class="option-label ${stateSelected ? 'selected' : ''}" onclick="registerSelection(${activeQuestion.globalId}, ${index})">
-                        <input type="radio" name="cbt_option" value="${index}" ${stateSelected ? 'checked' : ''}>
+                    <label class="option-label ${postSubmitClass}" onclick="registerSelection(${activeQuestion.globalId}, ${index})">
+                        <input type="radio" name="cbt_option" value="${index}" ${stateSelected ? 'checked' : ''} ${isExamSubmitted ? 'disabled' : ''}>
                         <strong>${String.fromCharCode(65 + index)}.</strong> &nbsp;&nbsp; ${choice}
                     </label>
                 `;
@@ -359,6 +387,7 @@
             viewport.innerHTML = `
                 <div class="question-meta-bar">
                     <span>${activeQuestion.sectionTitle}</span>
+                    ${isExamSubmitted ? `<span style="color:#16a34a; font-weight:bold;">Sahi Jawab: Option ${String.fromCharCode(65 + activeQuestion.correctKeyIndex)}</span>` : ''}
                     <span>Item Tracker: ${activeQuestion.globalId} / 120</span>
                 </div>
                 <div class="question-text">${activeQuestion.promptText}</div>
@@ -370,6 +399,7 @@
         }
 
         function registerSelection(questionId, responseIndex) {
+            if (isExamSubmitted) return; // Submit hone ke baad selection lock ho jayegi
             trackedUserAnswers[questionId] = responseIndex;
             const currentItem = masterExamArray[selectedIndexPointer];
             if (currentItem.globalId === questionId) {
@@ -385,67 +415,36 @@
             syncMatrixVisualIndicators();
         }
 
-        function flushSelection() {
-            const currentItem = masterExamArray[selectedIndexPointer];
-            delete trackedUserAnswers[currentItem.globalId];
-            document.querySelectorAll('.option-label').forEach(label => {
-                label.classList.remove('selected');
-                const radioElement = label.querySelector('input');
-                if (radioElement) radioElement.checked = false;
-            });
-            syncMatrixVisualIndicators();
-        }
-
-        function shiftQuestion(directionOffset) {
-            let potentialIndex = selectedIndexPointer + directionOffset;
-            if (potentialIndex >= 0 && potentialIndex < masterExamArray.length) {
-                loadQuestionIndexContext(potentialIndex);
-            }
-        }
-
-        function locateSectionLeadIndex(sectionCode) {
-            const calculatedIndex = masterExamArray.findIndex(i => i.sectionCode === sectionCode);
-            if (calculatedIndex !== -1) {
-                loadQuestionIndexContext(calculatedIndex);
-            }
-        }
-
         function syncMatrixVisualIndicators() {
             masterExamArray.forEach(item => {
                 const cell = document.getElementById(`matrix-index-cell-${item.globalId}`);
                 if (!cell) return;
-                cell.classList.remove('answered', 'visited');
-                if (trackedUserAnswers[item.globalId] !== undefined) {
-                    cell.classList.add('answered');
-                } else if (visitedIndicator[item.globalId] === true) {
-                    cell.classList.add('visited');
+                
+                cell.classList.remove('answered', 'visited', 'correct-palette', 'wrong-palette', 'blank-palette');
+                
+                if (isExamSubmitted) {
+                    const userAns = trackedUserAnswers[item.globalId];
+                    if (userAns === undefined) {
+                        cell.classList.add('blank-palette'); // Left blank keys color gray
+                    } else if (userAns === item.correctKeyIndex) {
+                        cell.classList.add('correct-palette'); // Correct keys color green
+                    } else {
+                        cell.classList.add('wrong-palette'); // Wrong keys color red
+                    }
+                } else {
+                    if (trackedUserAnswers[item.globalId] !== undefined) {
+                        cell.classList.add('answered');
+                    } else if (visitedIndicator[item.globalId] === true) {
+                        cell.classList.add('visited');
+                    }
                 }
             });
         }
 
-        function executeCountdownTicker() {
-            loopTickerInterval = setInterval(() => {
-                if (runningClockSeconds <= 0) {
-                    clearInterval(loopTickerInterval);
-                    compileFinalMarkMetrics();
-                } else {
-                    runningClockSeconds--;
-                    const min = Math.floor(runningClockSeconds / 60);
-                    const sec = runningClockSeconds % 60;
-                    document.getElementById('clock-display').innerText = 
-                        `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-                }
-            }, 1000);
-        }
-
-        function verifyCompletionRequest() {
-            if (confirm("Are you sure you want to finish the exam? This will lock your responses and generate your final score report.")) {
-                compileFinalMarkMetrics();
-            }
-        }
-
         function compileFinalMarkMetrics() {
             clearInterval(loopTickerInterval);
+            isExamSubmitted = true; // State change trigger
+            
             let correctHits = 0, incorrectHits = 0, leftBlank = 0;
 
             masterExamArray.forEach(item => {
@@ -466,7 +465,14 @@
             document.getElementById('stat-blank').innerText = leftBlank;
             document.getElementById('net-score-output').innerText = globalNetScore.toFixed(2);
             document.getElementById('scorecard-overlay').style.display = 'flex';
+            
+            // Palette update automatic execution
+            syncMatrixVisualIndicators();
+            loadQuestionIndexContext(0); 
         }
+
+        // Dynamic state declaration inside runtime hooks
+        window.isExamSubmitted = false;
 
         window.onload = () => {
             build120QuestionExamData();
