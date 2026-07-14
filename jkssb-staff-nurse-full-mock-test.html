@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GQKGDNH2PF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GQKGDNH2PF');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css?v=1.0">
+<script src="script.js?v=1.0"></script>
+    <title>JKSSB Staff Nurse Full Length Mock Test (GATE Styled)</title>
+    <style>
+        :root {
+            --primary-color: #0f2c59;
+            --secondary-color: #f1f5f9;
+            --success-color: #2e7d32;
+            --danger-color: #c62828;
+            --review-color: #ff8f00;
+            --text-color: #334155;
+            --border-color: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { display: flex; flex-direction: column; height: 100vh; color: var(--text-color); background-color: #f8fafc; }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timer-box {
+            background-color: #fff;
+            color: var(--danger-color);
+            padding: 6px 16px;
+            border-radius: 4px;
+            border: 2px solid var(--danger-color);
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+
+        .main-container { display: flex; flex: 1; overflow: hidden; }
+
+        /* Left Side Exam Window */
+        .exam-area { flex: 3; display: flex; flex-direction: column; padding: 25px; overflow-y: auto; background: #fff; }
+        .question-header { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--secondary-color); }
+        .question-text { font-size: 1.15rem; margin-bottom: 25px; line-height: 1.6; font-weight: 500; }
+        
+        .options-container { display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px; }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+        }
+        .option-label:hover { background-color: var(--secondary-color); border-color: #94a3b8; }
+        .option-label input { margin-right: 15px; transform: scale(1.3); cursor: pointer; }
+
+        /* Explanation Box Style */
+        .explanation-box {
+            display: none;
+            background-color: #eff6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .explanation-box.visible { display: block; }
+
+        /* Navigation Button Strip */
+        .action-buttons { margin-top: auto; display: flex; gap: 12px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+        .btn { padding: 12px 24px; font-size: 0.95rem; font-weight: bold; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background-color: var(--primary-color); color: white; border: none; }
+        .btn-success { background-color: var(--success-color); color: white; border: none; }
+        .btn-review { background-color: var(--review-color); color: white; border: none; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn:disabled { background-color: #cbd5e1; color: #94a3b8; cursor: not-allowed; transform: none; }
+
+        /* Right Side Sidebar Palette */
+        .sidebar { flex: 1; max-width: 360px; background-color: var(--secondary-color); display: flex; flex-direction: column; padding: 20px; border-left: 1px solid var(--border-color); }
+        .profile-section { display: flex; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        .profile-img { width: 55px; height: 55px; background-color: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 1.2rem; }
+        
+        .palette-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 20px; background: #fff; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .status-dot { width: 20px; height: 20px; border-radius: 3px; border: 1px solid #94a3b8; }
+        
+        .status-answered, .grid-btn.answered { background-color: var(--success-color); color: white; }
+        .status-not-answered, .grid-btn.not-answered { background-color: var(--danger-color); color: white; }
+        .status-review, .grid-btn.review { background-color: var(--review-color); color: white; }
+        .status-unvisited { background-color: #fff; }
+
+        .grid-title { font-weight: bold; margin-bottom: 12px; font-size: 0.95rem; color: #475569; }
+        .question-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; overflow-y: auto; flex: 1; padding-bottom: 20px; }
+        
+        .grid-btn { padding: 10px 0; font-size: 0.95rem; font-weight: bold; text-align: center; background-color: #fff; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; }
+        .grid-btn.active { border: 2.5px solid #000; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+
+        .submit-section { border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .btn-submit { width: 100%; padding: 14px; font-size: 1.1rem; }
+
+        /* Results Screen Overlay Modal */
+        .results-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .results-card { background: white; padding: 35px; border-radius: 8px; max-width: 550px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .results-card h2 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.6rem; }
+        .score-details { font-size: 1.15rem; margin: 20px 0; text-align: left; line-height: 1.8; background: var(--secondary-color); padding: 15px; border-radius: 6px; }
+    </style>
+  <!-- 💻 GOOGLE ADSENSE CODE INTEGRATION -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6086620349531765"
+     crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-6086620349531765">
+</head>
+<body>
+
+    <!-- Upper Header Panel -->
+    <header>
+        <div>JKSSB Staff Nurse Exam - 120 Qs Full Mock Test</div>
+        <div class="timer-box" id="timer-wrapper">Time Left: <span id="timer">120:00</span></div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="main-container">
+        
+        <!-- Left Side: Interactive Exam Sheet -->
+        <main class="exam-area">
+            <div class="question-header" id="question-number-title">Question 1</div>
+            <div class="question-text" id="question-body">Loading question...</div>
+            
+            <div class="options-container" id="options-block">
+                <!-- Controlled options injected here -->
+            </div>
+
+            <!-- Explanation Area (Visible only after submission/review mode) -->
+            <div class="explanation-box" id="explanation-container">
+                <strong>Explanation / व्याख्या:</strong>
+                <p id="explanation-text" style="margin-top: 5px;"></p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-review" id="review-btn" onclick="markForReview()">Mark for Review & Next</button>
+                <button class="btn" id="clear-btn" onclick="clearResponse()">Clear Response</button>
+                <button class="btn btn-success" id="save-btn" onclick="saveAndNext()">Save & Next</button>
+            </div>
+        </main>
+
+        <!-- Right Side: Candidate Context & Matrix Palette -->
+        <aside class="sidebar">
+            <div class="profile-section">
+                <div class="profile-img">SN</div>
+                <div>
+                    <p style="font-weight: bold; id='candidate-name'">JKSSB Aspirant</p>
+                    <p style="font-size: 0.85rem; color: #64748b;">Exam Mode: Staff Nurse</p>
+                </div>
+            </div>
+
+            <div class="palette-legend">
+                <div class="legend-item"><div class="status-dot status-answered"></div>Answered</div>
+                <div class="legend-item"><div class="status-dot status-not-answered"></div>Not Answered</div>
+                <div class="legend-item"><div class="status-dot status-review"></div>Review</div>
+                <div class="legend-item"><div class="status-dot status-unvisited"></div>Not Visited</div>
+            </div>
+
+            <div class="grid-title">Question Palette:</div>
+            <div class="question-grid" id="navigation-grid">
+                <!-- 120 Grid buttons items generated dynamically -->
+            </div>
+
+            <div class="submit-section">
+                <button class="btn btn-primary btn-submit" id="main-submit-btn" onclick="confirmFormSubmit()">Submit Test</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Live Performance Dashboard Modal -->
+    <div class="results-overlay" id="results-modal">
+        <div class="results-card">
+            <h2>Examination Performance Summary</h2>
+            <div class="score-details" id="score-summary-output">
+                <!-- Dynamically tracked stats here -->
+            </div>
+            <button class="btn btn-primary" onclick="closeModalAndReview()">Review All Answers & Explanations</button>
+        </div>
+    </div>
+
+    <script>
+        const TOTAL_QUESTIONS = 120;
+        let totalTimeSeconds = 120 * 60; // 120 Minutes
+        let currentIdx = 0;
+        let timerInterval;
+        let isExamSubmitted = false; // Flag to enable Answer-Key mode after submission
+
+        // 120 Questions Array Map (JKSSB Staff Nurse Syllabus Based)
+        const questions = [
+            { id: 1, q: "Which of the following solutions is considered an isotonic fluid?", o: ["0.45% Normal Saline", "0.9% Normal Saline", "3% Hypertonic Saline", "10% Dextrose in Water"], a: 1, e: "0.9% Normal Saline (NS) has the same osmolarity as human body fluids (approx 308 mOsm/L), making it an isotonic solution." },
+            { id: 2, q: "What is the primary pharmacological action of the drug Digoxin?", o: ["Decreases heart rate and increases myocardial contraction", "Increases heart rate and blood pressure", "Causes immediate vasodilation of peripheral vessels", "Prevents blood clot formations in coronary arteries"], a: 0, e: "Digoxin decreases the heart rate (negative chronotropic) and increases force of contraction (positive inotropic)." },
+            { id: 3, q: "Which clinical position is most ideal for a patient immediately following a major abdominal surgery to reduce tension on the sutures?", o: ["Prone Position", "Trendelenburg Position", "Semi-Fowler's / Low Fowler's Position", "Lithotomy Position"], a: 2, e: "Semi-Fowler's position relaxes abdominal muscles and unloads tension on abdominal incisions." },
+            { id: 4, q: "The target normal range for human arterial blood pH stands between which limits?", o: ["7.00 - 7.15", "7.35 - 7.45", "7.50 - 7.65", "6.85 - 7.00"], a: 1, e: "The normal physiological pH range of arterial blood is tightly maintained between 7.35 and 7.45." },
+            { id: 5, q: "Which electrolyte deficiency is primarily associated with the development of Tetany and positive Trousseau's sign?", o: ["Hypokalemia", "Hyponatremia", "Hypocalcemia", "Hypomagnesemia"], a: 2, e: "Hypocalcemia increases neuromuscular irritability, which induces muscle spasms and Tetany." },
+            { id: 6, q: "What is the correct compression-to-ventilation ratio for adult CPR during single-rescuer resuscitation?", o: ["15:2", "30:2", "5:1", "30:1"], a: 1, e: "According to AHA guidelines, the standard CPR ratio for adults is 30 compressions to 2 breaths." },
+            { id: 7, q: "Which of the following is the causative organism of Enteric fever?", o: ["Vibrio cholerae", "Salmonella typhi", "Mycobacterium leprae", "Clostridium tetani"], a: 1, e: "Enteric fever (Typhoid) is caused by Salmonella typhi bacteria." },
+            { id: 8, q: "The standard site for administering an Intramuscular (IM) injection in infants is?", o: ["Deltoid muscle", "Dorsogluteal muscle", "Vastus lateralis muscle", "Ventrogluteal muscle"], a: 2, e: "The vastus lateralis muscle in the anterolateral thigh is the preferred site for IM injections in infants." },
+            { id: 9, q: "Which immunization is strictly given at the time of birth?", o: ["DPT", "BCG", "Measles", "Pentavalent"], a: 1, e: "BCG, OPV-0, and Hepatitis B vaccines are administered immediately after birth." },
+            { id: 10, q: "Koplik's spots are a characteristic diagnostic feature of which communicable disease?", o: ["Chickenpox", "Rubella", "Measles", "Mumps"], a: 2, e: "Koplik's spots are small blue-white spots found inside the mouth of a patient with Measles." },
+            { id: 11, q: "Which vitamin deficiency is the leading cause of preventable blindness in children?", o: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin B12"], a: 0, e: "Vitamin A deficiency leads to Xerophthalmia and night blindness, which can cause permanent vision loss." },
+            { id: 12, q: "What is the normal respiration rate of a healthy newborn baby at rest?", o: ["12-20 breaths/min", "20-30 breaths/min", "30-60 breaths/min", "60-80 breaths/min"], a: 2, e: "A normal newborn's respiratory rate ranges from 30 to 60 breaths per minute." },
+            { id: 13, q: "The term 'Pica' is defined as the persistent consumption of:", o: ["Excessive fluid intake", "Non-nutritive, non-food substances", "Only raw green vegetables", "Spicy food items"], a: 1, e: "Pica involves eating substances like clay, chalk, or dirt that have no nutritional value." },
+            { id: 14, q: "Which human organ is primarily affected by the development of Cirrhosis?", o: ["Kidneys", "Lungs", "Liver", "Pancreas"], a: 2, e: "Cirrhosis is chronic, irreversible scarring and damage to the liver tissue." },
+            { id: 15, q: "What is the standard legal and medical color configuration for an oxygen cylinder shell in India?", o: ["Black body with white shoulder", "Completely blue body", "Completely black body", "White body with black shoulder"], a: 0, e: "Oxygen cylinders are standardly color-coded with a black body and a white shoulder area." },
+            { id: 16, q: "Which endocrine gland is widely referred to as the 'Master Gland' of the human body?", o: ["Thyroid gland", "Adrenal gland", "Pituitary gland", "Pancreas"], a: 2, e: "The pituitary gland controls most other endocrine glands, earning it the master gland title." },
+            { id: 17, q: "What is the primary antidote used to reverse Acetaminophen (Paracetamol) toxicity?", o: ["Naloxone", "Protamine sulfate", "N-acetylcysteine", "Atropine sulfate"], a: 2, e: "N-acetylcysteine (NAC) acts as the specific antidote to prevent liver injury during Paracetamol overdose." },
+            { id: 18, q: "An elevation in which hormone triggers the clinical process of ovulation?", o: ["Progesterone", "Luteinizing Hormone (LH)", "Estrogen", "Oxytocin"], a: 1, e: "An abrupt 'LH surge' around day 14 of the menstrual cycle induces the rupture of the Graafian follicle." },
+            { id: 19, q: "Which fundamental dynamic is primarily assessed using the APGAR score?", o: ["Maternal recovery post delivery", "Neurological milestone pacing", "Newborn adjustment to extrauterine life", "Congenital physical abnormalities"], a: 2, e: "APGAR scoring checks a newborn's heart rate, respiratory effort, muscle tone, reflexes, and color." },
+            { id: 20, q: "The presence of protein in urine during pregnancy accompanied by high blood pressure indicates:", o: ["Gestational Diabetes", "Preeclampsia", "Eclampsia", "Placenta Previa"], a: 1, e: "Preeclampsia is diagnosed by hypertension and proteinuria developing after 20 weeks of gestation." },
+            { id: 21, q: "Which cranial nerve is responsible for the mechanism of human vision?", o: ["CN I (Olfactory)", "CN II (Optic)", "CN III (Oculomotor)", "CN VII (Facial)"], a: 1, e: "The Optic nerve (Cranial Nerve II) transmits visual inputs from the retina to the brain." },
+            { id: 22, q: "What is the primary extracellular cation inside the human body?", o: ["Potassium", "Sodium", "Calcium", "Magnesium"], a: 1, e: "Sodium (Na+) is the dominant positively charged electrolyte found outside the cells." },
+            { id: 23, q: "Which vital sign modification is universally recognized as part of Cushing's Triad in increased ICP?", o: ["Tachycardia", "Bradycardia with irregular respirations", "Hypotension", "Tachypnea"], a: 1, e: "Cushing's triad consists of bradycardia, irregular respirations (Cheyne-Stokes), and widening pulse pressure." },
+            { id: 24, q: "The optimal time to conduct a Breast Self-Examination (BSE) in menstruating women is:", o: ["During the menstrual period", "7 to 10 days after the onset of menstruation", "Exactly 2 days before menstruation begins", "Any random day of the month"], a: 1, e: "Breasts are least tender and lumpy about a week after the menstrual period ends." },
+            { id: 25, q: "Which structural feature represents the fundamental functional unit of the human kidney?", o: ["Neuron", "Nephron", "Alveolus", "Ovary"], a: 1, e: "The nephron filters blood and forms urine, serving as the functional core of kidney anatomy." },
+            { id: 26, q: "What is the expected color of amniotic fluid if active fetal distress with meconium passage occurs?", o: ["Clear and straw colored", "Greenish or dark brown", "Golden yellow", "Bright red blood stained"], a: 1, e: "Meconium staining gives amniotic fluid a greenish or greenish-brown appearance, indicating fetal hypoxia." },
+            { id: 27, q: "Which mechanical medical device is standardly used to gauge and monitor arterial oxygen saturation?", o: ["Spirometer", "Glucometer", "Pulse Oximeter", "Sphygmomanometer"], a: 2, e: "A pulse oximeter non-invasively measures the oxygen saturation percentage of hemoglobin." },
+            { id: 28, q: "The therapeutic serum level range for a patient on Lithium carbonate therapy is:", o: ["0.6 to 1.2 mEq/L", "1.5 to 2.5 mEq/L", "3.0 to 4.5 mEq/L", "0.1 to 0.5 mEq/L"], a: 0, e: "The narrow therapeutic range for maintenance lithium therapy is 0.6 to 1.2 mEq/L." },
+            { id: 29, q: "Which route of administration provides the fastest system-wide absorption of a drug?", o: ["Oral", "Intramuscular", "Subcutaneous", "Intravenous"], a: 3, e: "Intravenous (IV) injection delivers medication directly into the bloodstream with 100% bioavailability." },
+            { id: 30, q: "What biological element is severely deficient in a child suffering from Kwashiorkor?", o: ["Total Calorie Intake", "Protein", "Vitamin C", "Essential Fatty Acids"], a: 1, e: "Kwashiorkor is severe malnutrition characterized by adequate calorie intake but critical protein deficiency." },
+            { id: 31, q: "Which vector is primarily responsible for transmitting Dengue fever to humans?", o: ["Anopheles mosquito", "Culex mosquito", "Aedes aegypti mosquito", "Housefly"], a: 2, e: "Dengue virus is transmitted by the bite of an infected female Aedes aegypti mosquito." },
+            { id: 32, q: "What biological component is structurally damaged or destroyed under Type 1 Diabetes Mellitus?", o: ["Alpha cells of pancreas", "Beta cells of pancreas", "Liver hepatocytes", "Renal tubules"], a: 1, e: "Type 1 Diabetes involves autoimmune destruction of insulin-producing beta cells in the pancreatic islets." },
+            { id: 33, q: "The structural valve located between the left atrium and left ventricle of the heart is the:", o: ["Tricuspid Valve", "Mitral (Bicuspid) Valve", "Aortic Valve", "Pulmonary Valve"], a: 1, e: "The mitral valve regulates unidirectional blood flow between the left atrium and left ventricle." },
+            { id: 34, q: "Which clinical condition is treated using Phototherapy in neonatal intensive care?", o: ["Neonatal Jaundice", "Respiratory Distress Syndrome", "Hypothermia", "Neonatal Tetanus"], a: 0, e: "Phototherapy breaks down unconjugated bilirubin in the skin to resolve newborn jaundice." },
+            { id: 35, q: "What is the medical term used to describe a heart rate that exceeds 100 beats per minute in adults?", o: ["Bradycardia", "Tachycardia", "Arrhythmia", "Fibrillation"], a: 1, e: "Tachycardia indicates an abnormally elevated resting heart rate above 100 bpm." },
+            { id: 36, q: "Which of the following values represents a normal fasting blood glucose range?", o: ["70 - 100 mg/dL", "140 - 180 mg/dL", "200 - 250 mg/dL", "40 - 60 mg/dL"], a: 0, e: "A normal, non-diabetic fasting blood glucose reading falls between 70 and 100 mg/dL." },
+            { id: 37, q: "What is the maximum duration a nurse should apply suctioning during endotracheal care?", o: ["5 seconds", "10 seconds", "30 seconds", "60 seconds"], a: 1, e: "Suctioning is limited to 10 seconds per pass to prevent profound hypoxia and vagal stimulation." },
+            { id: 38, q: "Which vitamins belong to the fat-soluble category inside the human body?", o: ["Vitamin B and C", "Vitamin A, D, E, and K", "Vitamin B complex only", "Vitamin C and Zinc"], a: 1, e: "Vitamins A, D, E, and K dissolve in organic fats and are stored within the liver and fatty tissues." },
+            { id: 39, q: "The surgical removal of the gallbladder is medically termed as a:", o: ["Gastrectomy", "Cholecystectomy", "Hysterectomy", "Nephrectomy"], a: 1, e: "A cholecystectomy is the surgical removal of the gallbladder." },
+            { id: 40, q: "Which assessment scales is most reliable to evaluate a patient's level of consciousness?", o: ["Braden Scale", "Glasgow Coma Scale (GCS)", "APGAR Scale", "Norton Scale"], a: 1, e: "GCS scores eye-opening, verbal, and motor responses to assess neurological status." },
+            { id: 41, q: "What is the primary anatomical site where nutrient absorption takes place?", o: ["Stomach", "Large Intestine", "Small Intestine", "Esophagus"], a: 2, e: "The small intestine's massive villi structure is designed for absorbing nutrients into circulation." },
+            { id: 42, q: "An overproduction of growth hormone during adulthood leads to which disorder?", o: ["Gigantism", "Acromegaly", "Dwarfism", "Cretinism"], a: 1, e: "Excess growth hormone after epiphyseal plate fusion causes bone overgrowth in the face, hands, and feet (Acromegaly)." },
+            { id: 43, q: "What is the standard angle of needle insertion required for a Subcutaneous (SC) injection?", o: ["15 degrees", "45 degrees", "90 degrees", "10 degrees"], a: 1, e: "A 45-degree angle is standardly used for normal-sized tissue to deposit medication into subcutaneous fat." },
+            { id: 44, q: "Which assessment metric is monitored using the Braden Scale tool?", o: ["Risk for falling", "Risk for developing pressure ulcers", "Cognitive decline velocity", "Nutrient intake tracking"], a: 1, e: "The Braden Scale assesses sensory perception, moisture, activity, mobility, nutrition, and friction to predict pressure ulcer risk." },
+            { id: 45, q: "The structural pacemaker of the human heart is the:", o: ["AV Node", "SA Node", "Bundle of His", "Purkinje Fibers"], a: 1, e: "The Sinoatrial (SA) node initiates electrical impulses, establishing the baseline cardiac rhythm." },
+            { id: 46, q: "Which diagnostic investigation is specific to confirm a Pulmonary Embolism?", o: ["ECG", "Chest X-Ray", "CT Pulmonary Angiography", "Sputum Culture"], a: 2, e: "CT pulmonary angiography provides clear visualization of arterial blood clots within lung vasculature." },
+            { id: 47, q: "What is the primary therapeutic rationale for administering life-saving Morphine during myocardial infarction?", o: ["To elevate the systemic blood pressure", "To reduce chest pain, anxiety, and cardiac workload", "To liquefy pulmonary secretions", "To act as an immediate anticoagulant"], a: 1, e: "Morphine manages severe ischemic pain, relieves anxiety, and acts as a vasodilator to ease cardiac workload." },
+            { id: 48, q: "A patient presenting with a classic 'barrel chest' profile most likely has which underlying disease?", o: ["Pneumonia", "Emphysema (COPD)", "Pulmonary Tuberculosis", "Acute Asthma Attack"], a: 1, e: "Alveolar hyperinflation and air trapping in emphysema widen the chest wall over time." },
+            { id: 49, q: "Which baseline parameters is closely evaluated before administering an ordered dose of Digoxin?", o: ["Blood Pressure", "Apical Pulse Rate", "Axillary Temperature", "Blood Glucose"], a: 1, e: "The apical pulse is counted for a full minute, and the dose is withheld if the rate is below 60 bpm." },
+            { id: 50, q: "The complete absence of urine output over a 24-hour window is clinically called:", o: ["Dysuria", "Polyuria", "Anuria", "Oliguria"], a: 2, e: "Anuria is defined as total urine production dropping below 100 mL per day." },
+            { id: 51, q: "Which anatomical structures serves to connect skeletal muscles directly to bones?", o: ["Ligaments", "Tendons", "Cartilage", "Joint capsules"], a: 1, e: "Tendons anchor muscles to bones, while ligaments connect bones to other bones." },
+            { id: 52, q: "What is the standard ratio of chest compressions to rescue breaths during two-rescuer infant CPR?", o: ["30:2", "15:2", "5:1", "15:1"], a: 1, e: "The ratio shifts from 30:2 to 15:2 during two-rescuer child or infant CPR." },
+            { id: 53, q: "Which vector is primarily responsible for transmitting Malaria?", o: ["Male Anopheles mosquito", "Female Anopheles mosquito", "Culex mosquito", "Tsetse fly"], a: 1, e: "The Female Anopheles mosquito transmits Plasmodium parasites through its saliva during blood meals." },
+            { id: 54, q: "What specific dietary compound must be completely excluded from the diet of a child diagnosed with Celiac Disease?", o: ["Lactose", "Gluten", "Glucose", "Fructose"], a: 1, e: "Celiac disease is an autoimmune intolerance to gluten, a protein found in wheat, barley, and rye." },
+            { id: 55, q: "The complete involuntary loss of urine due to a sudden increase in intra-abdominal pressure is called:", o: ["Urge Incontinence", "Stress Incontinence", "Overflow Incontinence", "Functional Incontinence"], a: 1, e: "Stress incontinence causes urine leakage during coughing, sneezing, laughing, or heavy lifting." },
+            { id: 56, q: "Which critical organ is directly compromised by the progression of Glaucoma?", o: ["Inner Ear", "Eye (Optic Nerve)", "Thyroid gland", "Urinary Bladder"], a: 1, e: "Glaucoma involves elevated intraocular pressure that damages the optic nerve, causing vision loss." },
+            { id: 57, q: "What specific position should a patient adopt during the safe insertion of a standard Nasogastric (NG) tube?", o: ["Supine Position", "High Fowler's Position", "Left Lateral Position", "Prone Position"], a: 1, e: "Sitting upright in High Fowler's position facilitates swallowing and prevents aspiration during NG tube insertion." },
+            { id: 58, q: "Which structural component forms the basic functional unit of the human liver?", o: ["Nephron", "Hepatic Lobule", "Alveolus", "Islet of Langerhans"], a: 1, e: "The hepatic lobule is the structural and functional block of liver tissue." },
+            { id: 59, q: "The painful or difficult mechanism of voiding urine is termed as:", o: ["Anuria", "Hematuria", "Dysuria", "Nocturia"], a: 2, e: "Dysuria describes burning pain or discomfort felt during urination." },
+            { id: 60, q: "Which underlying condition is targeted using a prescribed course of anti-tubercular therapy (ATT)?", o: ["Pneumonia", "Tuberculosis", "Bronchitis", "Empyema"], a: 1, e: "ATT regimens are specifically designed to treat Mycobacterium tuberculosis infections." },
+            { id: 61, q: "What is the normal intracranial pressure (ICP) range for a healthy adult at rest?", o: ["5 - 15 mmHg", "20 - 30 mmHg", "0 - 2 mmHg", "40 - 50 mmHg"], a: 0, e: "Normal resting intracranial pressure ranges between 5 and 15 mmHg." },
+            { id: 62, q: "Which position should a nurse place a patient in during a scheduled lumbar puncture?", o: ["Prone Position", "Lateral recumbent with knees flexed to chest", "Lithotomy Position", "Reverse Trendelenburg"], a: 1, e: "A lateral C-curve position widens the intervertebral spaces for needle insertion." },
+            { id: 63, q: "What is the primary visual clinical characteristic of a third-degree (full-thickness) burn injury?", o: ["Pink, moist skin with blisters", "Dry, leathery, charred black or white skin appearance", "Mild erythema with blanching", "Painful superficial scaling"], a: 1, e: "Third-degree burns destroy all skin layers, leaving a painless, leathery, or charred surface." },
+            { id: 64, q: "Which hormone is directly responsible for stimulating uterine contractions during labor and milk let-down?", o: ["Estrogen", "Progesterone", "Oxytocin", "Prolactin"], a: 2, e: "Oxytocin stimulates uterine contractions during labor and coordinates the milk ejection reflex." },
+            { id: 65, q: "What is the standard compression depth required during high-quality adult CPR?", o: ["At least 1 inch", "At least 2 inches (5 cm)", "Exactly 4 inches", "Less than 1.5 inches"], a: 1, e: "Rescuers must compress the adult sternum at least 2 inches (5 cm) but no more than 2.4 inches." },
+            { id: 66, q: "The localized clinical outpouching or dilation of an arterial wall is called an:", o: ["Embolism", "Thrombus", "Aneurysm", "Atheroma"], a: 2, e: "An aneurysm is a structural weakness that causes a localized ballooning of an artery." },
+            { id: 67, q: "Which optical matrix is tested via a Snellen Chart setup?", o: ["Hearing acuity", "Visual acuity", "Color blindness profiles", "Intraocular pressure spikes"], a: 1, e: "The Snellen chart measures distant visual acuity relative to a standard baseline." },
+            { id: 68, q: "What is the medical term for a normal, regular, quiet breathing pattern?", o: ["Dyspnea", "Apnea", "Eupnea", "Orthopnea"], a: 2, e: "Eupnea describes a normal respiratory rate and depth without effort." },
+            { id: 69, q: "Which critical organ is monitored for structural damage during a Myocardial Infarction?", o: ["Brain", "Lungs", "Heart", "Spleen"], a: 2, e: "Myocardial infarction involves ischemic necrosis of heart muscle cells due to coronary artery blockage." },
+            { id: 70, q: "The complete surgical removal of the uterus is called a:", o: ["Oophorectomy", "Salpingectomy", "Hysterectomy", "Mastectomy"], a: 2, e: "A hysterectomy is the surgical removal of part or all of the uterus." },
+            { id: 71, q: "Which chemical compound is the primary waste product formed from muscle metabolism?", o: ["Urea", "Uric Acid", "Creatinine", "Ammonia"], a: 2, e: "Creatinine is a waste product of muscle metabolism filtered out of the blood by the kidneys." },
+            { id: 72, q: "What type of isolation precautions are required for a patient diagnosed with Pulmonary Tuberculosis?", o: ["Contact Precautions", "Droplet Precautions", "Airborne Precautions", "Standard Precautions only"], a: 2, e: "Airborne precautions, including a negative-pressure room and N95 masks, are required for TB." },
+            { id: 73, q: "The structural dynamic evaluated during a scheduled Amniocentesis procedure is:", o: ["Maternal blood glucose markers", "Fetal genetic or chromosomal abnormalities", "Placental structural integrity", "Volume of amniotic fluid"], a: 1, e: "Amniocentesis analyzes fetal cells in amniotic fluid to detect genetic anomalies like Down syndrome." },
+            { id: 74, q: "Which mechanical medical tool is used to manually ventilate a patient in respiratory arrest?", o: ["Defibrillator", "Ambu Bag (Manual Resuscitator)", "Nebulizer machine", "Endoscope"], a: 1, e: "An Ambu bag delivers manual positive-pressure breaths to a non-breathing patient." },
+            { id: 75, q: "The presence of fresh, bright red blood within the stool matrix is termed as:", o: ["Melena", "Hematochezia", "Steatorrhea", "Occult blood"], a: 1, e: "Hematochezia is the passage of fresh blood per rectum, usually indicating lower GI bleeding." },
+            { id: 76, q: "Which structural element forms the basic operational functional unit of the human lung?", o: ["Bronchus", "Bronchiole", "Alveolus", "Pleura"], a: 2, e: "Alveoli are tiny air sacs where gas exchange occurs between the lungs and capillaries." },
+            { id: 77, q: "What physiological change causes the development of Dawn Phenomenon in diabetics?", o: ["Nighttime insulin overdose", "Early morning surge of counter-regulatory hormones", "Skipping evening snacks regularly", "Excessive exercise before bed"], a: 1, e: "Early morning releases of growth hormone and cortisol naturally elevate blood glucose levels." },
+            { id: 78, q: "Which cranial nerve coordinates the sense of hearing and balance?", o: ["CN V (Trigeminal)", "CN VIII (Vestibulocochlear)", "CN X (Vagus)", "CN XII (Hypoglossal)"], a: 1, e: "The vestibulocochlear nerve transmits sound and equilibrium inputs from the inner ear to the brain." },
+            { id: 79, q: "The rapid, life-threatening allergic reaction affecting multiple systemic axes is termed as:", o: ["Anaphylaxis", "Urticaria", "Angioedema", "Contact Dermatitis"], a: 0, e: "Anaphylaxis is an acute, systemic allergic reaction that can cause airway compromise and shock." },
+            { id: 80, q: "Which baseline laboratory value is tracked closely during Heparin anticoagulation therapy?", o: ["Prothrombin Time (PT)", "Activated Partial Thromboplastin Time (aPTT)", "Platelet Count only", "Bleeding Time"], a: 1, e: "The aPTT test evaluates the therapeutic effectiveness and safety of unfractionated heparin." },
+            { id: 81, q: "What type of diet is prescribed for a patient diagnosed with chronic hypertension?", o: ["High protein, high calorie diet", "Low sodium, low fat diet", "Fluid restricted carbohydrate diet", "Ketogenic diet protocol"], a: 1, e: "A low-sodium, low-fat diet (like the DASH diet) helps lower systemic blood pressure." },
+            { id: 82, q: "The surgical opening created directly into the trachea to secure an airway is a:", o: ["Tracheostomy", "Thoracotomy", "Endotracheal intubation", "Laryngectomy"], a: 0, e: "A tracheostomy is a surgically created stoma in the anterior trachea for airway management." },
+            { id: 83, q: "Which underlying dynamic is the primary cause of Pernicious Anemia?", o: ["Iron deficiency in diet", "Lack of Intrinsic Factor for Vitamin B12 absorption", "Acute blood loss from injury", "Bone marrow suppression"], a: 1, e: "Pernicious anemia is caused by an autoimmune deficiency of intrinsic factor, preventing B12 absorption." },
+            { id: 84, q: "What classic sign is characterized by involuntary hip flexion when the neck is flexed?", o: ["Kernig's Sign", "Brudzinski's Sign", "Babinski's Sign", "Homans' Sign"], a: 1, e: "Brudzinski's sign is an indicator of meningeal irritation, such as in meningitis." },
+            { id: 85, q: "Which critical organ is targeted during the management of Nephrotic Syndrome?", o: ["Liver", "Kidneys", "Spleen", "Lungs"], a: 1, e: "Nephrotic syndrome is a kidney disorder marked by severe proteinuria, hypoalbuminemia, and edema." },
+            { id: 86, q: "The psychological condition where a person alternates between mania and depression is:", o: ["Schizophrenia", "Bipolar Disorder", "Major Devastating Depression", "Obsessive-Compulsive Loop"], a: 1, e: "Bipolar disorder involves severe mood swings ranging from manic highs to depressive lows." },
+            { id: 87, q: "What is the standard duration of standard anti-rabies vaccination post-exposure prophylaxis?", o: ["Single dose challenge", "5-dose schedule over 28 days", "10 consecutive daily injections", "3 doses over a year"], a: 1, e: "Modern post-exposure rabies prophylaxis involves a 5-dose regimen given on days 0, 3, 7, 14, and 28." },
+            { id: 88, q: "Which chemical compound is measured to confirm a clinical diagnosis of Gout?", o: ["Urea", "Creatinine", "Uric Acid", "Cholesterol"], a: 2, e: "Gout is caused by hyperuricemia, leading to the deposition of uric acid crystals within joints." },
+            { id: 89, q: "The active mechanism of listening to internal body sounds using a stethoscope is called:", o: ["Palpation", "Percussion", "Auscultation", "Inspection"], a: 2, e: "Auscultation involves listening to sounds produced by organs like the heart, lungs, and bowels." },
+            { id: 90, q: "Which physiological change primarily causes varicose veins in the lower extremities?", o: ["Arterial occlusion", "Incompetent venous valves", "Deep vein thrombosis", "Capillary fragility"], a: 1, e: "Incompetent valves allow blood to pool, causing veins to dilate and become varicose." },
+            { id: 91, q: "What type of immunity is acquired by transferring maternal antibodies across the placenta?", o: ["Active Natural Immunity", "Passive Natural Immunity", "Active Artificial Immunity", "Passive Artificial Immunity"], a: 1, e: "Passive natural immunity involves the placental transfer of IgG antibodies from mother to fetus." },
+            { id: 92, q: "The medical term used to describe the vomiting of fresh or altered blood is:", o: ["Hemoptysis", "Hematemesis", "Melena", "Epistaxis"], a: 1, e: "Hematemesis is the vomiting of blood, often indicating upper gastrointestinal bleeding." },
+            { id: 93, q: "Which diagnostic metric is tracked using a Glycosylated Hemoglobin (HbA1c) test?", o: ["Current blood sugar level", "Average blood glucose control over the past 2-3 months", "Total insulin production capacity", "Risk for diabetic ketoacidosis"], a: 1, e: "HbA1c reflects glucose binding to hemoglobin over the 120-day lifespan of red blood cells." },
+            { id: 94, q: "The surgical connection established between an artery and a vein for hemodialysis is an:", o: ["AV Fistula", "AV Shunt", "Graft bypass", "Angioplasty"], a: 0, e: "An arteriovenous (AV) fistula provides high blood flow access needed for long-term hemodialysis." },
+            { id: 95, q: "Which positions should a nurse avoid for a patient with increased Intracranial Pressure?", o: ["Head of bed elevated 30 degrees", "Trendelenburg (head down) position", "Supine with neutral neck alignment", "Semi-Fowler's position"], a: 1, e: "Trendelenburg position increases venous congestion and dangerously elevates intracranial pressure." },
+            { id: 96, q: "What clinical indicator is most indicative of impending diabetic ketoacidosis (DKA)?", o: ["Profuse diaphoresis and tremors", "Kussmaul respirations with a fruity breath odor", "Severe bradycardia", "High blood pressure"], a: 1, e: "DKA features deep, rapid Kussmaul breathing as the body attempts to blow off carbon dioxide to compensate for metabolic acidosis." },
+            { id: 97, q: "Which baseline chemical element is the primary component of kidney stones in most cases?", o: ["Uric acid crystals", "Calcium oxalate", "Struvite composition", "Cystine amino structures"], a: 1, e: "Calcium oxalate is the most common chemical compound found in kidney stone compositions." },
+            { id: 98, q: "The therapeutic mechanism of a bronchodilator medication is designed to:", o: ["Suppress a non-productive cough", "Relax bronchial smooth muscles to open airways", "Dry up excessive respiratory secretions", "Thin out thick mucus blocks"], a: 1, e: "Bronchodilators relax the smooth muscles surrounding the bronchi, widening the airways to improve airflow." },
+            { id: 99, q: "Which physical sign is evaluated to check for deep vein thrombosis (DVT) using calf pain?", o: ["Kernig's Sign", "Homans' Sign", "Chvostek's Sign", "Cullen's Sign"], a: 1, e: "Homans' sign involves calf pain elicited by sharp dorsiflexion of the foot, used as a traditional indicator for DVT." },
+            { id: 100, q: "The immediate nursing priority when an intravenous site shows signs of infiltration is to:", o: ["Slow down the fluid infusion rate", "Apply a warm compress directly", "Stop the infusion immediately and remove the catheter", "Flush the line with saline solution"], a: 2, e: "The infusion must be stopped immediately to minimize tissue damage from extravasation or infiltration." },
+            { id: 101, q: "What is the primary visual assessment feature of a patient presenting with Jaundice?", o: ["Cyanosis around oral structures", "Yellow discoloration of the skin and sclera", "Flushed erythematous cheeks", "Petechial rashes on skin"], a: 1, e: "Elevated serum bilirubin deposits into tissues, causing characteristic yellowing of the skin and sclera." },
+            { id: 102, q: "Which diagnostic method is used to definitively confirm a case of suspected Malaria?", o: ["Complete Blood Count (CBC)", "Microscopic examination of a thick and thin blood smear", "Widal Agglutination assay", "Blood culture profile"], a: 1, e: "Microscopic analysis of a blood smear remains the gold standard for identifying Plasmodium parasites." },
+            { id: 103, q: "The complete neurological paralysis affecting only one side of the body is called:", o: ["Paraplegia", "Quadriplegia", "Hemiplegia", "Monoplegia"], a: 2, e: "Hemiplegia is the total paralysis of one lateral half of the body, often caused by a stroke." },
+            { id: 104, q: "Which endocrine cell population manufactures the hormone glucagon inside the pancreas?", o: ["Beta cells", "Alpha cells", "Delta cells", "PP cells"], a: 1, e: "Pancreatic alpha cells secrete glucagon, which elevates blood glucose by triggering glycogenolysis in the liver." },
+            { id: 105, q: "What specific nursing intervention prevents foot drop in a bedridden patient?", o: ["Using a high pillow under the knees", "Applying a footboard or ankle-foot orthosis", "Frequent turning every 4 hours", "Passive range of motion once a day"], a: 1, e: "A footboard keeps the feet dorsiflexed at a 90-degree angle, preventing contractures of the calf muscles." },
+            { id: 106, q: "The structural connection that allows communication between two neurons is a:", o: ["Dendrite", "Axon cylinder", "Synapse", "Myelin gap"], a: 2, e: "The synapse is the functional junction where chemical neurotransmitters pass signals between neurons." },
+            { id: 107, q: "Which legal-medical document specifies a patient's preferences regarding end-of-life care?", o: ["Informed Consent Sheet", "Living Will (Advance Directive)", "Incident Report Profile", "Discharge Summary Document"], a: 1, e: "A living will documents an individual's specific choices regarding life-sustaining treatments if they become incapacitated." },
+            { id: 108, q: "What baseline dynamic is measured using an Incentive Spirometer device?", o: ["Peak expiratory flow speed", "Inspiratory lung volume and lung expansion", "Arterial oxygen concentration", "Carbon dioxide retention volumes"], a: 1, e: "Incentive spirometry encourages deep breathing and lung expansion to prevent atelectasis post-surgery." },
+            { id: 109, q: "The acute inflammation of the membranes covering the brain and spinal cord is called:", o: ["Encephalitis", "Meningitis", "Myelitis", "Neuritis"], a: 1, e: "Meningitis is the inflammation of the protective meningeal layers surrounding the central nervous system." },
+            { id: 110, q: "Which nutrient deficiency causes Megaloblastic Anemia?", o: ["Iron", "Vitamin B12 or Folic Acid", "Vitamin C", "Protein allocation"], a: 1, e: "Deficiencies in B12 or folate impair DNA synthesis, causing the marrow to produce abnormally large, immature RBCs." },
+            { id: 111, q: "What specific color coding is assigned to a 22-gauge intravenous cannula?", o: ["Pink color code", "Blue color code", "Green color code", "Yellow color code"], a: 1, e: "A 22G IV cannula is standardly color-coded blue, used for smaller or fragile veins." },
+            { id: 112, q: "The immediate medical treatment for a patient experiencing ventricular fibrillation is:", o: ["Cardioversion synchronization", "High-energy Defibrillation", "Administration of high-dose Atropine", "Carotid sinus massage therapy"], a: 1, e: "Defibrillation depolarizes the myocardium to allow the heart's natural pacemaker to resume a functional rhythm." },
+            { id: 113, q: "Which organ produces the clotting factor fibrinogen?", o: ["Spleen", "Bone Marrow", "Liver", "Kidneys"], a: 2, e: "The liver synthesizes plasma proteins involved in coagulation, including fibrinogen and prothrombin." },
+            { id: 114, q: "The psychological defense mechanism where a person attributes their own unacceptable thoughts to another is:", o: ["Rationalization", "Projection", "Displacement", "Regression"], a: 1, e: "Projection involves places one's own unacceptable feelings or impulses onto someone else." },
+            { id: 115, q: "What is the standard solution configuration used to clean a normal granulating wound?", o: ["Hydrogen Peroxide", "0.9% Normal Saline", "Povidone Iodine scrub", "70% Isopropyl Alcohol"], a: 1, e: "Normal saline is isotonic and non-toxic to healing tissues, making it ideal for wound cleansing." },
+            { id: 116, q: "Which baseline measurement is used to calculate a patient's Body Mass Index (BMI)?", o: ["Weight and Age parameters", "Height and Weight measurements", "Waist-to-hip ratio data", "Chest circumference values"], a: 1, e: "BMI is calculated by dividing weight in kilograms by the square of height in meters." },
+            { id: 117, q: "The functional condition characterized by a loss of cognitive abilities severe enough to interfere with daily life is:", o: ["Delirium", "Dementia", "Psychosis", "Neurosis"], a: 1, e: "Dementia is a progressive, chronic decline in memory and cognitive function." },
+            { id: 118, q: "Which medication class is standardly used to manage an acute asthma attack?", o: ["Beta-blockers", "Short-Acting Beta2 Agonists (e.g., Albuterol)", "Corticosteroids orally", "Antihistamines"], a: 1, e: "Short-acting beta2 agonists provide rapid bronchodilation to relieve acute bronchospasm." },
+            { id: 119, q: "The structural functional unit of the human nervous system is the:", o: ["Nephron", "Neuron", "Axon block", "Glial cluster"], a: 1, e: "The neuron is the primary excitable cell responsible for transmitting electrical signals in the nervous system." },
+            { id: 120, q: "Which classic skin discoloration pattern indicates a positive Cullen's sign in acute pancreatitis?", o: ["Flank ecchymosis", "Bluish discoloration around the umbilicus", "Petechiae on lower limbs", "Yellowing of palm prints"], a: 1, e: "Cullen's sign is a bluish bruising around the belly button caused by retroperitoneal hemorrhage." }
+        ];
+
+        // State Tracking Vectors
+        const userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+        const statusState = new Array(TOTAL_QUESTIONS).fill('unvisited'); 
+
+        function initExam() {
+            initTimer();
+            initGrid();
+            loadQuestion(0);
+        }
+
+        function initTimer() {
+            const display = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                let minutes = Math.floor(totalTimeSeconds / 60);
+                let seconds = totalTimeSeconds % 60;
+
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+
+                display.textContent = `${minutes}:${seconds}`;
+
+                if (--totalTimeSeconds < 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitExam();
+                }
+            }, 1000);
+        }
+
+        function initGrid() {
+            const gridContainer = document.getElementById('navigation-grid');
+            gridContainer.innerHTML = '';
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'grid-btn';
+                btn.id = `grid-btn-${i}`;
+                btn.textContent = i + 1;
+                btn.onclick = () => jumpToQuestion(i);
+                gridContainer.appendChild(btn);
+            }
+        }
+
+        function loadQuestion(idx) {
+            if (!isExamSubmitted && statusState[currentIdx] === 'unvisited') {
+                statusState[currentIdx] = 'not-answered';
+            }
+
+            currentIdx = idx;
+            const q = questions[idx];
+
+            document.getElementById('question-number-title').textContent = `Question ${q.id} of ${TOTAL_QUESTIONS}`;
+            document.getElementById('question-body').textContent = q.q;
+
+            const optionsBlock = document.getElementById('options-block');
+            optionsBlock.innerHTML = '';
+            
+            q.o.forEach((opt, oIdx) => {
+                const label = document.createElement('label');
+                label.className = 'option-label';
+                
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'exam-option';
+                radio.value = oIdx;
+                if (userAnswers[idx] === oIdx) radio.checked = true;
+                
+                if (isExamSubmitted) radio.disabled = true;
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(` ${String.fromCharCode(65 + oIdx)}. ${opt}`));
+                
+                if (isExamSubmitted) {
+                    if (oIdx === q.a) {
+                        label.style.backgroundColor = '#d1fae5'; 
+                        label.style.borderColor = 'var(--success-color)';
+                    } else if (userAnswers[idx] === oIdx && userAnswers[idx] !== q.a) {
+                        label.style.backgroundColor = '#fee2e2'; 
+                        label.style.borderColor = 'var(--danger-color)';
+                    }
+                }
+
+                optionsBlock.appendChild(label);
+            });
+
+            const expContainer = document.getElementById('explanation-container');
+            const expText = document.getElementById('explanation-text');
+            if (isExamSubmitted) {
+                expText.textContent = q.e;
+                expContainer.classList.add('visible');
+            } else {
+                expContainer.classList.remove('visible');
+            }
+
+            updateGridStyles();
+        }
+
+        function jumpToQuestion(idx) {
+            loadQuestion(idx);
+        }
+
+        function clearResponse() {
+            if(isExamSubmitted) return;
+            const checkedRadio = document.querySelector('input[name="exam-option"]:checked');
+            if (checkedRadio) checkedRadio.checked = false;
+            userAnswers[currentIdx] = null;
+            statusState[currentIdx] = 'not-answered';
+            updateGridStyles();
+        }
+
+        function saveAndNext() {
+            if (isExamSubmitted) {
+                if (currentIdx < TOTAL_QUESTIONS - 1) loadQuestion(currentIdx + 1);
+                return;
+            }
+            const checkedRadio = document.querySelector('input[name="exam-option"]:checked');
+            if (checkedRadio) {
+                userAnswers[currentIdx] = parseInt(checkedRadio.value);
+                statusState[currentIdx] = 'answered';
+            } else {
+                statusState[currentIdx] = 'not-answered';
+            }
+            advanceNext();
+        }
+
+        function markForReview() {
+            if (isExamSubmitted) return;
+            const checkedRadio = document.querySelector('input[name="exam-option"]:checked');
+            if (checkedRadio) userAnswers[currentIdx] = parseInt(checkedRadio.value);
+            statusState[currentIdx] = 'review';
+            advanceNext();
+        }
+
+        function advanceNext() {
+            if (currentIdx < TOTAL_QUESTIONS - 1) {
+                loadQuestion(currentIdx + 1);
+            } else {
+                updateGridStyles();
+                alert("You have reached the last question. You can review your answers or click 'Submit Test' to finish.");
+            }
+        }
+
+        function updateGridStyles() {
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const btn = document.getElementById(`grid-btn-${i}`);
+                btn.className = 'grid-btn'; 
+                
+                if (i === currentIdx) btn.classList.add('active');
+                if (statusState[i] !== 'unvisited') {
+                    btn.classList.add(statusState[i]);
+                }
+            }
+        }
+
+        function confirmFormSubmit() {
+            if (confirm("Are you sure you want to final submit your JKSSB Mock Test?")) {
+                autoSubmitExam();
+            }
+        }
+
+        function autoSubmitExam() {
+            clearInterval(timerInterval);
+            isExamSubmitted = true;
+            
+            let totalCorrect = 0;
+            let totalAttempted = 0;
+
+            questions.forEach((q, idx) => {
+                if (userAnswers[idx] !== null) {
+                    totalAttempted++;
+                    if (userAnswers[idx] === q.a) {
+                        totalCorrect++;
+                    }
+                }
+            });
+
+            const totalWrong = totalAttempted - totalCorrect;
+            const negativeMarks = totalWrong * 0.25;
+            const finalMarks = totalCorrect - negativeMarks;
+            const unattempted = TOTAL_QUESTIONS - totalAttempted;
+
+            const summaryHTML = `
+                <p><strong>Total Questions:</strong> ${TOTAL_QUESTIONS}</p>
+                <p><strong>Attempted Questions:</strong> ${totalAttempted}</p>
+                <p><strong>Unattempted Questions:</strong> ${unattempted}</p>
+                <p style="color: var(--success-color);"><strong>Correct Answers:</strong> ${totalCorrect} (+${totalCorrect} Marks)</p>
+                <p style="color: var(--danger-color);"><strong>Incorrect Answers:</strong> ${totalWrong} (-${negativeMarks.toFixed(2)} Penalty)</p>
+                <hr style="margin:15px 0; border:0; border-top:2px solid #cbd5e1;">
+                <p style="font-size:1.3rem; text-align:center;"><strong>Your Net Score: ${finalMarks.toFixed(2)} / ${TOTAL_QUESTIONS}</strong></p>
+            `;
+
+            document.getElementById('score-summary-output').innerHTML = summaryHTML;
+            document.getElementById('results-modal').style.display = 'flex';
+            
+            document.getElementById('timer-wrapper').innerHTML = "<span style='color:green;'>Exam Completed</span>";
+            document.getElementById('main-submit-btn').disabled = true;
+            document.getElementById('review-btn').disabled = true;
+            document.getElementById('clear-btn').disabled = true;
+            document.getElementById('save-btn').textContent = "Next Question";
+        }
+
+        function closeModalAndReview() {
+            document.getElementById('results-modal').style.display = 'none';
+            loadQuestion(currentIdx);
+        }
+
+        window.onload = initExam;
+    </script>
+</body>
+</html>
