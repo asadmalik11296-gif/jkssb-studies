@@ -2,5 +2,12 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.pdf$
+
+Crawl-delay: 1
+
+User-agent: Googlebot
+Crawl-delay: 0
 
 Sitemap: https://jkssbstudies.in/sitemap.xml
