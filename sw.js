@@ -30,8 +30,8 @@ self.addEventListener('fetch', (event) => {
 // 2. PASTE MONETAG CODE DIRECTLY BELOW THIS
 // ==========================================
 self.options = {
-    "domain": "3nbf4.com",
-    "zoneId": 11290548
+    "domain": "5gvci.com",
+    "zoneId": 11290736
 }
 self.lary = ""
-importScripts('https://3nbf4.com/act/files/service-worker.min.js?r=sw')
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
