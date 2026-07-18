@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/download/527b2a9ee-4bea9ea3e/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Homepage -->
   <url>
     <loc>https://jkssbstudies.in/</loc>
     <lastmod>2026-07-18T16:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>1.0000</priority>
+    <priority>1.0</priority>
   </url>
 
-  <!-- FREE RESOURCES PAGES (NEW) -->
+  <!-- FREE RESOURCES -->
   <url>
     <loc>https://jkssbstudies.in/free-resources.html</loc>
     <lastmod>2026-07-18T16:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9000</priority>
+    <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/reasoning-tricks.html</loc>
     <lastmod>2026-07-18T16:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8500</priority>
+    <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/mathematics-shortcuts.html</loc>
     <lastmod>2026-07-18T16:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8500</priority>
+    <priority>0.85</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/general-knowledge.html</loc>
     <lastmod>2026-07-18T16:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8500</priority>
+    <priority>0.85</priority>
   </url>
 
   <!-- MAIN PAGES -->
@@ -44,109 +44,78 @@
     <loc>https://jkssbstudies.in/schedule.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/notes.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/jobs.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/answerkey.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
-  <!-- MOCK TEST PAGES -->
+  <!-- MOCK TEST -->
   <url>
     <loc>https://jkssbstudies.in/mock-test.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/jkssb-full-mock-test.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8000</priority>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/jkssb-junior-assistant-typing-test.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7500</priority>
+    <priority>0.75</priority>
   </url>
-
-  <!-- FOOTER PAGES -->
+    <!-- FOOTER PAGES -->
   <url>
     <loc>https://jkssbstudies.in/privacy.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6000</priority>
+    <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/disclaimer.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6000</priority>
+    <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/aboutus.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7000</priority>
+    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/contactus.html</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7000</priority>
-  </url>
-
-  <!-- ALTERNATE VERSIONS (with query parameters) -->
-  <url>
-    <loc>https://jkssbstudies.in/schedule.html?v=1.0</loc>
-    <lastmod>2026-07-10T05:20:53+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6400</priority>
-  </url>
-
-  <url>
-    <loc>https://jkssbstudies.in/notes.html?v=1.0</loc>
-    <lastmod>2026-07-10T05:20:53+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6400</priority>
-  </url>
-
-  <url>
-    <loc>https://jkssbstudies.in/mock-test.html?v=1.0</loc>
-    <lastmod>2026-07-10T05:20:53+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6400</priority>
-  </url>
-
-  <!-- INDEX ALTERNATE -->
-  <url>
-    <loc>https://jkssbstudies.in/index.html</loc>
-    <lastmod>2026-07-10T05:20:53+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6400</priority>
+    <priority>0.7</priority>
   </url>
 
   <!-- PDF RESOURCES -->
@@ -154,14 +123,14 @@
     <loc>https://jkssbstudies.in/pdf/number-system-basics.pdf</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6400</priority>
+    <priority>0.6</priority>
   </url>
 
   <url>
     <loc>https://jkssbstudies.in/pdf/coding-decoding-practice.pdf</loc>
     <lastmod>2026-07-10T05:20:53+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6400</priority>
+    <priority>0.6</priority>
   </url>
 
 </urlset>
