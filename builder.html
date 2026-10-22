@@ -431,14 +431,19 @@
                 } catch (e) {}
             }
             
+            // नए विंडो में रिज्यूम का HTML और CSS इंजेक्ट करें (A4 साइज फिक्स के साथ)
             printWindow.document.write(`
                 <html>
                 <head>
                     <title>${name.replace(/\s+/g, '_')}_Resume</title>
                     <style>
                         ${styles}
-                        body { background: white !important; padding: 0 !important; margin: 0 !important; }
-                        .resume-paper { transform: none !important; box-shadow: none !important; margin: 0 auto !important; padding: 15mm !important; }
+                        body { background: white !important; padding: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .resume-paper { transform: none !important; box-shadow: none !important; width: 100% !important; height: auto !important; padding: 20mm !important; box-sizing: border-box; font-size: 14px !important; }
+                        /* फोंट्स और गैप को प्रिंट स्क्रीन पर बड़ा और साफ दिखाने के लिए */
+                        .resume-paper h2 { font-size: 28px !important; margin-bottom: 5px !important; }
+                        .resume-paper .res-sec-title { font-size: 18px !important; margin-top: 20px !important; margin-bottom: 10px !important; padding-bottom: 3px !important; }
+                        .resume-paper p, .resume-paper li, .resume-paper div { font-size: 14px !important; line-height: 1.6 !important; }
                         @page { size: A4 portrait; margin: 0; }
                     </style>
                 </head>
@@ -457,8 +462,3 @@
                 </body>
                 </html>
             `);
-            printWindow.document.close();
-        }
-    </script>
-</body>
-</html>
