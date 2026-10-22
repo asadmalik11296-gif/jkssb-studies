@@ -414,26 +414,23 @@
         }
 
         function exportPDF() {
-            // प्रीव्यू वाले रिज्यूम पेपर एरिया को टारगेट करें
             const element = document.getElementById('resume-canvas');
             const name = document.getElementById('in-name').value || 'Fresher';
             
-            // एक नया अस्थायी पॉपअप ब्लैंक विंडो खोलें
+            // छात्रों को गाइड करने के लिए एक प्यारा सा मैसेज अलर्ट
+            alert("💡 TIP: Next screen पर 'Save as PDF' सिलेक्ट करके रिज्यूम को अपने फोन/कंप्यूटर में सेव करें।");
+            
             const printWindow = window.open('', '_blank', 'width=900,height=1200');
             
-            // मुख्य पेज के सभी स्टाइल्स (CSS) को इकट्ठा करें ताकि डिज़ाइन न बिगड़े
             let styles = '';
             for (let stylesheet of document.styleSheets) {
                 try {
                     for (let rule of stylesheet.cssRules) {
                         styles += rule.cssText;
                     }
-                } catch (e) {
-                    // लोकल/इंटरनल स्टाइल्स को बिना एरर के रीड करने के लिए
-                }
+                } catch (e) {}
             }
             
-            // नए विंडो में रिज्यूम का HTML और CSS इंजेक्ट करें
             printWindow.document.write(`
                 <html>
                 <head>
@@ -450,7 +447,6 @@
                         ${element.innerHTML}
                     </div>
                     <script>
-                        // इमेज और फॉन्ट लोड होने का इंतज़ार करें, फिर प्रिंट ट्रिगर करें
                         window.onload = function() {
                             setTimeout(function() {
                                 window.print();
@@ -461,7 +457,6 @@
                 </body>
                 </html>
             `);
-            
             printWindow.document.close();
         }
     </script>
