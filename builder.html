@@ -413,9 +413,8 @@
         function exportPDF() {
             const element = document.getElementById('resume-canvas');
             
-            // Safe name filtering without causing raw backslash compile crash
             let rawName = document.getElementById('in-name').value || 'Fresher';
-            let safeFileName = rawName.split(' ').join('_') + '_Resume.pdf';
+            let safeFileName = rawName.split(' ').join('_') + '_Resume';
             
             alert("💡 TIP: Next screen पर 'Destination' में 'Save as PDF' सिलेक्ट करके रिज्यूम को अपने डिवाइस में सेव करें।");
             
@@ -430,35 +429,17 @@
                 } catch (e) {}
             }
             
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>${safeFileName.replace('.pdf', '')}</title>
-                    <style>
-                        \${styles}
-                        body { background: white !important; padding: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                        .resume-paper { transform: none !important; box-shadow: none !important; width: 100% !important; height: auto !important; padding: 20mm !important; box-sizing: border-box; font-size: 14px !important; }
-                        .resume-paper h2 { font-size: 28px !important; margin-bottom: 5px !important; }
-                        .resume-paper .res-sec-title { font-size: 18px !important; margin-top: 20px !important; margin-bottom: 10px !important; padding-bottom: 3px !important; }
-                        .resume-paper p, .resume-paper li, .resume-paper div { font-size: 14px !important; line-height: 1.6 !important; }
-                        @page { size: A4 portrait; margin: 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="resume-paper \${selectedTemplate}">
-                        \${element.innerHTML}
-                    </div>
-                    <script>
-                        window.onload = function() {
-                            setTimeout(function() {
-                                window.print();
-                                window.close();
-                            }, 500);
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `);
+            // FIXED: Using standard string concatenation (+) to completely avoid `${}` template literal bugs
+            let htmlContent = '<html><head><title>' + safeFileName + '</title>';
+            htmlContent += '<style>' + styles + ' body { background: white !important; padding: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .resume-paper { transform: none !important; box-shadow: none !important; width: 100% !important; height: auto !important; padding: 20mm !important; box-sizing: border-box; font-size: 14px !important; } .resume-paper h2 { font-size: 28px !important; margin-bottom: 5px !important; } .resume-paper .res-sec-title { font-size: 18px !important; margin-top: 20px !important; margin-bottom: 10px !important; padding-bottom: 3px !important; } .resume-paper p, .resume-paper li, .resume-paper div { font-size: 14px !important; line-height: 1.6 !important; } @page { size: A4 portrait; margin: 0; }</style>';
+            htmlContent += '</head><body>';
+            htmlContent += '<div class="resume-paper ' + selectedTemplate + '">';
+            htmlContent += element.innerHTML;
+            htmlContent += '</div>';
+            htmlContent += '<script>window.onload = function() { setTimeout(function() { window.print(); window.close(); }, 500); };<\/script>';
+            htmlContent += '</body></html>';
+            
+            printWindow.document.write(htmlContent);
             printWindow.document.close();
         }
     </script>
