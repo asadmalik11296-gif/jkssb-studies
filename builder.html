@@ -8,6 +8,8 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://jkssbstudies.in" />
     <meta name="description" content="Create 100% Free Professional ATS Approved Resumes & CVs for J&K Freshers, JKSSB & Private Job Aspirants using JK CareerCraft.">
+    <!-- html2pdf.js CDN for Legacy Export Support -->
+    <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
@@ -59,7 +61,7 @@
         .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 2px; }
         .tmpl-ats .res-desig { font-size: 14px; font-weight: bold; color: #444; text-transform: uppercase; margin-bottom: 5px; }
         .tmpl-ats .res-sec-title { font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 15px; margin-bottom: 5px; }
-        .tmpl-ats .photo-frame { display: none !important; } /* Hard hidden on ATS layout */
+        .tmpl-ats .photo-frame { display: none !important; }
 
         .tmpl-modern { font-family: 'Georgia', serif; color: #334155; line-height: 1.5; }
         .tmpl-modern .res-header { border-left: 5px solid #0d47a1; padding-left: 15px; margin-bottom: 20px; min-height: 90px; }
@@ -127,7 +129,6 @@
             <div class="form-group"><label>Full Name</label><input type="text" id="in-name" placeholder="Rahul Sharma" oninput="renderData()"></div>
             <div class="form-group"><label>Overview / Designation</label><input type="text" id="in-desig" placeholder="Graduate / Project Engineer / Assistant" oninput="renderData()"></div>
             
-            <!-- Target node box container toggle -->
             <div class="form-group" id="photo-input-container" style="display: none;"><label>Upload Profile Photo</label><input type="file" id="in-photo" accept="image/*" onchange="loadPhoto(event)"></div>
             
             <div class="form-group"><label>Email</label><input type="email" id="in-email" placeholder="rahul@email.com" oninput="renderData()"></div>
@@ -136,7 +137,6 @@
             <h3>2. Profile Summary</h3>
             <div class="form-group"><label>Objective Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated graduate seeking an entry-level position..." oninput="renderData()"></textarea></div>
 
-            <!-- Dynamic Education Repeater Block Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">3. Education History</h3>
                 <button type="button" onclick="addEducationField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Education</button>
@@ -150,7 +150,6 @@
                 </div>
             </div>
 
-            <!-- Dynamic Experience Repeater Block Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">4. Experience & Internships</h3>
                 <button type="button" onclick="addExperienceField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Experience</button>
@@ -163,7 +162,6 @@
                 </div>
             </div>
 
-            <!-- Dynamic Projects Repeater Block Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">5. Projects & Core Tasks</h3>
                 <button type="button" onclick="addProjectField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Project</button>
@@ -187,7 +185,6 @@
             </div>
             <div class="preview-wrapper">
                 <div id="resume-canvas" class="resume-paper">
-                    <!-- Base64 Streaming Picture Element Container Frame -->
                     <img id="out-photo" class="photo-frame" src="" alt="Profile Image" style="display: none;">
                     
                     <div class="res-header">
@@ -329,7 +326,7 @@
             document.getElementById('out-contact').innerText = `Email: ${email} | Phone: ${phone}`;
             document.getElementById('out-obj').innerText = document.getElementById('in-obj').value || 'Career objective details...';
             
-            // Render Dynamic Education List safely using standard arrays
+            // Render Dynamic Education List
             let eduHTML = '';
             const eduEntries = document.getElementsByClassName('edu-entry-form');
             for(let i=0; i<eduEntries.length; i++) {
@@ -347,7 +344,7 @@
             }
             document.getElementById('out-edu').innerHTML = eduHTML || 'Education details...';
 
-            // Render Dynamic Experience List safely using standard arrays
+            // Render Dynamic Experience List
             let expHTML = '';
             const expEntries = document.getElementsByClassName('exp-entry-form');
             let hasExpData = false;
@@ -368,7 +365,7 @@
             document.getElementById('out-exp').innerHTML = expHTML;
             document.getElementById('sec-intern').style.display = hasExpData ? 'block' : 'none';
 
-            // Render Dynamic Projects List safely using standard arrays
+            // Render Dynamic Projects List
             let projHTML = '';
             const projEntries = document.getElementsByClassName('proj-entry-form');
             for(let i=0; i<projEntries.length; i++) {
@@ -383,8 +380,7 @@
                     `;
                 }
             }
-            document.getElementById('out-proj').innerHTML = projHTML || '<div class="item-block">Project details...</div>';
-
+            // Skills Node Render
             const skillsVal = document.getElementById('in-skills').value;
             const ulSkills = document.getElementById('out-skills');
             ulSkills.innerHTML = '';
@@ -396,6 +392,7 @@
                 }
             });
 
+            // Languages Node Render (Safely Fixed)
             const langVal = document.getElementById('in-lang').value;
             const ulLang = document.getElementById('out-lang');
             ulLang.innerHTML = '';
@@ -417,8 +414,8 @@
             const element = document.getElementById('resume-canvas');
             const name = document.getElementById('in-name').value || 'Fresher';
             
-            // छात्रों को गाइड करने के लिए एक प्यारा सा मैसेज अलर्ट
-            alert("💡 TIP: Next screen पर 'Save as PDF' सिलेक्ट करके रिज्यूम को अपने फोन/कंप्यूटर में सेव करें।");
+            // Pop-up Notification for Student Guidance
+            alert("💡 TIP: Next screen पर 'Destination' में 'Save as PDF' सिलेक्ट करके रिज्यूम को अपने डिवाइस में सेव करें।");
             
             const printWindow = window.open('', '_blank', 'width=900,height=1200');
             
@@ -431,16 +428,14 @@
                 } catch (e) {}
             }
             
-            // नए विंडो में रिज्यूम का HTML और CSS इंजेक्ट करें (A4 साइज फिक्स के साथ)
             printWindow.document.write(`
                 <html>
                 <head>
-                    <title>${name.replace(/\s+/g, '_')}_Resume</title>
+                    <title>\${name.replace(/\\s+/g, '_')}_Resume</title>
                     <style>
-                        ${styles}
+                        \${styles}
                         body { background: white !important; padding: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                         .resume-paper { transform: none !important; box-shadow: none !important; width: 100% !important; height: auto !important; padding: 20mm !important; box-sizing: border-box; font-size: 14px !important; }
-                        /* फोंट्स और गैप को प्रिंट स्क्रीन पर बड़ा और साफ दिखाने के लिए */
                         .resume-paper h2 { font-size: 28px !important; margin-bottom: 5px !important; }
                         .resume-paper .res-sec-title { font-size: 18px !important; margin-top: 20px !important; margin-bottom: 10px !important; padding-bottom: 3px !important; }
                         .resume-paper p, .resume-paper li, .resume-paper div { font-size: 14px !important; line-height: 1.6 !important; }
@@ -448,22 +443,22 @@
                     </style>
                 </head>
                 <body>
-                    <div class="resume-paper ${selectedTemplate}">
-                        ${element.innerHTML}
+                    <div class="resume-paper \${selectedTemplate}">
+                        \${element.innerHTML}
                     </div>
-    <script>
-        // 1. Function definition
-        function startBuilder() {
-            console.log("Builder started successfully.");
-        }
-
-        // 2. Automatic print aur close code
-        window.onload = function() {
-            setTimeout(function() {
-                window.print();
-                window.close();
-            }, 500);
-        };
-    </script>
+                    <script>
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                                window.close();
+                            }, 500);
+                        };
+                    <\/script>
                 </body>
                 </html>
+            `);
+            printWindow.document.close();
+        }
+    </script>
+</body>
+</html>
