@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JK CareerCraft - Free Resume Builder</title>
-    <!-- html2pdf.js CDN for PDF Generation -->
+    <!-- html2pdf.js for Client-side PDF Generation -->
     <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
@@ -16,7 +16,7 @@
         .btn-nav { background: #f8fafc; color: #0d47a1; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 14px; display: inline-block; }
         .back-btn { display: none; background: #e2e8f0; color: #1e293b; }
 
-        /* VIEW 1: DASHBOARD STYLE */
+        /* VIEW 1: DASHBOARD VIEW */
         .dashboard-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
         .dash-heading { text-align: center; margin-bottom: 30px; }
         .dash-heading h2 { font-size: 28px; color: #0f172a; margin-bottom: 8px; }
@@ -24,20 +24,19 @@
         
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px; }
         
-        /* FIXED: Click Target Area */
-        .template-card { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; border: 2px solid transparent; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; z-index: 10; }
-        .template-card:hover { transform: translateY(-5px); border-color: #1976d2; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        /* Fixed Click Container Layout */
+        .template-box-clicker { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; border: 2px solid transparent; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; padding: 15px; }
+        .template-box-clicker:hover { transform: translateY(-5px); border-color: #1976d2; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
-        .badge { position: absolute; top: 10px; right: 10px; background: #10b981; color: white; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase; z-index: 20; }
+        .badge { position: absolute; top: 25px; right: 25px; background: #10b981; color: white; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
 
-        /* FIXED: Pointer events block */
-        .tmpl-preview-box { height: 350px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden; border-bottom: 1px solid #e2e8f0; pointer-events: none; }
-        .mini-resume { width: 100%; height: 100%; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 15px; font-size: 8px; pointer-events: none; }
-        .card-info { padding: 15px; text-align: center; background: #fff; pointer-events: none; }
-        .card-info h4 { font-size: 16px; margin-bottom: 5px; color: #1e293b; }
-        .card-info p { font-size: 13px; color: #64748b; }
+        .dummy-preview-box { height: 260px; background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 15px; display: flex; flex-direction: column; justify-content: center; padding: 20px; text-align: left; }
+        .dummy-line { height: 6px; background: #cbd5e1; margin-bottom: 10px; border-radius: 2px; }
+        
+        .card-info-title { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #1e293b; text-align: center; }
+        .card-info-desc { font-size: 13px; color: #64748b; text-align: center; }
 
-        /* VIEW 2: BUILDER INTERFACE */
+        /* VIEW 2: LIVE BUILDER SPLIT SYSTEM */
         .builder-container { display: none; flex: 1; padding: 20px; gap: 20px; max-width: 1500px; margin: 0 auto; width: 100%; }
         .form-section { flex: 1; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-height: 82vh; overflow-y: auto; }
         .preview-section { flex: 1.2; background: #cbd5e1; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 15px; position: sticky; top: 20px; max-height: 82vh; }
@@ -54,9 +53,9 @@
         .btn-success:hover { background: #218838; }
         
         .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; height: 100%; }
-        .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; }
+        .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; text-align: left; }
 
-        /* Resume Live Preview Templates Styling */
+        /* Dynamic Template Engine Styles */
         .tmpl-ats { font-family: Arial, sans-serif; color: #000; }
         .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
         .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 5px; }
@@ -92,42 +91,35 @@
         </div>
         
         <div class="templates-grid">
-            <!-- Card 1 -->
-            <div class="template-card" onclick="startBuilder('tmpl-ats', 'ATS Minimalist')">
+            <!-- Template Card 1 (Direct In-line Trigger to eliminate any event blockage) -->
+            <div class="template-box-clicker" onclick="startBuilder('tmpl-ats', 'ATS Minimalist')">
                 <span class="badge">Highly Recommended</span>
-                <div class="tmpl-preview-box">
-                    <div class="mini-resume" style="font-family: Arial;">
-                        <div style="text-align:center; font-weight:bold; border-bottom:1px solid #000;">RAHUL SHARMA</div>
-                        <div style="font-weight:bold; margin-top:10px; border-bottom:0.5px solid #000;">EDUCATION</div>
-                        <div style="height:3px; margin:3px 0; background:#e2e8f0; width:80%"></div>
-                    </div>
+                <div class="dummy-preview-box">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 12px; border-bottom: 1px solid #000;">RAHUL SHARMA</div>
+                    <div class="dummy-line" style="width: 40%;"></div>
+                    <div class="dummy-line" style="width: 90%;"></div>
+                    <div class="dummy-line" style="width: 75%;"></div>
                 </div>
-                <div class="card-info">
-                    <h4>ATS Minimalist</h4>
-                    <p>Scans perfectly in corporate tracking systems (TCS, Banks, IT Companies).</p>
-                </div>
+                <div class="card-info-title">ATS Minimalist</div>
+                <div class="card-info-desc">Scans perfectly in screening tests (TCS, Wipro, Banks).</div>
             </div>
 
-            <!-- Card 2 -->
-            <div class="template-card" onclick="startBuilder('tmpl-modern', 'Modern Executive')">
-                <div class="tmpl-preview-box">
-                    <div class="mini-resume" style="font-family: Georgia; border-left: 3px solid #0d47a1; padding-left:10px;">
-                        <div style="font-weight:bold; color:#0d47a1;">AMIT KUMAR</div>
-                        <div style="font-weight:bold; color:#0d47a1; margin-top:10px; border-bottom:1px solid #0d47a1;">SKILLS</div>
-                        <div style="height:3px; margin:3px 0; background:#e2e8f0; width:90%"></div>
-                    </div>
+            <!-- Template Card 2 -->
+            <div class="template-box-clicker" onclick="startBuilder('tmpl-modern', 'Modern Executive')">
+                <div class="dummy-preview-box" style="border-left: 4px solid #0d47a1;">
+                    <div style="font-weight: bold; color: #0d47a1; font-size: 13px;">AMIT KUMAR</div>
+                    <div class="dummy-line" style="width: 50%; background-color: #94a3b8;"></div>
+                    <div class="dummy-line" style="width: 85%;"></div>
+                    <div class="dummy-line" style="width: 60%;"></div>
                 </div>
-                <div class="card-info">
-                    <h4>Modern Executive</h4>
-                    <p>Stylized serif font layout ideal for local business & department hiring.</p>
-                </div>
+                <div class="card-info-title">Modern Executive</div>
+                <div class="card-info-desc">Elegant layout layout ideal for local business hiring.</div>
             </div>
         </div>
     </div>
 
     <!-- VIEW 2: LIVE BUILDER VIEW -->
     <div class="builder-container" id="builder-view">
-        <!-- Form Section -->
         <div class="form-section">
             <h3>1. Personal Details</h3>
             <div class="form-group"><label>Full Name</label><input type="text" id="in-name" placeholder="Rahul Sharma" oninput="renderData()"></div>
@@ -145,6 +137,90 @@
             <div class="form-group"><label>Key Skills (Comma separated)</label><input type="text" id="in-skills" placeholder="Typing, Excel, Public Speaking" oninput="renderData()"></div>
         </div>
 
-        <!-- Live Preview Canvas Section -->
         <div class="preview-section">
             <div class="action-bar">
+                <span id="active-template-name" style="font-weight: bold; color: #0d47a1;">Template</span>
+                <button class="btn btn-success" onclick="exportPDF()">Download PDF</button>
+            </div>
+            <div class="preview-wrapper">
+                <div id="resume-canvas" class="resume-paper">
+                    <!-- Dynamic Internal Content -->
+                    <div class="res-header">
+                        <h2 id="out-name">NAME</h2>
+                        <div id="out-contact" style="font-size:12px; margin-top:5px;">Email | Phone</div>
+                    </div>
+                    <div class="res-sec-title">Objective</div>
+                    <p id="out-obj" style="font-size:12px; margin-bottom:10px;">Objective details...</p>
+                    
+                    <div class="res-sec-title">Education</div>
+                    <div id="out-edu" style="font-size:12px;">Degree details...</div>
+                    
+                    <div class="res-sec-title">Skills</div>
+                    <ul id="out-skills" style="font-size:12px; margin-left:20px;">
+                        <li>Skill items</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startBuilder(className, friendlyName) {
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('builder-view').style.display = 'flex';
+            document.getElementById('back-btn').style.display = 'block';
+            document.getElementById('active-template-name').innerText = "Active: " + friendlyName;
+            document.getElementById('resume-canvas').className = "resume-paper " + className;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderData();
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('builder-view').style.display = 'none';
+            document.getElementById('back-btn').style.display = 'none';
+        }
+
+        function renderData() {
+            document.getElementById('out-name').innerText = document.getElementById('in-name').value || 'YOUR NAME';
+            const email = document.getElementById('in-email').value || 'example@email.com';
+            const phone = document.getElementById('in-phone').value || '+91 XXXXX XXXXX';
+            document.getElementById('out-contact').innerText = `Email: ${email} | Phone: ${phone}`;
+            document.getElementById('out-obj').innerText = document.getElementById('in-obj').value || 'Career objective details will display here...';
+            
+            const deg = document.getElementById('in-degree').value || 'Degree / Diploma';
+            const col = document.getElementById('in-college').value || 'Institution Name';
+            document.getElementById('out-edu').innerHTML = `<strong>${deg}</strong> — ${col}`;
+
+            const skillsVal = document.getElementById('in-skills').value;
+            const ul = document.getElementById('out-skills');
+            ul.innerHTML = '';
+            if(skillsVal.trim()) {
+                skillsVal.split(',').forEach(sk => {
+                    if(sk.trim()) { 
+                        let li = document.createElement('li'); 
+                        li.innerText = sk.trim(); 
+                        ul.appendChild(li); 
+                    }
+                });
+            } else {
+                ul.innerHTML = '<li>Core Professional Skills</li>';
+            }
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('resume-canvas');
+            const name = document.getElementById('in-name').value || 'Fresher';
+            
+            const opt = {
+                margin: 0,
+                filename: `${name.replace(/\s+/g, '_')}_Resume.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
