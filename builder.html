@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JK CareerCraft - Advanced Resume Builder</title>
+    <title>JK CareerCraft - Professional Resume Builder</title>
     <!-- html2pdf.js CDN for PDF Generation -->
     <script src="https://cloudflare.com"></script>
     <style>
@@ -16,7 +16,7 @@
         .btn-nav { background: #f8fafc; color: #0d47a1; border: none; padding: 8px 16px; font-weight: bold; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 14px; display: inline-block; }
         .back-btn { display: none; background: #e2e8f0; color: #1e293b; }
 
-        /* DASHBOARD STYLE */
+        /* VIEW 1: DASHBOARD VIEW */
         .dashboard-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
         .dash-heading { text-align: center; margin-bottom: 30px; }
         .dash-heading h2 { font-size: 28px; color: #0f172a; margin-bottom: 8px; }
@@ -32,41 +32,32 @@
         .card-info-title { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #1e293b; text-align: center; }
         .card-info-desc { font-size: 13px; color: #64748b; text-align: center; }
 
-        /* LIVE BUILDER SPLIT SYSTEM */
+        /* VIEW 2: LIVE BUILDER SPLIT SYSTEM */
         .builder-container { display: none; flex: 1; padding: 20px; gap: 20px; max-width: 1500px; margin: 0 auto; width: 100%; }
         .form-section { flex: 1; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-height: 82vh; overflow-y: auto; }
         .preview-section { flex: 1.2; background: #cbd5e1; padding: 20px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; gap: 15px; position: sticky; top: 20px; max-height: 82vh; }
         
-        h3 { margin: 25px 0 15px 0; color: #0d47a1; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        h3 { margin: 20px 0 10px 0; color: #0d47a1; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
         h3:first-of-type { margin-top: 0; }
-        
-        .dynamic-block { background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; position: relative; }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; }
-        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
         
         .action-bar { width: 100%; display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        
-        /* Buttons */
-        .btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s; }
-        .btn-add { background: #0d47a1; color: white; padding: 6px 12px; font-size: 12px; }
-        .btn-add:hover { background: #1565c0; }
-        .btn-delete { background: #ef4444; color: white; padding: 4px 8px; font-size: 11px; position: absolute; top: 10px; right: 10px; border-radius: 3px; }
-        .btn-success { background: #28a745; color: white; padding: 10px 20px; font-size: 14px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn-success { background: #28a745; color: white; }
         .btn-success:hover { background: #218838; }
         
         .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; height: 100%; }
         .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; text-align: left; position: relative; }
 
-        /* Resume Templates Layout Styles */
+        /* Dynamic Template Layout Styles */
         .tmpl-ats { font-family: Arial, sans-serif; color: #000; line-height: 1.4; }
-        .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
+        .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; position: relative; }
         .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 2px; }
         .tmpl-ats .res-desig { font-size: 14px; font-weight: bold; color: #444; text-transform: uppercase; margin-bottom: 5px; }
-        .tmpl-ats .res-sec-title { font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 15px; margin-bottom: 8px; }
+        .tmpl-ats .res-sec-title { font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 15px; margin-bottom: 5px; }
         .tmpl-ats .photo-frame { display: none; } 
-        .tmpl-ats .item-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; }
-        .tmpl-ats .item-meta { display: flex; justify-content: space-between; font-style: italic; font-size: 11px; color: #333; margin-bottom: 4px; }
 
         .tmpl-modern { font-family: 'Georgia', serif; color: #334155; line-height: 1.5; }
         .tmpl-modern .res-header { border-left: 5px solid #0d47a1; padding-left: 15px; margin-bottom: 20px; min-height: 90px; }
@@ -74,11 +65,9 @@
         .tmpl-modern .res-desig { font-size: 15px; font-style: italic; color: #4b5563; margin-bottom: 5px; }
         .tmpl-modern .res-sec-title { font-size: 16px; font-weight: bold; color: #0d47a1; border-bottom: 2px solid #0d47a1; margin-top: 15px; margin-bottom: 8px; }
         .tmpl-modern .photo-frame { width: 85px; height: 95px; border: 1px solid #cbd5e1; position: absolute; top: 20mm; right: 20mm; object-fit: cover; border-radius: 4px; display: block; }
-        .tmpl-modern .item-row { display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #0d47a1; }
-        .tmpl-modern .item-meta { display: flex; justify-content: space-between; font-size: 12px; color: #4b5563; margin-bottom: 4px; font-weight: 500; }
 
-        .resume-item-block { margin-bottom: 12px; page-break-inside: avoid; }
-        .resume-desc-text { font-size: 12px; color: #4b5563; text-align: justify; margin-top: 2px; padding-left: 5px; }
+        .item-block { margin-bottom: 10px; }
+        .item-header { display: flex; justify-content: space-between; font-weight: bold; }
 
         @media (max-width: 950px) {
             .builder-container { flex-direction: column; }
@@ -101,7 +90,7 @@
     <div class="dashboard-container" id="dashboard-view">
         <div class="dash-heading">
             <h2>Select Your Resume Template</h2>
-            <p>100% Dynamic Multi-Block Layout Engine. Add unlimited Degrees, Marks, & Experiences.</p>
+            <p>100% Free, Mobile-Friendly & ATS Approved Templates with Dynamic Multi-Blocks.</p>
         </div>
         
         <div class="templates-grid">
@@ -114,7 +103,7 @@
                     <div class="dummy-line" style="width: 75%;"></div>
                 </div>
                 <div class="card-info-title">ATS Minimalist</div>
-                <div class="card-info-desc">Clean data tables pattern. Passes computer selection algorithms easily.</div>
+                <div class="card-info-desc">Text-only format. Passes corporate algorithms easily.</div>
             </div>
 
             <div class="template-box-clicker" onclick="startBuilder('tmpl-modern', 'Modern Executive')">
@@ -125,31 +114,30 @@
                     <div class="dummy-line" style="width: 60%; margin-top: 15px;"></div>
                 </div>
                 <div class="card-info-title">Modern Executive</div>
-                <div class="card-info-desc">Stylish multi-section layout with profile picture holder.</div>
+                <div class="card-info-desc">Stylish design with photo upload. Ideal for physical interviews.</div>
             </div>
         </div>
     </div>
-
-    <!-- VIEW 2: LIVE BUILDER SPLIT SYSTEM -->
+    <!-- VIEW 2: LIVE BUILDER VIEW -->
     <div class="builder-container" id="builder-view">
         <div class="form-section">
             <h3>1. Personal Details</h3>
             <div class="form-group"><label>Full Name</label><input type="text" id="in-name" placeholder="Rahul Sharma" oninput="renderData()"></div>
-            <div class="form-group"><label>Overview / Designation</label><input type="text" id="in-desig" placeholder="Graduate / Project Engineer / App Developer" oninput="renderData()"></div>
+            <div class="form-group"><label>Overview / Designation</label><input type="text" id="in-desig" placeholder="Graduate / Project Engineer / Assistant" oninput="renderData()"></div>
             <div class="form-group"><label>Upload Profile Photo (Only for Modern Template)</label><input type="file" id="in-photo" accept="image/*" onchange="loadPhoto(event)"></div>
             <div class="form-group"><label>Email</label><input type="email" id="in-email" placeholder="rahul@email.com" oninput="renderData()"></div>
             <div class="form-group"><label>Phone</label><input type="text" id="in-phone" placeholder="+91 9876543210" oninput="renderData()"></div>
 
             <h3>2. Profile Summary</h3>
-            <div class="form-group"><label>Objective Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated graduate seeking an entry-level position..." oninput="renderData()"></textarea></div>
+            <div class="form-group"><label>Objective Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated fresher looking for opportunities..." oninput="renderData()"></textarea></div>
 
+            <!-- Dynamic Education Repeater Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">3. Education History</h3>
                 <button type="button" onclick="addEducationField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Education</button>
             </div>
             <div id="education-fields-container">
-                <!-- Initial Education Block -->
-                <div class="edu-entry-form" style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; position: relative;">
+                <div class="edu-entry-form" style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
                     <div class="form-group"><label>Degree / Course Name</label><input type="text" class="in-edu-deg" placeholder="B.Sc IT / Class 12th" oninput="renderData()"></div>
                     <div class="form-group"><label>College / School / University</label><input type="text" class="in-edu-col" placeholder="University of Jammu" oninput="renderData()"></div>
                     <div class="form-group"><label>Passing Year</label><input type="text" class="in-edu-year" placeholder="2025" oninput="renderData()"></div>
@@ -157,29 +145,37 @@
                 </div>
             </div>
 
+            <!-- Dynamic Experience Repeater Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
-                <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">4. Experience / Internships</h3>
+                <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">4. Experience & Internships</h3>
                 <button type="button" onclick="addExperienceField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Experience</button>
             </div>
             <div id="experience-fields-container">
-                <!-- Initial Experience Block -->
                 <div class="exp-entry-form" style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
                     <div class="form-group"><label>Job Title / Role</label><input type="text" class="in-exp-role" placeholder="Web Development Intern" oninput="renderData()"></div>
-                    <div class="form-group"><label>Company / Organization Name & Duration</label><input type="text" class="in-exp-comp" placeholder="Pinnacle Tech Solutions (3 Months)" oninput="renderData()"></div>
-                    <div class="form-group"><label>Brief Description</label><textarea class="in-exp-desc" style="height:50px;" placeholder="Assisted in building frontend designs and components..." oninput="renderData()"></textarea></div>
+                    <div class="form-group"><label>Company Name & Duration</label><input type="text" class="in-exp-comp" placeholder="Pinnacle Tech Solutions (3 Months)" oninput="renderData()"></div>
+                    <div class="form-group"><label>Brief Description</label><textarea class="in-exp-desc" style="height:50px;" placeholder="Assisted in building frontend designs..." oninput="renderData()"></textarea></div>
                 </div>
             </div>
 
-            <h3>5. Projects</h3>
-            <div class="form-group"><label>Project Title</label><input type="text" id="in-proj-title" placeholder="Typing Tracker System" oninput="renderData()"></div>
-            <div class="form-group"><label>Project Description</label><textarea id="in-proj-desc" style="height:50px;" placeholder="Designed and deployed a local tracking interface..." oninput="renderData()"></textarea></div>
+            <!-- Dynamic Projects Repeater Header -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
+                <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">5. Projects & Core Tasks</h3>
+                <button type="button" onclick="addProjectField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Project</button>
+            </div>
+            <div id="project-fields-container">
+                <div class="proj-entry-form" style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                    <div class="form-group"><label>Project / Internship Title</label><input type="text" class="in-proj-title" placeholder="Typing Tracker System / Local Portal Project" oninput="renderData()"></div>
+                    <div class="form-group"><label>Project Description / Details</label><textarea class="in-proj-desc" style="height:50px;" placeholder="Designed and deployed a tracking interface using HTML..." oninput="renderData()"></textarea></div>
+                </div>
+            </div>
 
             <h3>6. Skills & Languages</h3>
             <div class="form-group"><label>Key Skills (Comma separated)</label><input type="text" id="in-skills" placeholder="Java, Excel, Data Entry" oninput="renderData()"></div>
             <div class="form-group"><label>Languages Known (Comma separated)</label><input type="text" id="in-lang" placeholder="English, Urdu, Hindi" oninput="renderData()"></div>
         </div>
 
-        <!-- LIVE CANVAS VISUALIZATION -->
+        <!-- RIGHT SIDE PREVIEW CANVAS SECTION -->
         <div class="preview-section">
             <div class="action-bar">
                 <span id="active-template-name" style="font-weight: bold; color: #0d47a1;">Template</span>
@@ -206,11 +202,8 @@
                         <div id="out-exp" style="font-size:12px;"></div>
                     </div>
 
-                    <div class="res-sec-title">Projects</div>
-                    <div style="font-size:12px;" class="item-block">
-                        <strong id="out-proj-title">Project Title</strong>
-                        <p id="out-proj-desc" style="color:#4b5563; margin-top:2px;">Project details...</p>
-                    </div>
+                    <div class="res-sec-title">Projects & Key Achievements</div>
+                    <div id="out-proj" style="font-size:12px;"></div>
                     
                     <div style="display: flex; gap: 40px;">
                         <div style="flex: 1;">
@@ -222,14 +215,13 @@
                             <ul id="out-lang" style="font-size:12px; margin-left:15px;"></ul>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         let selectedTemplate = 'tmpl-ats';
+        let base64ImageString = ""; 
 
         function startBuilder(className, friendlyName) {
             selectedTemplate = className;
@@ -240,7 +232,7 @@
             document.getElementById('resume-canvas').className = "resume-paper " + className;
             
             const photoEl = document.getElementById('out-photo');
-            if(className === 'tmpl-modern' && photoEl.src && photoEl.src !== window.location.href) {
+            if(className === 'tmpl-modern' && base64ImageString) {
                 photoEl.style.display = 'block';
             } else {
                 photoEl.style.display = 'none';
@@ -256,14 +248,21 @@
         }
 
         function loadPhoto(event) {
+            const input = event.target;
             const output = document.getElementById('out-photo');
-            if(event.target.files.length > 0) {
-                output.src = URL.createObjectURL(event.target.files);
-                if(selectedTemplate === 'tmpl-modern') output.style.display = 'block';
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64ImageString = e.target.result;
+                    output.src = base64ImageString;
+                    if(selectedTemplate === 'tmpl-modern') {
+                        output.style.display = 'block';
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // Add Dynamic Education Node
         function addEducationField() {
             const container = document.getElementById('education-fields-container');
             const div = document.createElement('div');
@@ -277,9 +276,9 @@
                 <div class="form-group"><label>Marks (CGPA / Percentage)</label><input type="text" class="in-edu-marks" placeholder="8.5 CGPA" oninput="renderData()"></div>
             `;
             container.appendChild(div);
+            renderData();
         }
 
-        // Add Dynamic Experience Node
         function addExperienceField() {
             const container = document.getElementById('experience-fields-container');
             const div = document.createElement('div');
@@ -292,6 +291,21 @@
                 <div class="form-group"><label>Brief Description</label><textarea class="in-exp-desc" style="height:50px;" placeholder="Details..." oninput="renderData()"></textarea></div>
             `;
             container.appendChild(div);
+            renderData();
+        }
+
+        function addProjectField() {
+            const container = document.getElementById('project-fields-container');
+            const div = document.createElement('div');
+            div.className = 'proj-entry-form';
+            div.style = 'background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px; position: relative;';
+            div.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove(); renderData();" style="position:absolute; top:10px; right:10px; background:#ef4444; color:white; border:none; padding:4px 8px; font-size:11px; border-radius:4px; cursor:pointer;">Remove</button>
+                <div class="form-group"><label>Project / Internship Title</label><input type="text" class="in-proj-title" placeholder="Project Title" oninput="renderData()"></div>
+                <div class="form-group"><label>Project Description / Details</label><textarea class="in-proj-desc" style="height:50px;" placeholder="Details..." oninput="renderData()"></textarea></div>
+            `;
+            container.appendChild(div);
+            renderData();
         }
 
         function renderData() {
@@ -311,7 +325,6 @@
                 const col = eduEntries[i].getElementsByClassName('in-edu-col')[0].value;
                 const yr = eduEntries[i].getElementsByClassName('in-edu-year')[0].value;
                 const mk = eduEntries[i].getElementsByClassName('in-edu-marks')[0].value;
-                
                 if(deg || col) {
                     let meta = [];
                     if(yr) meta.push(yr);
@@ -330,7 +343,6 @@
                 const role = expEntries[i].getElementsByClassName('in-exp-role')[0].value;
                 const comp = expEntries[i].getElementsByClassName('in-exp-comp')[0].value;
                 const desc = expEntries[i].getElementsByClassName('in-exp-desc')[0].value;
-                
                 if(role || comp || desc) {
                     hasExpData = true;
                     expHTML += `
@@ -344,23 +356,46 @@
             document.getElementById('out-exp').innerHTML = expHTML;
             document.getElementById('sec-intern').style.display = hasExpData ? 'block' : 'none';
 
-            document.getElementById('out-proj-title').innerText = document.getElementById('in-proj-title').value || 'Project Title';
-            document.getElementById('out-proj-desc').innerText = document.getElementById('in-proj-desc').value || 'Project description...';
+            // Render Dynamic Projects List
+            let projHTML = '';
+            const projEntries = document.getElementsByClassName('proj-entry-form');
+            for(let i=0; i<projEntries.length; i++) {
+                const pTitle = projEntries[i].getElementsByClassName('in-proj-title')[0].value;
+                const pDesc = projEntries[i].getElementsByClassName('in-proj-desc')[0].value;
+                if(pTitle || pDesc) {
+                    projHTML += `
+                        <div class="item-block" style="margin-bottom:10px;">
+                            <strong>${pTitle || 'Project Title'}</strong>
+                            <p style="color:#4b5563; margin-top:2px;">${pDesc || ''}</p>
+                        </div>
+                    `;
+                }
+            }
+            document.getElementById('out-proj').innerHTML = projHTML || '<div class="item-block">Project details...</div>';
 
             const skillsVal = document.getElementById('in-skills').value;
             const ulSkills = document.getElementById('out-skills');
             ulSkills.innerHTML = '';
             (skillsVal ? skillsVal.split(',') : ['Core Professional Skills']).forEach(sk => {
-                if(sk.trim()) { let li = document.createElement('li'); li.innerText = sk.trim(); ulSkills.appendChild(li); }
+                if(sk.trim()) { 
+                    let li = document.createElement('li'); 
+                    li.innerText = sk.trim(); 
+                    ulSkills.appendChild(li); 
+                }
             });
 
+            // Languages mapping
             const langVal = document.getElementById('in-lang').value;
             const ulLang = document.getElementById('out-lang');
             ulLang.innerHTML = '';
             if(langVal) {
                 document.getElementById('sec-lang').style.display = 'block';
                 langVal.split(',').forEach(ln => {
-                    if(ln.trim()) { let li = document.createElement('li'); li.innerText = ln.trim(); ulLang.appendChild(li); }
+                    if(ln.trim()) { 
+                        let li = document.createElement('li'); 
+                        li.innerText = ln.trim(); 
+                        ulLang.appendChild(li); 
+                    }
                 });
             } else {
                 document.getElementById('sec-lang').style.display = 'none';
