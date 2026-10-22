@@ -40,6 +40,7 @@
         h3 { margin: 20px 0 10px 0; color: #0d47a1; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
         h3:first-of-type { margin-top: 0; }
         .form-group { margin-bottom: 15px; }
+        .form-group.photo-input-group { display: none; } /* Dynamic view toggle control */
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
         input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
         
@@ -51,13 +52,13 @@
         .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; height: 100%; }
         .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; text-align: left; position: relative; }
 
-        /* Dynamic Template Layout Styles */
+        /* Template Engine CSS Overrides */
         .tmpl-ats { font-family: Arial, sans-serif; color: #000; line-height: 1.4; }
         .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; position: relative; }
         .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 2px; }
         .tmpl-ats .res-desig { font-size: 14px; font-weight: bold; color: #444; text-transform: uppercase; margin-bottom: 5px; }
         .tmpl-ats .res-sec-title { font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 15px; margin-bottom: 5px; }
-        .tmpl-ats .photo-frame { display: none; } 
+        .tmpl-ats .photo-frame { display: none !important; } /* Hard block photo on ATS template */
 
         .tmpl-modern { font-family: 'Georgia', serif; color: #334155; line-height: 1.5; }
         .tmpl-modern .res-header { border-left: 5px solid #0d47a1; padding-left: 15px; margin-bottom: 20px; min-height: 90px; }
@@ -90,7 +91,7 @@
     <div class="dashboard-container" id="dashboard-view">
         <div class="dash-heading">
             <h2>Select Your Resume Template</h2>
-            <p>100% Free, Mobile-Friendly & ATS Approved Templates with Dynamic Multi-Blocks.</p>
+            <p>100% Free & Mobile-Friendly. ATS Minimalist hides photo globally, Modern Executive supports picture upload.</p>
         </div>
         
         <div class="templates-grid">
@@ -103,7 +104,7 @@
                     <div class="dummy-line" style="width: 75%;"></div>
                 </div>
                 <div class="card-info-title">ATS Minimalist</div>
-                <div class="card-info-desc">Text-only format. Passes corporate algorithms easily.</div>
+                <div class="card-info-desc">Text-only format. Completely removes photo layout to pass filters.</div>
             </div>
 
             <div class="template-box-clicker" onclick="startBuilder('tmpl-modern', 'Modern Executive')">
@@ -114,7 +115,7 @@
                     <div class="dummy-line" style="width: 60%; margin-top: 15px;"></div>
                 </div>
                 <div class="card-info-title">Modern Executive</div>
-                <div class="card-info-desc">Stylish design with photo upload. Ideal for physical interviews.</div>
+                <div class="card-info-desc">Stylish design with photo frame support. Ideal for direct interviews.</div>
             </div>
         </div>
     </div>
@@ -124,14 +125,16 @@
             <h3>1. Personal Details</h3>
             <div class="form-group"><label>Full Name</label><input type="text" id="in-name" placeholder="Rahul Sharma" oninput="renderData()"></div>
             <div class="form-group"><label>Overview / Designation</label><input type="text" id="in-desig" placeholder="Graduate / Project Engineer / Assistant" oninput="renderData()"></div>
-            <div class="form-group"><label>Upload Profile Photo (Only for Modern Template)</label><input type="file" id="in-photo" accept="image/*" onchange="loadPhoto(event)"></div>
+            
+            <!-- Target element for explicit dynamic visibility -->
+            <div class="form-group" id="photo-input-container" style="display: none;"><label>Upload Profile Photo</label><input type="file" id="in-photo" accept="image/*" onchange="loadPhoto(event)"></div>
+            
             <div class="form-group"><label>Email</label><input type="email" id="in-email" placeholder="rahul@email.com" oninput="renderData()"></div>
             <div class="form-group"><label>Phone</label><input type="text" id="in-phone" placeholder="+91 9876543210" oninput="renderData()"></div>
 
             <h3>2. Profile Summary</h3>
             <div class="form-group"><label>Objective Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated fresher looking for opportunities..." oninput="renderData()"></textarea></div>
 
-            <!-- Dynamic Education Repeater Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">3. Education History</h3>
                 <button type="button" onclick="addEducationField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Education</button>
@@ -145,7 +148,6 @@
                 </div>
             </div>
 
-            <!-- Dynamic Experience Repeater Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">4. Experience & Internships</h3>
                 <button type="button" onclick="addExperienceField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Experience</button>
@@ -158,7 +160,6 @@
                 </div>
             </div>
 
-            <!-- Dynamic Projects Repeater Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px;">
                 <h3 style="margin:0; border:none; padding:0; color:#0d47a1;">5. Projects & Core Tasks</h3>
                 <button type="button" onclick="addProjectField()" style="background:#0d47a1; color:white; border:none; padding:6px 12px; font-weight:bold; border-radius:4px; cursor:pointer;">+ Add Project</button>
@@ -175,7 +176,6 @@
             <div class="form-group"><label>Languages Known (Comma separated)</label><input type="text" id="in-lang" placeholder="English, Urdu, Hindi" oninput="renderData()"></div>
         </div>
 
-        <!-- RIGHT SIDE PREVIEW CANVAS SECTION -->
         <div class="preview-section">
             <div class="action-bar">
                 <span id="active-template-name" style="font-weight: bold; color: #0d47a1;">Template</span>
@@ -183,6 +183,7 @@
             </div>
             <div class="preview-wrapper">
                 <div id="resume-canvas" class="resume-paper">
+                    <!-- Base64 Locked Profile Picture Frame Element -->
                     <img id="out-photo" class="photo-frame" src="" alt="Profile Image" style="display: none;">
                     
                     <div class="res-header">
@@ -231,12 +232,20 @@
             document.getElementById('active-template-name').innerText = "Active: " + friendlyName;
             document.getElementById('resume-canvas').className = "resume-paper " + className;
             
+            // Dynamic Form & Canvas Photo UI Synchronization Engine
+            const inputContainer = document.getElementById('photo-input-container');
             const photoEl = document.getElementById('out-photo');
-            if(className === 'tmpl-modern' && base64ImageString) {
-                photoEl.style.display = 'block';
+            
+            if(className === 'tmpl-modern') {
+                inputContainer.style.display = 'block'; // Show upload button only on Modern Form
+                if(base64ImageString) {
+                    photoEl.style.display = 'block';
+                }
             } else {
+                inputContainer.style.display = 'none'; // Completely hide upload control block on ATS form
                 photoEl.style.display = 'none';
             }
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
             renderData();
         }
@@ -367,12 +376,12 @@
                         <div class="item-block" style="margin-bottom:10px;">
                             <strong>${pTitle || 'Project Title'}</strong>
                             <p style="color:#4b5563; margin-top:2px;">${pDesc || ''}</p>
-                        </div>
-                    `;
-                }
+                    </div>
+                `;
             }
             document.getElementById('out-proj').innerHTML = projHTML || '<div class="item-block">Project details...</div>';
 
+            // Skills Rendering
             const skillsVal = document.getElementById('in-skills').value;
             const ulSkills = document.getElementById('out-skills');
             ulSkills.innerHTML = '';
@@ -384,7 +393,7 @@
                 }
             });
 
-            // Languages mapping
+            // Languages mapping (Fixed Typo Here)
             const langVal = document.getElementById('in-lang').value;
             const ulLang = document.getElementById('out-lang');
             ulLang.innerHTML = '';
