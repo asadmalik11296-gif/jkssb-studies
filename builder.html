@@ -412,9 +412,11 @@
 
         function exportPDF() {
             const element = document.getElementById('resume-canvas');
-            const name = document.getElementById('in-name').value || 'Fresher';
             
-            // Pop-up Notification for Student Guidance
+            // Safe name filtering without causing raw backslash compile crash
+            let rawName = document.getElementById('in-name').value || 'Fresher';
+            let safeFileName = rawName.split(' ').join('_') + '_Resume.pdf';
+            
             alert("💡 TIP: Next screen पर 'Destination' में 'Save as PDF' सिलेक्ट करके रिज्यूम को अपने डिवाइस में सेव करें।");
             
             const printWindow = window.open('', '_blank', 'width=900,height=1200');
@@ -431,7 +433,7 @@
             printWindow.document.write(`
                 <html>
                 <head>
-                    <title>\${name.replace(/\\s+/g, '_')}_Resume</title>
+                    <title>${safeFileName.replace('.pdf', '')}</title>
                     <style>
                         \${styles}
                         body { background: white !important; padding: 0 !important; margin: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
