@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JK CareerCraft - Free Resume Builder</title>
-    <!-- html2pdf.js for Client-side PDF Generation -->
+    <title>JK CareerCraft - Professional Resume Builder</title>
+    <!-- html2pdf.js CDN for PDF Generation -->
     <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
@@ -23,16 +23,12 @@
         .dash-heading p { color: #64748b; }
         
         .templates-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px; }
-        
-        /* Fixed Click Container Layout */
         .template-box-clicker { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; border: 2px solid transparent; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; padding: 15px; }
         .template-box-clicker:hover { transform: translateY(-5px); border-color: #1976d2; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
         .badge { position: absolute; top: 25px; right: 25px; background: #10b981; color: white; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
-
-        .dummy-preview-box { height: 260px; background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 15px; display: flex; flex-direction: column; justify-content: center; padding: 20px; text-align: left; }
+        .dummy-preview-box { height: 260px; background: #f8fafc; border: 1px dashed #cbd5e1; margin-bottom: 15px; display: flex; flex-direction: column; justify-content: center; padding: 20px; }
         .dummy-line { height: 6px; background: #cbd5e1; margin-bottom: 10px; border-radius: 2px; }
-        
         .card-info-title { font-size: 18px; font-weight: bold; margin-bottom: 5px; color: #1e293b; text-align: center; }
         .card-info-desc { font-size: 13px; color: #64748b; text-align: center; }
 
@@ -53,18 +49,25 @@
         .btn-success:hover { background: #218838; }
         
         .preview-wrapper { width: 100%; overflow: auto; display: flex; justify-content: center; height: 100%; }
-        .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; text-align: left; }
+        .resume-paper { width: 210mm; min-height: 297mm; background: white; padding: 20mm; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transform: scale(0.55); transform-origin: top center; text-align: left; position: relative; }
 
-        /* Dynamic Template Engine Styles */
-        .tmpl-ats { font-family: Arial, sans-serif; color: #000; }
-        .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; }
-        .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 5px; }
+        /* Dynamic Template Layout Styles */
+        .tmpl-ats { font-family: Arial, sans-serif; color: #000; line-height: 1.4; }
+        .tmpl-ats .res-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 15px; position: relative; }
+        .tmpl-ats h2 { font-size: 24px; text-transform: uppercase; margin-bottom: 2px; }
+        .tmpl-ats .res-desig { font-size: 14px; font-weight: bold; color: #444; text-transform: uppercase; margin-bottom: 5px; }
         .tmpl-ats .res-sec-title { font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid #000; margin-top: 15px; margin-bottom: 5px; }
+        .tmpl-ats .photo-frame { display: none; } 
 
-        .tmpl-modern { font-family: 'Georgia', serif; color: #334155; }
-        .tmpl-modern .res-header { border-left: 5px solid #0d47a1; padding-left: 15px; margin-bottom: 20px; }
-        .tmpl-modern h2 { font-size: 26px; color: #0d47a1; margin-bottom: 5px; }
+        .tmpl-modern { font-family: 'Georgia', serif; color: #334155; line-height: 1.5; }
+        .tmpl-modern .res-header { border-left: 5px solid #0d47a1; padding-left: 15px; margin-bottom: 20px; min-height: 90px; }
+        .tmpl-modern h2 { font-size: 26px; color: #0d47a1; margin-bottom: 2px; }
+        .tmpl-modern .res-desig { font-size: 15px; font-style: italic; color: #4b5563; margin-bottom: 5px; }
         .tmpl-modern .res-sec-title { font-size: 16px; font-weight: bold; color: #0d47a1; border-bottom: 2px solid #0d47a1; margin-top: 15px; margin-bottom: 8px; }
+        .tmpl-modern .photo-frame { width: 85px; height: 95px; border: 1px solid #cbd5e1; position: absolute; top: 20mm; right: 20mm; object-fit: cover; border-radius: 4px; display: block; }
+
+        .item-block { margin-bottom: 10px; }
+        .item-header { display: flex; justify-content: space-between; font-weight: bold; }
 
         @media (max-width: 950px) {
             .builder-container { flex-direction: column; }
@@ -87,56 +90,75 @@
     <div class="dashboard-container" id="dashboard-view">
         <div class="dash-heading">
             <h2>Select Your Resume Template</h2>
-            <p>100% Free, Mobile-Friendly & ATS Approved Templates for JKSSB & Private Job Aspirants.</p>
+            <p>Advanced Templates including Languages, Dynamic Education Blocks & Internships.</p>
         </div>
         
         <div class="templates-grid">
-            <!-- Template Card 1 (Direct In-line Trigger to eliminate any event blockage) -->
             <div class="template-box-clicker" onclick="startBuilder('tmpl-ats', 'ATS Minimalist')">
                 <span class="badge">Highly Recommended</span>
                 <div class="dummy-preview-box">
-                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; font-size: 12px; border-bottom: 1px solid #000;">RAHUL SHARMA</div>
-                    <div class="dummy-line" style="width: 40%;"></div>
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 5px; font-size: 12px; border-bottom: 1px solid #000;">RAHUL SHARMA</div>
+                    <div class="dummy-line" style="width: 40%; margin: 0 auto 10px auto;"></div>
                     <div class="dummy-line" style="width: 90%;"></div>
                     <div class="dummy-line" style="width: 75%;"></div>
                 </div>
                 <div class="card-info-title">ATS Minimalist</div>
-                <div class="card-info-desc">Scans perfectly in screening tests (TCS, Wipro, Banks).</div>
+                <div class="card-info-desc">Text-only format. Perfect for higher screening passes.</div>
             </div>
 
-            <!-- Template Card 2 -->
             <div class="template-box-clicker" onclick="startBuilder('tmpl-modern', 'Modern Executive')">
-                <div class="dummy-preview-box" style="border-left: 4px solid #0d47a1;">
+                <div class="dummy-preview-box" style="border-left: 4px solid #0d47a1; position: relative;">
                     <div style="font-weight: bold; color: #0d47a1; font-size: 13px;">AMIT KUMAR</div>
-                    <div class="dummy-line" style="width: 50%; background-color: #94a3b8;"></div>
-                    <div class="dummy-line" style="width: 85%;"></div>
-                    <div class="dummy-line" style="width: 60%;"></div>
+                    <div style="width: 40px; height: 40px; border: 1px dashed #94a3b8; position: absolute; top: 20px; right: 20px; font-size: 8px; text-align: center; line-height: 40px;">Photo</div>
+                    <div class="dummy-line" style="width: 50%; background-color: #94a3b8; margin-top: 5px;"></div>
+                    <div class="dummy-line" style="width: 60%; margin-top: 15px;"></div>
                 </div>
                 <div class="card-info-title">Modern Executive</div>
-                <div class="card-info-desc">Elegant layout layout ideal for local business hiring.</div>
+                <div class="card-info-desc">Stylish multi-section layout with profile picture holder.</div>
             </div>
         </div>
     </div>
-
     <!-- VIEW 2: LIVE BUILDER VIEW -->
     <div class="builder-container" id="builder-view">
         <div class="form-section">
             <h3>1. Personal Details</h3>
             <div class="form-group"><label>Full Name</label><input type="text" id="in-name" placeholder="Rahul Sharma" oninput="renderData()"></div>
+            <div class="form-group"><label>Overview / Designation</label><input type="text" id="in-desig" placeholder="Graduate / Project Engineer / App Developer" oninput="renderData()"></div>
+            <div class="form-group"><label>Upload Profile Photo (Only for Modern Template)</label><input type="file" id="in-photo" accept="image/*" onchange="loadPhoto(event)"></div>
             <div class="form-group"><label>Email</label><input type="email" id="in-email" placeholder="rahul@email.com" oninput="renderData()"></div>
             <div class="form-group"><label>Phone</label><input type="text" id="in-phone" placeholder="+91 9876543210" oninput="renderData()"></div>
 
             <h3>2. Profile Summary</h3>
-            <div class="form-group"><label>Objective / Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated fresher looking for opportunities..." oninput="renderData()"></textarea></div>
+            <div class="form-group"><label>Objective Summary</label><textarea id="in-obj" style="height:70px;" placeholder="Motivated graduate seeking an entry-level position..." oninput="renderData()"></textarea></div>
 
-            <h3>3. Education</h3>
-            <div class="form-group"><label>Degree</label><input type="text" id="in-degree" placeholder="B.A / B.Sc / B.Tech" oninput="renderData()"></div>
-            <div class="form-group"><label>College & Year</label><input type="text" id="in-college" placeholder="University of Jammu (2025)" oninput="renderData()"></div>
+            <h3>3. Education History</h3>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                <strong style="font-size: 14px; color: #0d47a1;">Post-Graduation (Optional)</strong>
+                <div class="form-group" style="margin-top:10px;"><label>Degree (e.g., M.Sc / M.Tech / M.A)</label><input type="text" id="in-pg-deg" placeholder="M.Sc Computer Science" oninput="renderData()"></div>
+                <div class="form-group"><label>University / College & Year</label><input type="text" id="in-pg-col" placeholder="University of Jammu (2026)" oninput="renderData()"></div>
+            </div>
 
-            <h3>4. Skills</h3>
-            <div class="form-group"><label>Key Skills (Comma separated)</label><input type="text" id="in-skills" placeholder="Typing, Excel, Public Speaking" oninput="renderData()"></div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                <strong style="font-size: 14px; color: #0d47a1;">Graduation</strong>
+                <div class="form-group" style="margin-top:10px;"><label>Degree (e.g., B.Sc / B.A / B.Tech)</label><input type="text" id="in-grad-deg" placeholder="B.Sc IT" oninput="renderData()"></div>
+                <div class="form-group"><label>University / College & Year</label><input type="text" id="in-grad-col" placeholder="Cluster University of Jammu (2024)" oninput="renderData()"></div>
+            </div>
+
+            <h3>4. Internships (Work Experience)</h3>
+            <div class="form-group"><label>Job Title / Role</label><input type="text" id="in-intern-role" placeholder="Web Development Intern / Trainee" oninput="renderData()"></div>
+            <div class="form-group"><label>Company Name & Duration</label><input type="text" id="in-intern-comp" placeholder="Pinnacle Tech Solutions (3 Months)" oninput="renderData()"></div>
+            <div class="form-group"><label>What did you do? (Brief description)</label><textarea id="in-intern-desc" style="height:50px;" placeholder="Assisted in building responsive web panels and managing SQL databases..." oninput="renderData()"></textarea></div>
+
+            <h3>5. Projects</h3>
+            <div class="form-group"><label>Project Title</label><input type="text" id="in-proj-title" placeholder="Android Attendance App / Typing Tracker" oninput="renderData()"></div>
+            <div class="form-group"><label>Project Description</label><textarea id="in-proj-desc" style="height:50px;" placeholder="Designed and deployed a local tracking interface using Java..." oninput="renderData()"></textarea></div>
+
+            <h3>6. Skills & Languages</h3>
+            <div class="form-group"><label>Key Skills (Comma separated)</label><input type="text" id="in-skills" placeholder="Java, Excel, Data Entry" oninput="renderData()"></div>
+            <div class="form-group"><label>Languages Known (Comma separated)</label><input type="text" id="in-lang" placeholder="English, Urdu, Hindi, Dogri" oninput="renderData()"></div>
         </div>
 
+        <!-- LIVE CANVAS VISUALIZATION -->
         <div class="preview-section">
             <div class="action-bar">
                 <span id="active-template-name" style="font-weight: bold; color: #0d47a1;">Template</span>
@@ -144,33 +166,67 @@
             </div>
             <div class="preview-wrapper">
                 <div id="resume-canvas" class="resume-paper">
-                    <!-- Dynamic Internal Content -->
+                    <img id="out-photo" class="photo-frame" src="" alt="Profile Image" style="display: none;">
+                    
                     <div class="res-header">
-                        <h2 id="out-name">NAME</h2>
-                        <div id="out-contact" style="font-size:12px; margin-top:5px;">Email | Phone</div>
+                        <h2 id="out-name">YOUR NAME</h2>
+                        <div id="out-desig" class="res-desig">OVERVIEW / PROFESSION</div>
+                        <div id="out-contact" style="font-size:11px; margin-top:5px;">Email | Phone</div>
                     </div>
+                    
                     <div class="res-sec-title">Objective</div>
-                    <p id="out-obj" style="font-size:12px; margin-bottom:10px;">Objective details...</p>
+                    <p id="out-obj" style="font-size:12px; margin-bottom:5px;">Objective details...</p>
                     
                     <div class="res-sec-title">Education</div>
-                    <div id="out-edu" style="font-size:12px;">Degree details...</div>
+                    <div id="out-edu" style="font-size:12px;"></div>
+
+                    <div id="sec-intern" style="display:none;">
+                        <div class="res-sec-title">Internships</div>
+                        <div style="font-size:12px;" class="item-block">
+                            <div class="item-header"><span id="out-intern-role"></span><span id="out-intern-comp" style="font-weight:normal; font-style:italic;"></span></div>
+                            <p id="out-intern-desc" style="color:#4b5563; margin-top:2px;"></p>
+                        </div>
+                    </div>
+
+                    <div class="res-sec-title">Projects</div>
+                    <div style="font-size:12px;" class="item-block">
+                        <strong id="out-proj-title">Project Title</strong>
+                        <p id="out-proj-desc" style="color:#4b5563; margin-top:2px;">Project details...</p>
+                    </div>
                     
-                    <div class="res-sec-title">Skills</div>
-                    <ul id="out-skills" style="font-size:12px; margin-left:20px;">
-                        <li>Skill items</li>
-                    </ul>
+                    <div style="display: flex; gap: 40px;">
+                        <div style="flex: 1;">
+                            <div class="res-sec-title">Skills</div>
+                            <ul id="out-skills" style="font-size:12px; margin-left:15px;"></ul>
+                        </div>
+                        <div style="flex: 1;" id="sec-lang">
+                            <div class="res-sec-title">Languages</div>
+                            <ul id="out-lang" style="font-size:12px; margin-left:15px;"></ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        let selectedTemplate = 'tmpl-ats';
+
         function startBuilder(className, friendlyName) {
+            selectedTemplate = className;
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('builder-view').style.display = 'flex';
             document.getElementById('back-btn').style.display = 'block';
             document.getElementById('active-template-name').innerText = "Active: " + friendlyName;
             document.getElementById('resume-canvas').className = "resume-paper " + className;
+            
+            const photoEl = document.getElementById('out-photo');
+            if(className === 'tmpl-modern' && photoEl.src && photoEl.src !== window.location.href) {
+                photoEl.style.display = 'block';
+            } else {
+                photoEl.style.display = 'none';
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
             renderData();
         }
@@ -181,37 +237,76 @@
             document.getElementById('back-btn').style.display = 'none';
         }
 
+        function loadPhoto(event) {
+            const output = document.getElementById('out-photo');
+            if(event.target.files.length > 0) {
+                output.src = URL.createObjectURL(event.target.files[0]);
+                if(selectedTemplate === 'tmpl-modern') output.style.display = 'block';
+            }
+        }
+
         function renderData() {
             document.getElementById('out-name').innerText = document.getElementById('in-name').value || 'YOUR NAME';
+            document.getElementById('out-desig').innerText = document.getElementById('in-desig').value || 'OVERVIEW / PROFESSION';
+            
             const email = document.getElementById('in-email').value || 'example@email.com';
             const phone = document.getElementById('in-phone').value || '+91 XXXXX XXXXX';
             document.getElementById('out-contact').innerText = `Email: ${email} | Phone: ${phone}`;
-            document.getElementById('out-obj').innerText = document.getElementById('in-obj').value || 'Career objective details will display here...';
+            document.getElementById('out-obj').innerText = document.getElementById('in-obj').value || 'Career objective details...';
             
-            const deg = document.getElementById('in-degree').value || 'Degree / Diploma';
-            const col = document.getElementById('in-college').value || 'Institution Name';
-            document.getElementById('out-edu').innerHTML = `<strong>${deg}</strong> — ${col}`;
+            // Dual Education Management
+            let eduHTML = '';
+            const pgDeg = document.getElementById('in-pg-deg').value;
+            const pgCol = document.getElementById('in-pg-col').value;
+            if(pgDeg || pgCol) {
+                eduHTML += `<div class="item-block"><strong>${pgDeg || 'Degree'}</strong> — ${pgCol || 'University Name'}</div>`;
+            }
+            const gradDeg = document.getElementById('in-grad-deg').value || 'Degree / Diploma';
+            const gradCol = document.getElementById('in-grad-col').value || 'Institution Name';
+            eduHTML += `<div class="item-block"><strong>${gradDeg}</strong> — ${gradCol}</div>`;
+            document.getElementById('out-edu').innerHTML = eduHTML;
 
+            // Internship Engine Control
+            const intRole = document.getElementById('in-intern-role').value;
+            const intComp = document.getElementById('in-intern-comp').value;
+            const intDesc = document.getElementById('in-intern-desc').value;
+            if(intRole || intComp || intDesc) {
+                document.getElementById('sec-intern').style.display = 'block';
+                document.getElementById('out-intern-role').innerText = intRole || 'Internship Role';
+                document.getElementById('out-intern-comp').innerText = intComp || 'Company Name';
+                document.getElementById('out-intern-desc').innerText = intDesc || 'Details...';
+            } else {
+                document.getElementById('sec-intern').style.display = 'none';
+            }
+
+            document.getElementById('out-proj-title').innerText = document.getElementById('in-proj-title').value || 'Project Title';
+            document.getElementById('out-proj-desc').innerText = document.getElementById('in-proj-desc').value || 'Project description / details go here...';
+
+            // Lists rendering (Skills)
             const skillsVal = document.getElementById('in-skills').value;
-            const ul = document.getElementById('out-skills');
-            ul.innerHTML = '';
-            if(skillsVal.trim()) {
-                skillsVal.split(',').forEach(sk => {
-                    if(sk.trim()) { 
-                        let li = document.createElement('li'); 
-                        li.innerText = sk.trim(); 
-                        ul.appendChild(li); 
-                    }
+            const ulSkills = document.getElementById('out-skills');
+            ulSkills.innerHTML = '';
+            (skillsVal ? skillsVal.split(',') : ['Core Professional Skills']).forEach(sk => {
+                if(sk.trim()) { let li = document.createElement('li'); li.innerText = sk.trim(); ulSkills.appendChild(li); }
+            });
+
+            // Languages mapping
+            const langVal = document.getElementById('in-lang').value;
+            const ulLang = document.getElementById('out-lang');
+            ulLang.innerHTML = '';
+            if(langVal) {
+                document.getElementById('sec-lang').style.display = 'block';
+                langVal.split(',').forEach(ln => {
+                    if(ln.trim()) { let li = document.createElement('li'); li.innerText = ln.trim(); ulLang.appendChild(li); }
                 });
             } else {
-                ul.innerHTML = '<li>Core Professional Skills</li>';
+                document.getElementById('sec-lang').style.display = 'none';
             }
         }
 
         function exportPDF() {
             const element = document.getElementById('resume-canvas');
             const name = document.getElementById('in-name').value || 'Fresher';
-            
             const opt = {
                 margin: 0,
                 filename: `${name.replace(/\s+/g, '_')}_Resume.pdf`,
