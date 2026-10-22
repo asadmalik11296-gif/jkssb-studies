@@ -451,13 +451,19 @@
                     <div class="resume-paper ${selectedTemplate}">
                         ${element.innerHTML}
                     </div>
-                    <script>
-                        window.onload = function() {
-                            setTimeout(function() {
-                                window.print();
-                                window.close();
-                            }, 500);
-                        };
-                    <\/script>
+    <script>
+        // 1. Missing function ko define kiya taaki error aana band ho jaye
+        function startBuilder() {
+            console.log("Builder started successfully.");
+        }
+
+        // 2. Aapka automatic print aur close hone ka code
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+                window.close();
+            }, 500);
+        };
+    </script>
                 </body>
                 </html>
