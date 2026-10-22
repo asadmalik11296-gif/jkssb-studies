@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JK CareerCraft - Professional Resume Builder</title>
-    <!-- html2pdf.js CDN for PDF Generation -->
-    <script src="https://cloudflare.com"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background-color: #f1f5f9; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
@@ -412,32 +410,55 @@
         }
 
         function exportPDF() {
-            // कैनवास एरिया को टारगेट करें
+            // प्रीव्यू वाले रिज्यूम पेपर एरिया को टारगेट करें
             const element = document.getElementById('resume-canvas');
             const name = document.getElementById('in-name').value || 'Fresher';
             
-            // html2pdf को बिना क्रैश हुए डाउनलोड करने के लिए सेफ सेटिंग्स
-            const opt = {
-                margin:       0,
-                filename:     `${name.replace(/\s+/g, '_')}_Resume.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            // एक नया अस्थायी पॉपअप ब्लैंक विंडो खोलें
+            const printWindow = window.open('', '_blank', 'width=900,height=1200');
             
-            // सेफ एग्जीक्यूशन ब्लॉक
-            try {
-                html2pdf().from(element).set(opt).save();
-            } catch (error) {
-                console.error("PDF Generation failed: ", error);
-                
-                // अल्टरनेटिव फॉलबैक मेथड (अगर लाइब्रेरी में कोई दिक्कत आए)
+            // मुख्य पेज के सभी स्टाइल्स (CSS) को इकट्ठा करें ताकि डिज़ाइन न बिगड़े
+            let styles = '';
+            for (let stylesheet of document.styleSheets) {
                 try {
-                    html2pdf(element, opt);
-                } catch(e) {
-                    alert("कृपया एक बार ब्राउज़र रीफ्रेश करें या इसे Chrome ब्राउज़र में खोलें।");
+                    for (let rule of stylesheet.cssRules) {
+                        styles += rule.cssText;
+                    }
+                } catch (e) {
+                    // लोकल/इंटरनल स्टाइल्स को बिना एरर के रीड करने के लिए
                 }
             }
+            
+            // नए विंडो में रिज्यूम का HTML और CSS इंजेक्ट करें
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>${name.replace(/\s+/g, '_')}_Resume</title>
+                    <style>
+                        ${styles}
+                        body { background: white !important; padding: 0 !important; margin: 0 !important; }
+                        .resume-paper { transform: none !important; box-shadow: none !important; margin: 0 auto !important; padding: 15mm !important; }
+                        @page { size: A4 portrait; margin: 0; }
+                    </style>
+                </head>
+                <body>
+                    <div class="resume-paper ${selectedTemplate}">
+                        ${element.innerHTML}
+                    </div>
+                    <script>
+                        // इमेज और फॉन्ट लोड होने का इंतज़ार करें, फिर प्रिंट ट्रिगर करें
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                                window.close();
+                            }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
         }
     </script>
 </body>
